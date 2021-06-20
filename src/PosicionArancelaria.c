@@ -271,32 +271,54 @@ int posicionArancelaria_imprimirUnaPosicionArancelaria(void* pElement)
 		float porcentajeImportacion;
 		float porcentajeTasaEstadistica;
 		int tipoLicencia;
-
+		char tipoDeLicenciaStr[TIPOLICENCIA_LEN];
 		int flagErrorA, flagErrorB, flagErrorC, flagErrorD, flagErrorE, flagErrorF;
 
-		// Obtengo cada campo
+		// ----------------------------------- Obtengo cada campo -----------------------------------------------
 		idPosicionArancelaria = posicionArancelaria_getIdPosicionArancelaria(pPosicionArancelaria, &flagErrorA);
-
 		nomenclador = posicionArancelaria_getNomenclador(pPosicionArancelaria, &flagErrorB);
-
 		porcentajeSeguro = posicionArancelaria_getPorcentajeSeguro(pPosicionArancelaria, &flagErrorC);
 		porcentajeImportacion = posicionArancelaria_getPorcentajeImportacion(pPosicionArancelaria, &flagErrorD);
 		porcentajeTasaEstadistica = posicionArancelaria_getPorcentajeTasaEstadistica(pPosicionArancelaria, &flagErrorE);
-
 		tipoLicencia = posicionArancelaria_getTipoLicencia(pPosicionArancelaria, &flagErrorF);
-
-		if(!flagErrorA && !flagErrorB && !flagErrorC && !flagErrorD && !flagErrorE && !flagErrorF)
+		// ------------------------------------------------------------------------------------------------------
+		if(!flagErrorA && !flagErrorB && !flagErrorC && !flagErrorD && !flagErrorE && !flagErrorF &&
+		   !posicionArancelaria_obtenerCadenaPorTipoLicencia(tipoLicencia, tipoDeLicenciaStr))
 		{
-			printf("\n\x1b[34m ----------------------------------------------------------------------------------------------------------------------  \x1b[0m");
-			printf("\n idPosicionArancelaria, nomenclador, porcentajeSeguro, porcentajeImportacion, porcentajeTasaEstadistica, tipoLicencia");
-			printf("\n %d, %s, %.2f, %.2f, %.2f, %d",idPosicionArancelaria, nomenclador, porcentajeSeguro,
-					                                porcentajeImportacion, porcentajeTasaEstadistica, tipoLicencia);
+			posicionArancelaria_encabezado();
+			printf("\n %-10d %-20s %-20.2f %-20.2f %-25.2f %-25s",idPosicionArancelaria, nomenclador, porcentajeSeguro,
+					                                 porcentajeImportacion, porcentajeTasaEstadistica, tipoDeLicenciaStr);
+			//printf("\n\x1b[34m ----------------------------------------------------------------------------------------------------------------------------------  \x1b[0m");
 			retorno = 0;
 		}
 
 	}
 	return retorno;
 }
+
+void posicionArancelaria_encabezado(void)
+{
+	char idPosicionArancelaria[] = {"ID [P.A]"};
+	char nomenclador[] = {"NOMENCLADOR"};
+	char porcentajeSeguro[] = {"% SEGURO"};
+	char porcentajeImportacion[] = {"% IMPORTACION"};
+	char porcentajeTasaEstadistica[] = {"% TASA ESTADISTICA"};
+	char tipoLicencia[] = {"TIPO DE LICENCIA"};
+
+	//printf("\n\x1b[34m ----------------------------------------------------------------------------------------------------------------------------------  \x1b[0m");
+	printf("\n \x1b[40m\x1b[32m%-10s %-20s %-20s %-20s %-25s %-25s\x1b[0m\x1b[0m ", idPosicionArancelaria,
+																							nomenclador,
+																							porcentajeSeguro,
+																							porcentajeImportacion,
+																							porcentajeTasaEstadistica,
+																							tipoLicencia);
+}
+
+
+
+
+
+
 
 int posicionArancelaria_imprimirPosicionesArancelarias(LinkedList* ListaPosicionesArancelarias)
 {
@@ -315,5 +337,25 @@ int posicionArancelaria_imprimirPosicionesArancelarias(LinkedList* ListaPosicion
 				retorno = 0;
 		}
 	}
+	return retorno;
+}
+
+int posicionArancelaria_obtenerCadenaPorTipoLicencia(int tipoLicencia, char opcionObtenida[])
+{
+	int retorno = -1;
+	if(opcionObtenida != NULL && (tipoLicencia == AUTOMATICA || tipoLicencia == NO_AUTOMATICA))
+	{
+		switch(tipoLicencia)
+		{
+			case AUTOMATICA:
+				strncpy(opcionObtenida, "AUTOMÁTICA", TIPOLICENCIA_LEN);
+			break;
+			case NO_AUTOMATICA:
+				strncpy(opcionObtenida, "NO AUTOMÁTICA", TIPOLICENCIA_LEN);
+			break;
+		}
+		retorno = 0;
+	}
+
 	return retorno;
 }

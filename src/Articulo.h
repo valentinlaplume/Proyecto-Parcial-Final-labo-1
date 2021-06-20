@@ -28,8 +28,8 @@ typedef struct
 	float fob;
 	float peso;
 
-	float altura;
 	float ancho;
+	float altura;
 	float profundidad;
 }Articulo;
 
@@ -88,5 +88,8 @@ int articulo_imprimirUnArticulo(void* pElement);
 int articulo_imprimirArticulos(LinkedList* listaArticulos);
 
 int articulo_pedirIdPosicionArancelaria(int* idPosicionArancelaria);
+
+// ENCABEZADO AL LISTAR ARTICULO
+void articulo_encabezado(void);
 
 #endif /* ARTICULO_H_ */

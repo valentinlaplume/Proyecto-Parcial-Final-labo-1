@@ -1,10 +1,10 @@
-
-#include "Articulo.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "utn.h"
+
 #include "LinkedList.h"
+#include "utn.h"
+#include "Articulo.h"
 #include "laplume.h"
 
 //******************************************************************************* CONSTRUCTORES
@@ -32,6 +32,7 @@ Articulo* articulo_newParam(int idArticulo, int IdPosicionArancelaria,
 			articulo_setAltura(pArticulo, altura)                                  < 0 ||
 			articulo_setProfundidad(pArticulo, profundidad)                        < 0)
 		{
+			printf("\n * Articulo no valido cargado de articulos.csv");
 			articulo_delete(pArticulo);
 			pArticulo = NULL;
 		}
@@ -249,7 +250,7 @@ int articulo_setFob(Articulo* this, float fob)
 float articulo_getFob(Articulo* this,int* flagError)
 {
     *flagError = -1;
-    int aux = -1;
+    float aux = -1;
     if(this != NULL && flagError != NULL )
     {
     	aux = this->fob;
@@ -282,7 +283,7 @@ int articulo_setPeso(Articulo* this, float peso)
 float articulo_getPeso(Articulo* this,int* flagError)
 {
     *flagError = -1;
-    int aux = -1;
+    float aux = -1;
     if(this != NULL && flagError != NULL )
     {
     	aux = this->peso;
@@ -315,7 +316,7 @@ int articulo_setAltura(Articulo* this, float altura)
 float articulo_getAltura(Articulo* this,int* flagError)
 {
     *flagError = -1;
-    int aux = -1;
+    float aux = -1;
     if(this != NULL && flagError != NULL )
     {
     	aux = this->altura;
@@ -348,7 +349,7 @@ int articulo_setAncho(Articulo* this, float ancho)
 float articulo_getAncho(Articulo* this,int* flagError)
 {
     *flagError = -1;
-    int aux = -1;
+    float aux = -1;
     if(this != NULL && flagError != NULL )
     {
     	aux = this->ancho;
@@ -381,7 +382,7 @@ int articulo_setProfundidad(Articulo* this, float profundidad)
 float articulo_getProfundidad(Articulo* this,int* flagError)
 {
     *flagError = -1;
-    int aux = -1;
+    float aux = -1;
     if(this != NULL && flagError != NULL )
     {
     	aux = this->profundidad;
@@ -461,9 +462,9 @@ int articulo_imprimirUnArticulo(void* pElement)
 		if(!flagErrorA && !flagErrorB && !flagErrorC && !flagErrorD && !flagErrorE && !flagErrorF &&
 		   !flagErrorG && !flagErrorH && !flagErrorI && !flagErrorJ && !flagErrorK)
 		{
-			printf("\n\x1b[34m --------------------------------------------------------------------------------------------------------------------------------------------------------------  \x1b[0m");
-			printf("\n ID ART: %-10d ID POS: %-10d NOMBRE: %-10s CODIGO: %-10s DESCRIP: %-10s ORIGEN: %-10s USS %-10.2f PESO: %-10.2f"
-				   "\n DIMENSIONES: 	    ANCHO: %-10.2f  ALTO: %-10.2f     PROFUNDO: %-10.2f ",idArticulo,idPosicionArancelaria,
+			//printf("\n\x1b[34m --------------------------------------------------------------------------------------------------------------------------------------------------------------  \x1b[0m");
+			articulo_encabezado();
+			printf("\n %-10d %-13d %-15s %-15s %-20s %-15s %-15.2f %-12.2f %-12.2f %-12.2f %-12.2f",idArticulo,idPosicionArancelaria,
 																                             nombre,codigo,descripcion,paisDeFabricacion,
 																                             fob,peso,ancho,altura,profundidad);
 			retorno = 0;
@@ -473,6 +474,24 @@ int articulo_imprimirUnArticulo(void* pElement)
 	return retorno;
 }
 
+void articulo_encabezado(void)
+{
+	char idArticulo[] = {"ID [A]"};
+	char idPosicionArancelaria[] = {"ID [P.A]"};
+	char nombre[] = {"NOMBRE"};
+	char codigo[] = {"CODIGO"};
+	char descripcion[] = {"DESCRIPCIÓN"};
+	char paisDeFabricacion[] = {"ORIGEN"};
+	char peso[] = {"PESO KG"};
+	char fob[] = {"V.FOB [USD]"};
+	char altura[] = {"ALTURA"};
+	char ancho[] = {"ANCHO"};
+	char profundidad[] = {"PROFUNDIDAD"};
+
+	printf("\n \x1b[40m\x1b[37m%-10s %-13s %-15s %-15s %-20s %-15s %-15s %-12s %-12s %-12s %-12s\x1b[0m\x1b[0m ",   idArticulo,idPosicionArancelaria,
+																													nombre,codigo,descripcion,paisDeFabricacion,
+																													fob,peso,ancho,altura,profundidad);
+}
 int articulo_imprimirArticulos(LinkedList* listaArticulos)
 {
 	int retorno = -1;

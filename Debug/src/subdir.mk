@@ -12,6 +12,8 @@ C_SRCS += \
 ../src/Parser.c \
 ../src/PosicionArancelaria.c \
 ../src/Serializer.c \
+../src/TransporteAereo.c \
+../src/TransporteMaritimo.c \
 ../src/laplume.c \
 ../src/main_Parcial2.c \
 ../src/utn.c 
@@ -25,6 +27,8 @@ OBJS += \
 ./src/Parser.o \
 ./src/PosicionArancelaria.o \
 ./src/Serializer.o \
+./src/TransporteAereo.o \
+./src/TransporteMaritimo.o \
 ./src/laplume.o \
 ./src/main_Parcial2.o \
 ./src/utn.o 
@@ -38,6 +42,8 @@ C_DEPS += \
 ./src/Parser.d \
 ./src/PosicionArancelaria.d \
 ./src/Serializer.d \
+./src/TransporteAereo.d \
+./src/TransporteMaritimo.d \
 ./src/laplume.d \
 ./src/main_Parcial2.d \
 ./src/utn.d 

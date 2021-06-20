@@ -13,7 +13,8 @@
 #define AUTOMATICA 0
 #define NO_AUTOMATICA 1
 
-#define NOMENCLADOR_LEN 20
+#define NOMENCLADOR_LEN 30
+#define TIPOLICENCIA_LEN 30
 
 typedef struct
 {
@@ -65,5 +66,11 @@ int isValidTipoLicencia(int tipoLicencia);
 //******************************************************************************** LISTAR
 int posicionArancelaria_imprimirUnaPosicionArancelaria(void* pElement);
 int posicionArancelaria_imprimirPosicionesArancelarias(LinkedList* posicionesArancelarias);
+
+// OBTENER CADENA POR TIPO DE LICENCIA
+int posicionArancelaria_obtenerCadenaPorTipoLicencia(int tipoLicencia, char opcionObtenida[]);
+
+// ENCABEZADO AL LISTAR
+void posicionArancelaria_encabezado(void);
 
 #endif /* POSICIONARANCELARIA_H_ */

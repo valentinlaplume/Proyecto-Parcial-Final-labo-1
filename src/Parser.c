@@ -9,14 +9,16 @@
 #include "Parser.h"
 #include "utn.h"
 
+#include "TransporteMaritimo.h"
+#include "TransporteAereo.h"
+
 /** \brief Parsea los datos los datos de los Articulos desde el archivo articulos.csv (modo texto).
- *
  * \param pFile FILE*
  * \param pArrayListArticulo LinkedList*
  * \return int
  *
  */
-int parser_articuloFromText(FILE* pFile, Dictionary* articulos, int* pIdMaxEncontrado)
+int parser_articulosFromText(FILE* pFile, Dictionary* articulos, int* pIdMaxEncontrado)
 {
 	char idArticuloStr[STR_LEN];
 	char idPosicionArancelariaStr[STR_LEN];
@@ -56,9 +58,10 @@ int parser_articuloFromText(FILE* pFile, Dictionary* articulos, int* pIdMaxEncon
 				if(flagOnce != 0)
 				{
 					if(esNumerica(idArticuloStr, 10) && esNumerica(idPosicionArancelariaStr, 10) &&
-					   esFlotante(pesoStr, 10) && esFlotante(alturaStr, 10) &&
+					   esFlotante(fobStr, 10) && esFlotante(pesoStr, 10) && esFlotante(alturaStr, 10) &&
 					   esFlotante(anchoStr, 10) && esFlotante(profundidadStr, 10))
 					{
+
 						idArticulo = atoi(idArticuloStr);
 						idPosicionArancelaria = atoi(idPosicionArancelariaStr);
 						fob = atof(fobStr);
@@ -72,18 +75,15 @@ int parser_articuloFromText(FILE* pFile, Dictionary* articulos, int* pIdMaxEncon
 								                      fob, peso, ancho, altura, profundidad);
 
 						// Guardo en diccionario el articulo construido
-						if(pArticulo != NULL) // La clave(key) es el ID : de TIPO cadena
-							dict_insert(articulos, idArticuloStr, pArticulo);
-
-						// busco id maximo
-						if(cantidadCargados == 0)
-							idMax = idArticulo; // me guardo el 1ero como MAX
-						else
+						if(pArticulo != NULL &&
+						  !dict_insert(articulos, idArticuloStr, pArticulo)) // La clave(key) es el ID : de TIPO cadena
 						{
-							if(idArticulo > idMax)
-								idMax = idArticulo;
+							// busco id maximo
+							if(cantidadCargados == 0 || idArticulo > idMax)
+								idMax = idArticulo; // me guardo el 1ero como MAX
+
+							cantidadCargados++;
 						}
-						cantidadCargados++;
 					}
 				}
 			}
@@ -96,7 +96,6 @@ int parser_articuloFromText(FILE* pFile, Dictionary* articulos, int* pIdMaxEncon
 }
 
 /** \brief Parsea los datos los datos de las Posiciones Arancelarias desde el archivo posicionesArancelarias.csv (modo texto).
- *
  * \param pFile FILE*
  * \param pArrayListArticulo LinkedList*
  * \return int
@@ -148,17 +147,14 @@ int parser_posicionesArancelariasFromText(FILE* pFile, Dictionary* posicionesAra
 
 						// Guardo en diccionario el articulo construido
 						if(pPosicionArancelaria != NULL) // La clave(key) es el ID : de TIPO cadena
-							dict_insert(posicionesArancelarias, idPosicionArancelariaStr, pPosicionArancelaria);
-
-						// busco id maximo
-						if(cantidadCargados == 0)
-							idMax = idPosicionArancelaria; // me guardo el 1ero como MAX
-						else
 						{
-							if(idPosicionArancelaria > idMax)
-								idMax = idPosicionArancelaria;
+							dict_insert(posicionesArancelarias, idPosicionArancelariaStr, pPosicionArancelaria);
+							// busco id maximo
+							if(cantidadCargados == 0 || idPosicionArancelaria > idMax)
+								idMax = idPosicionArancelaria; // me guardo el 1ero como MAX
+
+							cantidadCargados++;
 						}
-						cantidadCargados++;
 					}
 				}
 			}
@@ -166,6 +162,94 @@ int parser_posicionesArancelariasFromText(FILE* pFile, Dictionary* posicionesAra
 		}
 		while(!feof(pFile));
 		*pIdMaxEncontrado = idMax; // lo escribo en la var externa
+	}
+	return cantidadCargados; // devuelve cantidad leidos
+}
+
+/** \brief Parsea .
+ * \param pFile FILE*
+ * \param pArrayListArticulo LinkedList*
+ * \return int
+ */
+int parser_transporteMaritimoFromText(FILE* pFile, TransporteMaritimo* pTransporteMaritimo)
+{
+	char metrosCubicosStr[STR_LEN];
+	char precioContenedorStr[STR_LEN];
+	//-----------------------------------
+	float metrosCubicos;
+	float precioContenedor;
+    //------------------------------------
+	int flagOnce = 0;
+	int cantidadCargados = -1;
+
+	if(pFile != NULL && pTransporteMaritimo)
+	{
+		cantidadCargados = 0;
+		do
+		{
+			if(fscanf(pFile,"%[^,],%[^\n]\n", metrosCubicosStr,precioContenedorStr) == 2)
+			{
+				if(flagOnce != 0)
+				{
+					if(esFlotante(metrosCubicosStr, 10) && esFlotante(precioContenedorStr, 10))
+					{
+						metrosCubicos = atof(metrosCubicosStr);
+						precioContenedor = atof(precioContenedorStr);
+
+						transporteMaritimo_newParam(pTransporteMaritimo, metrosCubicos, precioContenedor);
+
+						if(pTransporteMaritimo != NULL)
+							cantidadCargados++;
+					}
+				}
+			}
+			flagOnce = 1;
+		}
+		while(!feof(pFile));
+	}
+	return cantidadCargados; // devuelve cantidad leidos
+}
+
+/** \brief Parsea .
+ * \param pFile FILE*
+ * \param pArrayListArticulo LinkedList*
+ * \return int
+ */
+int parser_transporteAereoFromText(FILE* pFile, TransporteAereo* pTransporteAereo)
+{
+	char constanteVolumetricaStr[STR_LEN];
+	char precioPorKgStr[STR_LEN];
+	//-----------------------------------
+	float constanteVolumetrica;
+	float precioPorKg;
+    //------------------------------------
+	int flagOnce = 0;
+	int cantidadCargados = -1;
+
+	if(pFile != NULL && pTransporteAereo)
+	{
+		cantidadCargados = 0;
+		do
+		{
+			if(fscanf(pFile,"%[^,],%[^\n]\n", constanteVolumetricaStr, precioPorKgStr) == 2)
+			{
+				if(flagOnce != 0)
+				{
+					if(esFlotante(constanteVolumetricaStr, 10) && esFlotante(precioPorKgStr, 10))
+					{
+						constanteVolumetrica = atof(constanteVolumetricaStr);
+						precioPorKg = atof(precioPorKgStr);
+
+						transporteAereo_newParam(pTransporteAereo, constanteVolumetrica, precioPorKg);
+
+						if(pTransporteAereo != NULL)
+							cantidadCargados++;
+					}
+				}
+			}
+			flagOnce = 1;
+		}
+		while(!feof(pFile));
 	}
 	return cantidadCargados; // devuelve cantidad leidos
 }

@@ -1,10 +1,10 @@
-src/Articulo.o: ../src/Articulo.c ../src/Articulo.h ../src/utn.h \
-  ../src/LinkedList.h ../src/laplume.h
+src/Articulo.o: ../src/Articulo.c ../src/LinkedList.h ../src/utn.h \
+  ../src/Articulo.h ../src/laplume.h
 
-../src/Articulo.h:
+../src/LinkedList.h:
 
 ../src/utn.h:
 
-../src/LinkedList.h:
+../src/Articulo.h:
 
 ../src/laplume.h:

@@ -8,13 +8,13 @@
 #include "Serializer.h"
 #include "Articulo.h"
 #include "Controller.h"
+#include "TransporteMaritimo.h"
+#include "TransporteAereo.h"
 
 /** \brief Escribe los datos de los articulos al archivo articulos.csv (modo texto).
- *
  * \param pFile FILE*
  * \param articulos Dictionary*
  * \return int
- *
  */
 int serializer_articulosFromText(FILE* pFile, Dictionary* articulos)
 {
@@ -70,7 +70,7 @@ int serializer_articulosFromText(FILE* pFile, Dictionary* articulos)
 				if(!flagErrorA && !flagErrorB && !flagErrorC && !flagErrorD && !flagErrorE && !flagErrorF &&
 				   !flagErrorG && !flagErrorH && !flagErrorI && !flagErrorJ && !flagErrorK)
 				{
-					fprintf(pFile,"%d,%d,%s,%s,%s,%s,%.2f,%.2f,%.2f,%.2f,%.2f\n",idArticulo,idPosicionArancelaria,
+					fprintf(pFile,"%d,%d,%s,%s,%s,%s,%f,%.2f,%.2f,%.2f,%.2f\n",idArticulo,idPosicionArancelaria,
 																	             nombre,codigo,descripcion,paisDeFabricacion,
 																	             fob,peso,ancho,altura,profundidad);
 					flagGuarde = 1;
@@ -84,11 +84,9 @@ int serializer_articulosFromText(FILE* pFile, Dictionary* articulos)
 }
 
 /** \brief Escribe los datos de las Posiciones Arancelarias al archivo posicionesArancelarias.csv (modo texto).
- *
  * \param pFile FILE*
  * \param articulos Dictionary*
  * \return int
- *
  */
 int serializer_posicionesArancelariasFromText(FILE* pFile, Dictionary* posicionesArancelarias)
 {
@@ -126,13 +124,69 @@ int serializer_posicionesArancelariasFromText(FILE* pFile, Dictionary* posicione
 				//---------------------------- OBTENGO CAMPOS -------------------------------------------------------------
 				if(!flagErrorA && !flagErrorB && !flagErrorC && !flagErrorD && !flagErrorE && !flagErrorF)
 				{
-					fprintf(pFile,"%d,%s,%.2f,%.2f,%.2f,%d\n",idPosicionArancelaria, nomenclador, porcentajeSeguro,
+					fprintf(pFile,"%d,%s,%f,%f,%f,%d\n",idPosicionArancelaria, nomenclador, porcentajeSeguro,
 										                porcentajeImportacion, porcentajeTasaEstadistica, tipoLicencia);
 					flagGuarde = 1;
 				}
 			}
 			if(flagGuarde == 1 && !ll_deleteLinkedList(listaPosicionArancelaria))
 				retorno = 0;
+		}
+	}
+	return retorno;
+}
+
+/** \brief Escribe los datos del TransporteMaritimo al archivo transporteMaritimo.csv (modo texto).
+ * \param pFile FILE*
+ * \param pTransporteMaritimo TransporteMaritimo*
+ * \return int
+ */
+int serializer_transporteMaritimoFromText(FILE* pFile, TransporteMaritimo* pTransporteMaritimo)
+{
+	int retorno = -1;
+	//------------------------------------
+	float metrosCubicos;
+	float precioContenedor;
+	int flagErrorA, flagErrorB;
+
+	if(pFile != NULL && pTransporteMaritimo != NULL)
+	{
+		fprintf(pFile,"metrosCubicos,precioContenedor\n");
+		//---------------------------- OBTENGO CAMPOS -------------------------------------------------------------
+		metrosCubicos = transporteMaritimo_getMetrosCubicos(pTransporteMaritimo, &flagErrorA);
+		precioContenedor = transporteMaritimo_getPrecioContenedor(pTransporteMaritimo, &flagErrorB);
+		if(!flagErrorA && !flagErrorB)
+		{
+			fprintf(pFile,"%f,%f\n",metrosCubicos, precioContenedor);
+			retorno = 0;
+		}
+	}
+	return retorno;
+}
+
+/** \brief Escribe los datos del Transporte Aereo al archivo transporteAereo.csv (modo texto).
+ * \param pFile FILE*
+ * \param pTransporteMaritimo TransporteMaritimo*
+ * \return int
+ */
+int serializer_transporteAereoFromText(FILE* pFile, TransporteAereo* pTransporteAereo)
+{
+	int retorno = -1;
+	//------------------------------------
+	float constanteVolumetrica;
+	float precioPorKg;
+	int flagErrorA, flagErrorB;
+
+	if(pFile != NULL && pTransporteAereo != NULL)
+	{
+		fprintf(pFile,"constanteVolumetrica,precioPorKg\n");
+		//---------------------------- OBTENGO CAMPOS -------------------------------------------------------------
+		constanteVolumetrica = transporteAereo_getConstanteVolumetrica(pTransporteAereo, &flagErrorA);
+		precioPorKg = transporteAereo_getPrecioPorKg(pTransporteAereo, &flagErrorB);
+		if(!flagErrorA && !flagErrorB)
+		{
+			fprintf(pFile,"%f,%f\n",constanteVolumetrica, precioPorKg);
+			retorno = 0;
 		}
 	}
 	return retorno;
