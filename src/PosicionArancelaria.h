@@ -13,7 +13,7 @@
 #define AUTOMATICA 0
 #define NO_AUTOMATICA 1
 
-#define NOMENCLADOR_LEN 30
+#define NOMENCLADOR_LEN 40
 #define TIPOLICENCIA_LEN 30
 
 typedef struct
@@ -27,13 +27,31 @@ typedef struct
 	float porcentajeTasaEstadistica;
 
 	int tipoLicencia; // [0] AUTOMATICA - [1] NO AUTOMATICA
+
 }PosicionArancelaria;
 
+// LISTAR
+int posicionArancelaria_imprimirUnaPosicionArancelaria(void* pElement);
+int posicionArancelaria_imprimirPosicionesArancelarias(LinkedList* posicionesArancelarias);
+
+// OBTENER CADENA POR TIPO DE LICENCIA
+int posicionArancelaria_obtenerCadenaPorTipoLicencia(int tipoLicencia, char opcionObtenida[]);
+
+// ENCABEZADO AL LISTAR
+void posicionArancelaria_encabezado(void);
+
+// FUNCION CRITERIO BUSCAR POR NOMENCLATURA ARANCELARIA
+int funcionCriterio_buscarPorNomenclador(void* pElement, void* nomencladorIngresadoBuscado);
+
+
+//------------------------------------------------------------------------------------------------------------------
+// CONSTRUCTORES
 PosicionArancelaria* posicionArancelaria_new(void);
 PosicionArancelaria* posicionArancelaria_newParam(int idPosicionArancelaria, char* nomenclador, float porcentajeSeguro,
 		                                          float porcentajeImportacion, float porcentajeTasaEstadistica, int tipoLicencia);
-
+// DESTRUCTOR
 int posicionArancelaria_delete(PosicionArancelaria* this);
+//---------------------------------------------- SET - GET - IS VALID ----------------------------------------------
 
 int posicionArancelaria_setIdPosicionArancelaria(PosicionArancelaria* this,int IdPosicionArancelaria);
 int posicionArancelaria_getIdPosicionArancelaria(PosicionArancelaria* this,int* flagError);
@@ -62,15 +80,6 @@ int isValidTipoLicencia(int tipoLicencia);
 int posicionArancelaria_setTipoLicencia(PosicionArancelaria* this, int tipoLicencia);
 int posicionArancelaria_getTipoLicencia(PosicionArancelaria* this,int* flagError);
 int isValidTipoLicencia(int tipoLicencia);
-
-//******************************************************************************** LISTAR
-int posicionArancelaria_imprimirUnaPosicionArancelaria(void* pElement);
-int posicionArancelaria_imprimirPosicionesArancelarias(LinkedList* posicionesArancelarias);
-
-// OBTENER CADENA POR TIPO DE LICENCIA
-int posicionArancelaria_obtenerCadenaPorTipoLicencia(int tipoLicencia, char opcionObtenida[]);
-
-// ENCABEZADO AL LISTAR
-void posicionArancelaria_encabezado(void);
+//-----------------------------------------------------------------------------------------------------------------
 
 #endif /* POSICIONARANCELARIA_H_ */

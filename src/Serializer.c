@@ -70,7 +70,7 @@ int serializer_articulosFromText(FILE* pFile, Dictionary* articulos)
 				if(!flagErrorA && !flagErrorB && !flagErrorC && !flagErrorD && !flagErrorE && !flagErrorF &&
 				   !flagErrorG && !flagErrorH && !flagErrorI && !flagErrorJ && !flagErrorK)
 				{
-					fprintf(pFile,"%d,%d,%s,%s,%s,%s,%f,%.2f,%.2f,%.2f,%.2f\n",idArticulo,idPosicionArancelaria,
+					fprintf(pFile,"%d,%d,%s,%s,%s,%s,%.3f,%.3f,%.3f,%.3f,%.3f\n",idArticulo,idPosicionArancelaria,
 																	             nombre,codigo,descripcion,paisDeFabricacion,
 																	             fob,peso,ancho,altura,profundidad);
 					flagGuarde = 1;
@@ -124,7 +124,7 @@ int serializer_posicionesArancelariasFromText(FILE* pFile, Dictionary* posicione
 				//---------------------------- OBTENGO CAMPOS -------------------------------------------------------------
 				if(!flagErrorA && !flagErrorB && !flagErrorC && !flagErrorD && !flagErrorE && !flagErrorF)
 				{
-					fprintf(pFile,"%d,%s,%f,%f,%f,%d\n",idPosicionArancelaria, nomenclador, porcentajeSeguro,
+					fprintf(pFile,"%d,%s,%.2f,%.2f,%.2f,%d\n",idPosicionArancelaria, nomenclador, porcentajeSeguro,
 										                porcentajeImportacion, porcentajeTasaEstadistica, tipoLicencia);
 					flagGuarde = 1;
 				}
@@ -157,7 +157,7 @@ int serializer_transporteMaritimoFromText(FILE* pFile, TransporteMaritimo* pTran
 		precioContenedor = transporteMaritimo_getPrecioContenedor(pTransporteMaritimo, &flagErrorB);
 		if(!flagErrorA && !flagErrorB)
 		{
-			fprintf(pFile,"%f,%f\n",metrosCubicos, precioContenedor);
+			fprintf(pFile,"%.2f,%.2f\n",metrosCubicos, precioContenedor);
 			retorno = 0;
 		}
 	}
@@ -185,7 +185,7 @@ int serializer_transporteAereoFromText(FILE* pFile, TransporteAereo* pTransporte
 		precioPorKg = transporteAereo_getPrecioPorKg(pTransporteAereo, &flagErrorB);
 		if(!flagErrorA && !flagErrorB)
 		{
-			fprintf(pFile,"%f,%f\n",constanteVolumetrica, precioPorKg);
+			fprintf(pFile,"%.2f,%.2f\n",constanteVolumetrica, precioPorKg);
 			retorno = 0;
 		}
 	}

@@ -153,7 +153,7 @@ int ll_add(LinkedList* this, void* pElement)
     return returnAux;
 }
 
-/** \brief Permite realizar el test de la funcion addNode la cual es privada
+/** \brief Obtiene un elemento
  *
  * \param this LinkedList* Puntero a la lista
  * \param nodeIndex int Ubicacion del elemento a obtener
@@ -176,7 +176,53 @@ void* ll_get(LinkedList* this, int index)
     }
     return returnAux;
 }
+/** \brief Obtiene un elemento
+ *
+ * \param this LinkedList* Puntero a la lista
+ * \param isFirst int indica 0 para retornar primer nodo, 1 para dar el siguiente nodo
+ * \return void* Retorna    (NULL) Error: si el puntero a la lista es NULL o (si el indice es menor a 0 o mayor al len de la lista)
+ *                          (pElement) Si funciono correctamente
+ *
+ */
+void* ll_getNext(LinkedList* this, int isFirst)
+{
+	/* ------------------------ Se usa --------------------------------------
 
+	 pEmpleado = ll_getNext(listaEmpleados, 1) // dame el de la posicion 0
+	 while(pEmpleado != NULL)
+	 {
+		printf("nombre empleado: %s", pEmpleado->nombre); <----- editable, funcion buscar
+		pEmpleado = ll_getNext(listaEmpleados, 0) // dame el next
+	 }
+
+	   ------------------------ Se usa -------------------------------------- */
+    void* returnAux = NULL;
+    static Node* pNodeAux;
+
+    if(this != NULL && (isFirst == 1 || isFirst == 0))
+    {
+    	if(isFirst == 1)
+    	{
+    		pNodeAux = getNode(this, 0);
+    		if(pNodeAux != NULL)
+			{
+				returnAux = pNodeAux->pElement;
+			}
+    	}
+    	else
+    	{
+			if(pNodeAux != NULL)
+			{
+				pNodeAux = pNodeAux->pNextNode;
+				if(pNodeAux != NULL)
+				{
+					returnAux = pNodeAux->pElement;
+				}
+			}
+    	}
+    }
+    return returnAux;
+}
 /** \brief Modifica un elemento de la lista
  *
  * \param this LinkedList* Puntero a la lista
@@ -544,7 +590,7 @@ int ll_sort(LinkedList* this, int (*pFunc)(void* ,void*), int order)
  * \return int Retorna  (-1) Error: si el puntero a la listas es NULL
  *                      ( 0) Si ok
  */
-int ll_map(LinkedList* this, Function pFunc)
+int ll_map2(LinkedList* this, Function pFunc)
 {
 	int returnAux = -1;
 	int i;
@@ -555,11 +601,39 @@ int ll_map(LinkedList* this, Function pFunc)
 		for(i=0;i<ll_len(this);i++)
 		{
 			pElemento = ll_get(this,i);
-			pFunc(pElemento);
+			if(pElemento != NULL)
+				pFunc(pElemento);
 		}
 		returnAux = 0;
 	}
 	return returnAux;
+}
+/** \brief Itera la lista y utiliza a la funcion criterio en cada iteracion
+ * \param this LinkedList* Puntero a la lista
+ * \param pFunc (*pFunc) Puntero a la funcion criterio
+ * \return int Retorna  (-1) Error: si el puntero a la listas es NULL
+ *                      ( 0) Si ok
+ */
+int ll_map(LinkedList* plistaFiltrada, int (*pFuncion)(void*))
+{
+	int retorno = -1;
+	int lenLista, i;
+	void* pElemento;
+
+	if(plistaFiltrada != NULL)
+	{
+		lenLista = ll_len(plistaFiltrada);
+		for(i=0; i<lenLista; i++)
+		{
+			pElemento = ll_get(plistaFiltrada, i);
+			if(pElemento != NULL)
+			{
+				pFuncion(pElemento);
+			}
+		}
+		retorno = 0;
+	}
+	return retorno;
 }
 
 /** \brief Filtra la lista usando a la funcion criterio recibida como parametro
@@ -568,7 +642,7 @@ int ll_map(LinkedList* this, Function pFunc)
  * \return int Retorna  (-1) Error: si el puntero a la listas es NULL
  *                      ( 0) Si ok
  */
-int ll_filter(LinkedList * this, Function pFunc)
+int ll_filter3(LinkedList * this, Function pFunc)
 {
 	int returnAux = -1;
 	void* pAux;
@@ -591,6 +665,36 @@ int ll_filter(LinkedList * this, Function pFunc)
 		}
 	}
 	return returnAux;
+}
+
+/** \brief Filtra la lista usando a la funcion criterio recibida como parametro
+ * \param this LinkedList* Puntero a la lista
+ * \param pFunc (*pFunc) Puntero a la funcion criterio
+ * \return LinkedList* Retorna la lista filtrada, NULL si no obtuvo lista
+ */
+LinkedList* ll_filter(LinkedList* pListaOriginal, int(*pFuncionCriterio)(void*))
+{
+	LinkedList* listaFiltrada = NULL;
+	void* pElement;
+	int lenListaOriginal, i;
+
+	if(pListaOriginal != NULL && pFuncionCriterio != NULL)
+	{
+		lenListaOriginal = ll_len(pListaOriginal);
+		listaFiltrada = ll_newLinkedList(); // creo lista filtrada
+		if(listaFiltrada != NULL)
+		{
+			for(i=0; i<lenListaOriginal; i++)
+			{
+				pElement = ll_get(pListaOriginal, i);
+				if(pFuncionCriterio(pElement)) // funcion criterio, agrego por criterio
+				{
+					ll_add(listaFiltrada, pElement);// agrego a la lista filtrada los elementos por criterio
+				}
+			}
+		}
+	}
+	return listaFiltrada;
 }
 
 /** \brief Reduce la lista a un numero (tipo Int), usando a la funcion criterio recibida como parametro
@@ -697,4 +801,31 @@ int ll_reduceInt2(LinkedList* this,int (*pFunc)(void*,void*),void* arg)
 		}
 	}
 	return acum;
+}
+
+/** \brief Itera la lista y utiliza a la funcion criterio en cada iteracion para buscar un elemento
+ * \param this LinkedList* Puntero a la lista
+ * \param pFunc (*pFunc) Puntero a la funcion criterio
+ * \return int Retorna  (1) Error: si el puntero a la listas es NULL
+ *                      ( 0) Si ok
+ */
+
+void* ll_buscarElement(LinkedList* lista, int(*pFuncionCriterio)(void*, void*), void* datoIngresadoBuscado)
+{
+	void* retornoElement = NULL;
+	if(lista != NULL && pFuncionCriterio != NULL)
+	{
+		void* pElement;
+		pElement = ll_getNext(lista, 1);
+		while(pElement != NULL)
+		{
+			if(pFuncionCriterio(pElement, datoIngresadoBuscado) == 1)
+			{
+				retornoElement = pElement;
+				break;
+			}
+			pElement = ll_getNext(lista, 0);
+		}
+	}
+	return retornoElement;
 }

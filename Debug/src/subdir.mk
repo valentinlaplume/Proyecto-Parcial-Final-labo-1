@@ -5,6 +5,7 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../src/Articulo.c \
+../src/Calculos.c \
 ../src/Controller.c \
 ../src/Dictionary.c \
 ../src/Informe.c \
@@ -20,6 +21,7 @@ C_SRCS += \
 
 OBJS += \
 ./src/Articulo.o \
+./src/Calculos.o \
 ./src/Controller.o \
 ./src/Dictionary.o \
 ./src/Informe.o \
@@ -35,6 +37,7 @@ OBJS += \
 
 C_DEPS += \
 ./src/Articulo.d \
+./src/Calculos.d \
 ./src/Controller.d \
 ./src/Dictionary.d \
 ./src/Informe.d \

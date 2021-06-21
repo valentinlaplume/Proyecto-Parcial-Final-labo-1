@@ -1,5 +1,5 @@
 idPosicionArancelaria,nomenclador,porcentajeSeguro,porcentajeImportacion,porcentajeTasaEstadistica,tipoLicencia
-1,AX12DF,1.100000,11.700000,1.500000,1
+1,AX12DF,1,20,2.5,1
 2,BX12AR,1.200000,12.700000,2.500000,0
 3,CX12BZ,1.300000,13.700000,3.500000,1
 4,DX12UK,1.400000,14.700000,4.500000,0

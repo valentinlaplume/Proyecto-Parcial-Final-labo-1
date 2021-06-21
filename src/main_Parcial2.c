@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "LinkedList.h"
 #include "Dictionary.h"
-
 #include "utn.h"
 #include "Controller.h"
 
@@ -19,6 +17,8 @@ int main(void)
 
 	articulos = dict_new(0);
 	posicionesArancelarias = dict_new(0);
+
+
 
 	if(articulos != NULL && posicionesArancelarias != NULL)
 	{
@@ -38,14 +38,14 @@ int main(void)
 					"\n |  4  - Submenu: Alta, Baja, Modificacion [Posicion Arancelaria]       |"
 					"\n |  5  - Ver información - Modificar información [Transporte Aereo]     |"
 					"\n |  6  - Ver información - Modificar información [Transporte Maritimo]  |"
-					"\n |  7  - Listar Posicion Arancelaria con sus Articulos                  |"
-					"\n |  8  - Listar Articulos y costo final por Transporte Maritimo         |"
-					"\n |  9  - |"
-					"\n | 10  - |"
-					"\n | 11  -  Guardar Transporte Aereo                                      |"
-					"\n | 12  -  Guardar Transporte Maritimo                                   |"
-					"\n | 13  -  Guardar Articulos                                             |"
-					"\n | 14  -  Guardar Posiciones Arancelarias                               |"
+					"\n |  7  - Listar Posiciones Arancelarias con sus Articulos               |"
+					"\n |  8  - Informe costo final por Transportes                            |"
+					"\n |  9  - Buscar Posicion Arancelaria por Nomenclador y listar Articulos |"
+					"\n | 10  - Buscar Articulo por Codigo                                     |"
+					"\n | 11  -  |"
+					"\n | 12  -  |"
+					"\n | 13  -  |"
+					"\n | 14  -  Guardar todo                                                  |"
 					"\n | 15  -  Salir                                                         |"
 					"\n * -------------------------------------------------------------------- *"
 					"\n > Eliga opcion: ",
@@ -54,10 +54,10 @@ int main(void)
 				switch(opcion)
 				{
 					case 1: // Listar articulos
-						controller_imprimirArticulos(articulos);
+						controller_listarArticulos(articulos);
 					break;
 					case 2: // Listar posiciones arancelarias
-						controller_imprimirPosicionesArancelarias(posicionesArancelarias);
+						controller_listarPosicionesArancelarias(posicionesArancelarias);
 					break;
 					case 3: // Alta - Baja - Modificacion [Articulo]
 						controller_ABMArticulo(articulos, posicionesArancelarias);
@@ -72,25 +72,30 @@ int main(void)
 						controller_subMenuTransporteMaritimo(&transporteMaritimo);
 					break;
 					case 7: // Listar Posicion Arancelaria con sus Articulos
-						controller_imprimirPosicionArancelariaConSusArticulo(articulos, posicionesArancelarias);
+						controller_listarPosicionArancelariaConSusArticulo(articulos, posicionesArancelarias);
 					break;
-					case 8: // Listar Articulos y costo final por Transporte Maritimo
-						controller_precioMaritimoArticulo(articulos, posicionesArancelarias,&transporteMaritimo);
+					case 8: // Informe costo final por Transportes
+						controller_subMenuInforme(articulos, posicionesArancelarias, &transporteAereo, &transporteMaritimo);
 					break;
-					case 9:
+					case 9: // Buscar Posicion Arancelaria por Nomenclador y listar Articulos
+						controller_listarArticulosPorBusquedaNomenclador(articulos, posicionesArancelarias);
 					break;
-					case 10:
+					case 10: // Buscar Articulo por Codigo
+						controller_listarArticuloPorBusquedaCodigo(articulos);
 					break;
 					case 11:
-						controller_guardarTransporteAereo("transporteAereo.csv", &transporteAereo);
+
 					break;
 					case 12:
-						controller_guardarTransporteMaritimo("transporteMaritimo.csv", &transporteMaritimo);
+
 					break;
 					case 13:
-						controller_guardarArticulos("articulos.csv", articulos);
+
 					break;
 					case 14:
+						controller_guardarTransporteAereo("transporteAereo.csv", &transporteAereo);
+						controller_guardarTransporteMaritimo("transporteMaritimo.csv", &transporteMaritimo);
+						controller_guardarArticulos("articulos.csv", articulos);
 						controller_guardarPosicionesArancelarias("posicionesArancelarias.csv", posicionesArancelarias);
 					break;
 				} // fin switch

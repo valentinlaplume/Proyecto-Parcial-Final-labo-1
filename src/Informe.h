@@ -14,6 +14,7 @@
 #include "Informe.h"
 #include "TransporteAereo.h"
 #include "TransporteMaritimo.h"
+#include "Calculos.h"
 
 int informe_pedirDatosArticulo(char* nombre, char* codigo, char* descripcion, char* paisDeFabricacion,
 		                       float* fob, float* peso, float* ancho, float* altura, float* profundidad);
@@ -23,32 +24,22 @@ int informe_pedirDatosPosicionArancelaria(char* nomenclador, float* porcentajeSe
 
 // Listar Posicion Arancelaria con sus Articulos
 int informe_listarPosicionArancelariaConSusArticulo(LinkedList* listaArticulos, LinkedList* listaPosicionesArancelarias);
+// Listar Articulos con costo final por Transporte Maritimo
+int informe_listarArticulosConCostoFinalTransporteMaritimo(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria,TransporteMaritimo* pTransporteMaritimo);
+// Listar Articulos con costo final por Transporte Aereo
+int informe_listarArticulosConCostoFinalTransporteAereo(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria,TransporteAereo* pTransporteAereo);
+// Listar Articulos con costo final por Transportes
+int informe_listarArticulosConCostoFinalPorTransportes(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria, TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo);
 
-// Listar Articulos y costo final por Transporte Maritimo
-int informe_listarArticulosConCostoFinalTransporteMaritimo(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria,
-		                                                   TransporteMaritimo* pTransporteMaritimo);
-//******************************************************************************** Calculos
-// Transporte Maritimo
-float transporteMaritimo_obtenerVolumenCubico(Articulo* pArticulo);
-float transporteMaritimo_obtenerPrecioPorMetroCubico(TransporteMaritimo* pTransporteMaritimo);
-float transporteMaritimo_calcularFlete(Articulo* pArticulo, TransporteMaritimo* pTransporteMaritimo);
-/*
-  (seguro*fob) / 100 -------- OK
-  base imponible maritimo: fob + seguro + proporcional flete = la base imponible maritima ----- OK
 
- PORCENTAJE DE IMPORTACION = (% importacion * base imponible) / 100        - OK
- PORCENTAJE DE TASA ESTADISTICA = (% tasa estad * base imponible) / 100    - OK
 
- COSTO final !!!!!
- import final maritima = basee impon + porcentaje de importortacion + porcentaje tasa estadis */
-float transporteMaritimo_calcularCostoFinal(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
-		                                    TransporteMaritimo* pTransporteMaritimo);
-float transporteMaritimo_calcularBaseImponible(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
-											   TransporteMaritimo* pTransporteMaritimo);
-float transporteMaritimo_calcularPorcentajeImportacion(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
-		                                               TransporteMaritimo* pTransporteMaritimo);
-float transporteMaritimo_calcularPorcentajeeTasaEstadistica(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
-		                                                    TransporteMaritimo* pTransporteMaritimo);
-float transporteMaritimo_calcularPorcentajeSeguro(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria);
+// Listar Articulos por Busqueda nomenclador
+int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionArancelaria, LinkedList* listaArticulos);
+int sonIgualesIdPosicionArancelaria(void* pArticuloElement, void* pPosicionAranElement);
+
+
+
+
+
 
 #endif /* INFORME_H_ */

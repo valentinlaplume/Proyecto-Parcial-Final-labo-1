@@ -406,7 +406,7 @@ int isValidProfundidad(float profundidad)
  * \param int* idPosicionArancelaria
  * \return -1 ERROR, 0 si ok
  */
-int articulo_pedirIdPosicionArancelaria(int* idPosicionArancelaria)
+/*int articulo_pedirIdPosicionArancelaria(int* idPosicionArancelaria)
 {
 	int retorno = -1;
 	if(idPosicionArancelaria != NULL )
@@ -420,10 +420,14 @@ int articulo_pedirIdPosicionArancelaria(int* idPosicionArancelaria)
 		}
 	}
 	return retorno;
-}
+}*/
 
 
 //******************************************************************************** LISTAR
+/** \brief Lista un Articulo
+ * \param pElement void*
+ * \return int 0 si ok, -1 error
+ */
 int articulo_imprimirUnArticulo(void* pElement)
 {
 	int retorno = -1;
@@ -473,7 +477,10 @@ int articulo_imprimirUnArticulo(void* pElement)
 	}
 	return retorno;
 }
-
+/** \brief print encabezado al listar
+ * \param void
+ * \return void
+ */
 void articulo_encabezado(void)
 {
 	char idArticulo[] = {"ID [A]"};
@@ -488,10 +495,14 @@ void articulo_encabezado(void)
 	char ancho[] = {"ANCHO"};
 	char profundidad[] = {"PROFUNDIDAD"};
 
-	printf("\n \x1b[40m\x1b[37m%-10s %-13s %-15s %-15s %-20s %-15s %-15s %-12s %-12s %-12s %-12s\x1b[0m\x1b[0m ",   idArticulo,idPosicionArancelaria,
+	printf("\n \x1b[40m\x1b[37m%-10s %-13s %-15s %-15s %-20s %-15s %-15s %-12s %-12s %-12s %-12s \x1b[0m\x1b[0m ",   idArticulo,idPosicionArancelaria,
 																													nombre,codigo,descripcion,paisDeFabricacion,
 																													fob,peso,ancho,altura,profundidad);
 }
+/** \brief Lista todos los Articulos
+ * \param listaArticulos LinkedList*
+ * \return int 0 si ok, -1 error
+ */
 int articulo_imprimirArticulos(LinkedList* listaArticulos)
 {
 	int retorno = -1;
@@ -509,4 +520,70 @@ int articulo_imprimirArticulos(LinkedList* listaArticulos)
 		}
 	}
 	return retorno;
+}
+/* \brief Compara el codigo ingresado con el de todos los elementos
+ * \param pElement void*
+ * \param codigoIngresadoBuscado void*
+ * \return int: 0 si no encontró
+ 	 	 	    1 si encontró
+ */
+int funcionCriterio_buscarPorCodigoArticulo(void* pElement, void* codigoIngresadoBuscado)
+{
+	int retorno = 0;
+	char* codigoAux;
+	int flagError;
+	if(pElement != NULL && codigoIngresadoBuscado != NULL)
+	{
+		Articulo* pArticulo = (Articulo*)pElement;
+		codigoAux = articulo_getCodigo(pArticulo, &flagError);
+
+		if(!flagError && (strcmp(codigoAux, codigoIngresadoBuscado) == 0) )
+			retorno = 1;
+	}
+	return retorno;
+}
+
+/* \brief Compara dos Nombres
+ * \param this1 void*
+ * \param this2 void*
+ * \return int -2 ERROR,
+ 	 	 	 	 	 	  0 si los this son iguales
+ 	 	 	 	 	 	  1 si thisUno es mayor a thisDos
+ 	 	 	 	 	 	 -1 si thisUno es menor a thisDos
+ */
+int funcionCriterio_compararPorNombreArticulo(void* thisUno, void* thisDos)
+{
+    int retorno= -2;
+    char* bufferNombreUno;
+    char* bufferNombreDos;
+    int flagErrorUno, flagErrorDos;
+
+    if(thisUno != NULL && thisDos != NULL)
+    {
+    	bufferNombreUno = articulo_getNombre((Articulo*)thisUno, &flagErrorUno);
+    	bufferNombreDos = articulo_getNombre((Articulo*)thisDos, &flagErrorDos);
+
+    	if(!flagErrorUno && !flagErrorDos)
+    	{
+    		if(strcmp(bufferNombreUno, bufferNombreDos) > 0)
+    		{
+    			retorno = 1;
+    		}
+    		else
+    		{
+				if(strcmp(bufferNombreUno, bufferNombreDos) < 0)
+				{
+					retorno = -1;
+				}
+    			else
+    			{
+    				if(strcmp(bufferNombreUno, bufferNombreDos) == 0)
+    				{
+    					retorno = 0;
+    				}
+    			}
+    		}
+    	}
+    }
+    return retorno;
 }

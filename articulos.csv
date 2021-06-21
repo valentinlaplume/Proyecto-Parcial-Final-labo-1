@@ -1,7 +1,7 @@
 idArticulo,idPosicionArancelaria,nombre,codigo,descripcion,paisDeFabricacion,fob,peso,ancho,altura,profundidad
-1,6,moto,AX30,con nitro,China,15.00,17.00,15.00,10.00,7.00
-2,5,Cpu,BX30,cpu,China,280.00,17.00,20.00,40.00,7.00,7.00
-3,6,Sarcofago,CX30,sarcofago,China,85.00,17.00,15.00,10.00,7.00
-4,3,Monitor,DX30,monitor,China,15.00,17.00,15.00,10.00,7.00
-5,6,Leds,h44,leds rgb,China,15.00,17.00,15.00,10.00,7.00
-6,1,Botella,FX30,botella de agua,China,15.00,17.00,15.00,10.00,7.00
+1,1,Raspberry,AX30,con nitro,China,38.10,0.107,8.5,4.9,2.2
+2,5,Cpu,BX30,cpu,China,280.00,0.200,20.00,40.00,7.00,9.00
+3,6,Sarcofago,CX30,sarcofago,China,85.00,1.00,11.00,11.00,7.00
+4,3,Monitor,DX30,monitor,China,15.00,4.00,14.00,10.00,7.00
+5,6,Leds,h44,leds rgb,China,15.00,0.500,15.00,8.00,9.00
+6,1,Botella,FX30,botella de agua,China,15.00,0.300,15.00,10.00,6.00

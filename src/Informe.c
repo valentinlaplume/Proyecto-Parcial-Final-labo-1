@@ -15,10 +15,11 @@
 
 #include "Articulo.h"
 #include "PosicionArancelaria.h"
-#include "Informe.h"
-
 #include "TransporteAereo.h"
 #include "TransporteMaritimo.h"
+
+#include "Calculos.h"
+#include "Informe.h"
 
 
 int informe_pedirDatosArticulo(char* nombre, char* codigo, char* descripcion, char* paisDeFabricacion,
@@ -33,7 +34,7 @@ int informe_pedirDatosArticulo(char* nombre, char* codigo, char* descripcion, ch
 		   !utn_getTexto(descripcion, DESCRIPCION_LEN, " > Ingrese descripcion del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
 		   !utn_getNombre(paisDeFabricacion, PAIS_LEN, " > Ingrese pais de fabricación del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
 		   !utn_getNumeroFloat(fob, " > Ingrese valor fob del articulo: USS ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
-		   !utn_getNumeroFloat(peso, " > Ingrese peso [kg] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
+		   !utn_getNumeroFloat(peso, " > Ingrese peso en [kg] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
 		   !utn_getNumeroFloat(ancho, "\n > DIMENSIONES:\n > Ingrese ancho[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
 		   !utn_getNumeroFloat(altura, " > Ingrese altura[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
 		   !utn_getNumeroFloat(profundidad, " > Ingrese profundidad[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2))
@@ -82,6 +83,7 @@ int informe_listarPosicionArancelariaConSusArticulo(LinkedList* listaArticulos, 
 		{
 			pPosicionArancelaria = (PosicionArancelaria*)ll_get(listaPosicionesArancelarias, i);
 			idPosAran = posicionArancelaria_getIdPosicionArancelaria(pPosicionArancelaria, &flagErrorPA);
+			printf("\n\n");
 			posicionArancelaria_imprimirUnaPosicionArancelaria(pPosicionArancelaria);
 			for(k=0; k<lenArticulos; k++)
 			{
@@ -92,7 +94,6 @@ int informe_listarPosicionArancelariaConSusArticulo(LinkedList* listaArticulos, 
 				   idPosAranArticulo == idPosAran)
 				{
 					articulo_imprimirUnArticulo(pArticulo);
-					printf("\n");
 				}
 				// ------------------------------------
 			}
@@ -102,6 +103,56 @@ int informe_listarPosicionArancelariaConSusArticulo(LinkedList* listaArticulos, 
 	}
 	return retorno;
 }
+// Listar Articulos y costo final por Transporte Aereo
+int informe_listarArticulosConCostoFinalTransporteAereo(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria,
+                                                        TransporteAereo* pTransporteAereo)
+{
+	int retorno = -1;
+	Articulo* pArticulo;
+	PosicionArancelaria* pPosicionArancelaria;
+	if(listaArticulos != NULL && listaPosicionArancelaria != NULL && pTransporteAereo != NULL )
+	{
+		int i, k;
+		int lenArticulos, lenPosicionArancelaria;
+		//float resultadoTransporteAereo;
+		lenArticulos = ll_len(listaArticulos);
+		lenPosicionArancelaria = ll_len(listaPosicionArancelaria);
+		int idPosAranArticulo, idPosicionArancelaria, flagErrorA, flagErrorB;
+
+		float resultadoTransporteAereo;
+	// ------------------------------------------------------------------------------------------------------
+		for(i=0; i<lenArticulos; i++)
+		{
+			pArticulo = (Articulo*) ll_get(listaArticulos, i);
+			if(pArticulo != NULL)
+			{
+				idPosAranArticulo = articulo_getIdPosicionArancelaria(pArticulo, &flagErrorA);
+				articulo_imprimirUnArticulo(pArticulo); // Imprimo Articulo
+				// ------------------------------------------------------------------------
+				for(k=0; k<lenPosicionArancelaria; k++)
+				{
+					pPosicionArancelaria = (PosicionArancelaria*) ll_get(listaPosicionArancelaria, k);
+					if(pPosicionArancelaria != NULL)
+					{
+						idPosicionArancelaria = posicionArancelaria_getIdPosicionArancelaria(pPosicionArancelaria, &flagErrorB);
+						if(!flagErrorA && !flagErrorB &&
+						   idPosAranArticulo == idPosicionArancelaria)
+						{
+							resultadoTransporteAereo = transporteAereo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteAereo);
+							printf("\n > Costo final por Transporte Aereo:  USD %.2f\n", resultadoTransporteAereo);
+							retorno = 0;
+						}
+					}
+				}
+				// ------------------------------------------------------------------------
+			}
+		}
+	}
+	return retorno;
+}
+
+//---------------------------------------------------------------------------------------------------------------------------
+
 // Listar Articulos y costo final por Transporte Maritimo
 int informe_listarArticulosConCostoFinalTransporteMaritimo(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria,
 		                                                   TransporteMaritimo* pTransporteMaritimo)
@@ -116,178 +167,149 @@ int informe_listarArticulosConCostoFinalTransporteMaritimo(LinkedList* listaArti
 		float resultadoTransporteMaritimo;
 		lenArticulos = ll_len(listaArticulos);
 		lenPosicionArancelaria = ll_len(listaPosicionArancelaria);
-	// ---------------------------------------------------------------------
+		int idPosAranArticulo, idPosicionArancelaria, flagErrorA, flagErrorB;
+	// ------------------------------------------------------------------------------------------------------
 		for(i=0; i<lenArticulos; i++)
 		{
 			pArticulo = (Articulo*) ll_get(listaArticulos, i);
-			// Imprimo Articulo
-			articulo_imprimirUnArticulo(pArticulo);
-		//-----------------------------------------
-			for(k=0; k<lenPosicionArancelaria; k++)
+			if(pArticulo != NULL)
 			{
-				pPosicionArancelaria = (PosicionArancelaria*) ll_get(listaPosicionArancelaria, k);
-				if(pPosicionArancelaria->idPosicionArancelaria == pArticulo->idPosicionArancelaria)
+				idPosAranArticulo = articulo_getIdPosicionArancelaria(pArticulo, &flagErrorA);
+				articulo_imprimirUnArticulo(pArticulo); // Imprimo Articulo
+				// ------------------------------------------------------------------------
+				for(k=0; k<lenPosicionArancelaria; k++)
 				{
-					resultadoTransporteMaritimo = transporteMaritimo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteMaritimo);
-					printf("\n > Costo final por Transporte Maritimo:  usd %f\n", resultadoTransporteMaritimo);
-					retorno = 0;
+					pPosicionArancelaria = (PosicionArancelaria*) ll_get(listaPosicionArancelaria, k);
+					if(pPosicionArancelaria != NULL)
+					{
+						idPosicionArancelaria = posicionArancelaria_getIdPosicionArancelaria(pPosicionArancelaria, &flagErrorB);
+						if(!flagErrorA && !flagErrorB &&
+						   idPosAranArticulo == idPosicionArancelaria)
+						{
+							resultadoTransporteMaritimo = transporteMaritimo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteMaritimo);
+							printf("\n > Costo final por Transporte Maritimo:  USD %.2f\n", resultadoTransporteMaritimo);
+							retorno = 0;
+						}
+					}
 				}
+				// ------------------------------------------------------------------------
+			}
+		}
+  // ----------------------------------------------------------------------------------------------------
+	}
+	return retorno;
+}
+// Listar Articulos y costo final por Transporte Aereo
+int informe_listarArticulosConCostoFinalPorTransportes(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria,
+                                                       TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo)
+{
+	int retorno = -1;
+	Articulo* pArticulo;
+	PosicionArancelaria* pPosicionArancelaria;
+	if(listaArticulos != NULL && listaPosicionArancelaria != NULL && pTransporteAereo != NULL && pTransporteMaritimo != NULL)
+	{
+		int i, k;
+		int lenArticulos, lenPosicionArancelaria;
+		//float resultadoTransporteAereo;
+		lenArticulos = ll_len(listaArticulos);
+		lenPosicionArancelaria = ll_len(listaPosicionArancelaria);
+		int idPosAranArticulo, idPosicionArancelaria, flagErrorA, flagErrorB;
+
+		float resultadoTransporteAereo, resultadoTransporteMaritimo;
+	// ------------------------------------------------------------------------------------------------------
+		for(i=0; i<lenArticulos; i++)
+		{
+			pArticulo = (Articulo*) ll_get(listaArticulos, i);
+			if(pArticulo != NULL)
+			{
+				idPosAranArticulo = articulo_getIdPosicionArancelaria(pArticulo, &flagErrorA);
+				articulo_imprimirUnArticulo(pArticulo); // Imprimo Articulo
+				// ------------------------------------------------------------------------
+				for(k=0; k<lenPosicionArancelaria; k++)
+				{
+					pPosicionArancelaria = (PosicionArancelaria*) ll_get(listaPosicionArancelaria, k);
+					if(pPosicionArancelaria != NULL)
+					{
+						idPosicionArancelaria = posicionArancelaria_getIdPosicionArancelaria(pPosicionArancelaria, &flagErrorB);
+						if(!flagErrorA && !flagErrorB &&
+						   idPosAranArticulo == idPosicionArancelaria)
+						{
+							resultadoTransporteAereo = transporteAereo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteAereo);
+							resultadoTransporteMaritimo = transporteMaritimo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteMaritimo);
+							printf("\n > Costo final por Transporte Aereo:  USD %.2f", resultadoTransporteAereo);
+							printf("\n > Costo final por Transporte Maritimo:  USD %.2f\n", resultadoTransporteMaritimo);
+							retorno = 0;
+						}
+					}
+				}
+				// ------------------------------------------------------------------------
 			}
 		}
 	}
 	return retorno;
 }
-//******************************************************************************** CALCULOS
-//Proporcional Flete
-float transporteMaritimo_obtenerVolumenCubico(Articulo* pArticulo) // 1)
+/** \brief Lista Posicion Arancelaria buscada por Nomencladorcon y sus Articulos
+ * \param listaArticulos LinkedList*
+ * \param listaPosicionArancelaria LinkedList*
+ * \return int 0 si ok, -1 error
+ */
+int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionArancelaria, LinkedList* listaArticulos)
 {
-	float retornoResultado = -1;
-	float ancho, altura, profundidad;
-	int flagErrorA, flagErrorB, flagErrorC;
+	int retorno = -1;
+	void* pPosicionAranElement;
+	void* pArticuloElement;
+	char nomencladorAux[NOMENCLADOR_LEN];
 
-	if(pArticulo != NULL)
+	if(listaPosicionArancelaria != NULL && listaArticulos != NULL &&
+	  !utn_getTexto(nomencladorAux, NOMENCLADOR_LEN,"\n - BUSCAR POSICION ARANCELARIA -"
+									                "\n > Ingrese nomenclador: ", "\n\x1b[31m * ERROR\x1b[0m", 2))
 	{
-		ancho = articulo_getAncho(pArticulo, &flagErrorA);
-		altura = articulo_getAltura(pArticulo, &flagErrorB);
-		profundidad = articulo_getProfundidad(pArticulo, &flagErrorC);
-		//----------------------------------------------------------------------------
-		// (ancho / 100) *********** [ Paso de centimetros a metro]
-		retornoResultado = ( (ancho / 100) * (altura / 100) * (profundidad / 100) );
-	}
-	return retornoResultado;
-}
+		// Busco elemento
+		pPosicionAranElement = ll_buscarElement(listaPosicionArancelaria, funcionCriterio_buscarPorNomenclador, nomencladorAux);
 
-float transporteMaritimo_obtenerPrecioPorMetroCubico(TransporteMaritimo* pTransporteMaritimo) // 2)
-{
-	float retornoResultado = -1;
-	int flagErrorA, flagErrorB;
-	float metrosCubicos;
-	float precioContenedor;
-
-	if(pTransporteMaritimo != NULL)
-	{
-		metrosCubicos = transporteMaritimo_getMetrosCubicos(pTransporteMaritimo, &flagErrorA);
-		precioContenedor = transporteMaritimo_getPrecioContenedor(pTransporteMaritimo, &flagErrorB);
-
-		if(!flagErrorA && !flagErrorB)
-			retornoResultado = (metrosCubicos / precioContenedor);
-	}
-	return retornoResultado;
-}
-// creo que es flete
-float transporteMaritimo_calcularFlete(Articulo* pArticulo, TransporteMaritimo* pTransporteMaritimo) // 3)
-{
-	float retornoResultado = -1;
-	float resultadoVolumenCubico;
-	float resulPrecioPorMetroCubico;
-
-	if(pArticulo != NULL && pTransporteMaritimo != NULL)
-	{
-		resultadoVolumenCubico = transporteMaritimo_obtenerVolumenCubico(pArticulo);
-		resulPrecioPorMetroCubico = transporteMaritimo_obtenerPrecioPorMetroCubico(pTransporteMaritimo);
-
-		retornoResultado = ( resultadoVolumenCubico * resulPrecioPorMetroCubico );
-	}
-	return retornoResultado;
-}
-//--------------------------------------------------------------------------
-float transporteMaritimo_calcularCostoFinal(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
-                                            TransporteMaritimo* pTransporteMaritimo)
-{
-	float retornoResultado = -1;
-	float resulBaseImponible, resulImportacion, resultTasaEstadistica;
-	if(pArticulo != NULL && pPosicionArancelaria != NULL && pTransporteMaritimo != NULL)
-	{
-		resulBaseImponible = transporteMaritimo_calcularBaseImponible(pArticulo, pPosicionArancelaria, pTransporteMaritimo);
-		resulImportacion = transporteMaritimo_calcularPorcentajeImportacion(pArticulo, pPosicionArancelaria, pTransporteMaritimo);
-		resultTasaEstadistica = transporteMaritimo_calcularPorcentajeeTasaEstadistica(pArticulo, pPosicionArancelaria, pTransporteMaritimo);
-		if(resulBaseImponible > 0 && resulImportacion > 0 && resultTasaEstadistica > 0)
+		// Verifico el elemento y imprimo
+		if(pPosicionAranElement != NULL && !posicionArancelaria_imprimirUnaPosicionArancelaria(pPosicionAranElement))
 		{
-			retornoResultado = (resulBaseImponible + resulImportacion + resultTasaEstadistica);
+			//------------------ QUE QUIERE HACER? MENU SWTICH
+			//menuPorNomenclador(pArticuloElement, pPosicionAranElement);
+			//------------------------------------------------------ MUESTRO EEL QUE COINCIDE
+			pArticuloElement = ll_getNext(listaArticulos, 1);
+			while(pArticuloElement != NULL)
+			{
+				if(sonIgualesIdPosicionArancelaria(pArticuloElement, pPosicionAranElement))
+				{
+					articulo_imprimirUnArticulo(pArticuloElement);
+				}
+				pArticuloElement = ll_getNext(listaArticulos, 0);
+			}
+
+			retorno = 0;
 		}
 	}
-	return retornoResultado;
+	return retorno;
 }
 
-float transporteMaritimo_calcularPorcentajeeTasaEstadistica(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
-		                                                    TransporteMaritimo* pTransporteMaritimo)
+int sonIgualesIdPosicionArancelaria(void* pArticuloElement, void* pPosicionAranElement)
 {
-	float retornoResultado = -1;
-	float porcentajeTasaEstadistica, resulBaseImponible;
-	int flagErrorA;
-	if(pArticulo != NULL && pPosicionArancelaria != NULL && pTransporteMaritimo != NULL)
+	int retorno = 0;
+	Articulo* pArticulo;
+	PosicionArancelaria* pPosicionAran;
+	int idPosAranArticulo, idPosAran,
+	    flagErrorA, flagErrorB;
+
+	if(pArticuloElement != NULL && pPosicionAranElement != NULL)
 	{
-		porcentajeTasaEstadistica = posicionArancelaria_getPorcentajeTasaEstadistica(pPosicionArancelaria, &flagErrorA);
-		resulBaseImponible = transporteMaritimo_calcularBaseImponible(pArticulo, pPosicionArancelaria, pTransporteMaritimo);
-		if(!flagErrorA && resulBaseImponible > 0)
+		pArticulo = (Articulo*) pArticuloElement;
+		pPosicionAran = (PosicionArancelaria*) pPosicionAranElement;
+		//------------------------------------------------------------------------------------
+		idPosAranArticulo = articulo_getIdPosicionArancelaria(pArticulo, &flagErrorA);
+		idPosAran = posicionArancelaria_getIdPosicionArancelaria(pPosicionAran, &flagErrorB);
+		//------------------------------------------------------------------------------------
+		if(!flagErrorA && !flagErrorB &&
+		  (idPosAranArticulo == idPosAran) )
 		{
-			retornoResultado = ((porcentajeTasaEstadistica * resulBaseImponible) / 100);
+			retorno = 1;
 		}
 	}
-	return retornoResultado;
+	return retorno;
 }
-
-float transporteMaritimo_calcularPorcentajeImportacion(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
-		                                               TransporteMaritimo* pTransporteMaritimo)
-{
-	float retornoResultado = -1;
-	float porcentajeImportacion, resulBaseImponible;
-	int flagErrorA;
-	if(pArticulo != NULL && pPosicionArancelaria != NULL && pTransporteMaritimo != NULL)
-	{
-		porcentajeImportacion = posicionArancelaria_getPorcentajeImportacion(pPosicionArancelaria, &flagErrorA);
-		resulBaseImponible = transporteMaritimo_calcularBaseImponible(pArticulo, pPosicionArancelaria, pTransporteMaritimo);
-		if(!flagErrorA && resulBaseImponible > 0)
-		{
-			retornoResultado = ((porcentajeImportacion * resulBaseImponible) / 100);
-		}
-	}
-	return retornoResultado;
-}
-
-
-float transporteMaritimo_calcularBaseImponible(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
-											   TransporteMaritimo* pTransporteMaritimo)
-{
-	float retornoResultado = -1;
-	float resultadoFlete, resulPorcentajeSeguro;
-	float fob;
-	int flagErrorA;
-	if(pArticulo != NULL && pPosicionArancelaria != NULL && pTransporteMaritimo != NULL)
-	{
-		// Calculo proporcional Maritimo
-		resultadoFlete = transporteMaritimo_calcularFlete(pArticulo, pTransporteMaritimo);
-		// Calculo Porcentaje del Seguro
-		resulPorcentajeSeguro = transporteMaritimo_calcularPorcentajeSeguro(pArticulo, pPosicionArancelaria);
-
-		fob = articulo_getFob(pArticulo, &flagErrorA); // Obtengo valor fob
-		if(!flagErrorA)
-			retornoResultado = (fob + resulPorcentajeSeguro + resultadoFlete);
-	}
-	return retornoResultado;
-}
-
-float transporteMaritimo_calcularPorcentajeSeguro(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria)
-{
-	float retornoResultado = -1;
-	float porcentajeSeguro, fob;
-	int flagErrorA, flagErrorB;
-	if(pArticulo != NULL && pPosicionArancelaria != NULL)
-	{
-		porcentajeSeguro = posicionArancelaria_getPorcentajeSeguro(pPosicionArancelaria, &flagErrorB);
-		fob = articulo_getFob(pArticulo, &flagErrorA);
-		if(!flagErrorA && !flagErrorB)
-		{
-			retornoResultado = ((porcentajeSeguro * fob) / 100);
-		}
-	}
-	return retornoResultado;
-}
-
-
-
-
-
-
-
-

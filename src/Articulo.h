@@ -31,14 +31,32 @@ typedef struct
 	float ancho;
 	float altura;
 	float profundidad;
+
+	float costoTransporteAereo;
+	float costoTransporteMaritimo;
 }Articulo;
 
+// LISTAR
+int articulo_imprimirUnArticulo(void* pElement);
+int articulo_imprimirArticulos(LinkedList* listaArticulos);
+
+// ENCABEZADO AL LISTAR ARTICULO
+void articulo_encabezado(void);
+
+//int articulo_pedirIdPosicionArancelaria(int* idPosicionArancelaria);
+
+// FUNCION CRITERIO BUSCAR POR CODIGO
+int funcionCriterio_buscarPorCodigoArticulo(void* pElement, void* codigoIngresadoBuscado);
+
+//------------------------------------------------------------------------------------------------------------------
+// CONSTRUCTORES
 Articulo* articulo_new(void);
 Articulo* articulo_newParam(int idArticulo, int IdPosicionArancelaria,
 		                    char* nombre, char* codigo,char* descripcion,char* paisDeFabricacion,
 		                    float fob, float peso, float ancho, float altura, float profundidad);
-
+// DESTRUCTOR
 int articulo_delete(Articulo* this);
+//---------------------------------------------- SET - GET - IS VALID ----------------------------------------------
 
 int articulo_setIdArticulo(Articulo* this,int idArticulo);
 int articulo_getIdArticulo(Articulo* this,int* flagError);
@@ -82,14 +100,6 @@ int isValidAltura(float);
 int articulo_setProfundidad(Articulo* this, float profundidad);
 float articulo_getProfundidad(Articulo* this,int* flagError);
 int isValidProfundidad(float profundidad);
-
-//******************************************************************************** LISTAR
-int articulo_imprimirUnArticulo(void* pElement);
-int articulo_imprimirArticulos(LinkedList* listaArticulos);
-
-int articulo_pedirIdPosicionArancelaria(int* idPosicionArancelaria);
-
-// ENCABEZADO AL LISTAR ARTICULO
-void articulo_encabezado(void);
+//-----------------------------------------------------------------------------------------------------------------
 
 #endif /* ARTICULO_H_ */

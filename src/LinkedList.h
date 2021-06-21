@@ -34,8 +34,20 @@ typedef int(*Function)(void*);
 typedef float(*FunctionReduceFloat)(void*);
 typedef int (*FunctionFilter)(void*, void*);
 
-int ll_map(LinkedList* this, Function pFunc);
-int ll_filter(LinkedList * this, Function pFunc);
+// ************************************** Funciones agregadas **************************************
+
+// Buscar element por funcion criterio
+void* ll_buscarElement(LinkedList* lista, int(*pFuncionCriterio)(void*, void*), void* datoIngresadoBuscado);
+
+// Filter
+LinkedList* ll_filter(LinkedList* pListaOriginal, int(*pFuncionCriterio)(void*));
+
+// Get mas optimo
+void* ll_getNext(LinkedList* this, int isFirst);
+//-----------------------------------------------------------------------------------------------------------
+
+int ll_map2(LinkedList* this, Function pFunc);
+int ll_filter3(LinkedList * this, Function pFunc);
 int ll_reduceInt(LinkedList* this, Function pFunc);
 float ll_reduceFloat(LinkedList* this, FunctionReduceFloat pFunc);
 int ll_filter2(LinkedList * this, FunctionFilter pFunc, void* arg);

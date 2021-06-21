@@ -111,17 +111,16 @@ int isValidNomenclador(char nomenclador[])
 	{
 		/*while(nomenclador[i] != '\0')
 		{
-
-			if((nomenclador[i] != ' ') && (nomenclador[i] != '.') &&
-			   (nomenclador[i] < 'a' || nomenclador[i] > 'z') &&
-			   (nomenclador[i] < 'A' || nomenclador[i] > 'Z') &&
-			   (nomenclador[i] < '0' || nomenclador [i] > '9'))
+			if((nomenclador[i] != ' ') && (nomenclador[i] == '.') &&
+			   (nomenclador[i] >= 'a' && nomenclador[i] <= 'z') &&
+			   (nomenclador[i] >= 'A' && nomenclador[i] <= 'Z') &&
+			   (nomenclador[i] >= '0' && nomenclador [i] <= '9'))
 			{
-				retorno = 0;
+				retorno = 1;
 			}
 			i++;
 		}*/
-		retorno =1;
+		retorno = 1;
 	}
 	return retorno;
 }
@@ -258,6 +257,10 @@ int isValidTipoLicencia(int tipoLicencia)
 	return retorno;
 }
 //******************************************************************************** LISTAR
+/** \brief Lista una Posicion Arancelaria
+ * \param pElement void*
+ * \return int 0 si ok, -1 error
+ */
 int posicionArancelaria_imprimirUnaPosicionArancelaria(void* pElement)
 {
 	int retorno = -1;
@@ -285,17 +288,19 @@ int posicionArancelaria_imprimirUnaPosicionArancelaria(void* pElement)
 		if(!flagErrorA && !flagErrorB && !flagErrorC && !flagErrorD && !flagErrorE && !flagErrorF &&
 		   !posicionArancelaria_obtenerCadenaPorTipoLicencia(tipoLicencia, tipoDeLicenciaStr))
 		{
-			posicionArancelaria_encabezado();
-			printf("\n %-10d %-20s %-20.2f %-20.2f %-25.2f %-25s",idPosicionArancelaria, nomenclador, porcentajeSeguro,
-					                                 porcentajeImportacion, porcentajeTasaEstadistica, tipoDeLicenciaStr);
-			//printf("\n\x1b[34m ----------------------------------------------------------------------------------------------------------------------------------  \x1b[0m");
+			posicionArancelaria_encabezado(); // Imprimo encabezado
+			printf("\n %-10d %-20s %-20.2f %-20.2f %-25.2f %-25s",idPosicionArancelaria,nomenclador,porcentajeSeguro,
+					                                porcentajeImportacion,porcentajeTasaEstadistica,tipoDeLicenciaStr);
 			retorno = 0;
 		}
 
 	}
 	return retorno;
 }
-
+/** \brief print encabezado al listar
+ * \param void
+ * \return void
+ */
 void posicionArancelaria_encabezado(void)
 {
 	char idPosicionArancelaria[] = {"ID [P.A]"};
@@ -313,13 +318,10 @@ void posicionArancelaria_encabezado(void)
 																							porcentajeTasaEstadistica,
 																							tipoLicencia);
 }
-
-
-
-
-
-
-
+/** \brief Lista todos las Posiciones Arancelarias
+ * \param ListaPosicionesArancelarias LinkedList*
+ * \return int 0 si ok, -1 error
+ */
 int posicionArancelaria_imprimirPosicionesArancelarias(LinkedList* ListaPosicionesArancelarias)
 {
 	int retorno = -1;
@@ -339,7 +341,11 @@ int posicionArancelaria_imprimirPosicionesArancelarias(LinkedList* ListaPosicion
 	}
 	return retorno;
 }
-
+/** \brief Obtiene Cadena Por TipoLicencia AUTOMATICA [0] NO_AUTOMATICA[1]
+ * \param tipoLicencia int
+ * \param opcionObtenida char*
+ * \return int 0 si ok, -1 error
+ */
 int posicionArancelaria_obtenerCadenaPorTipoLicencia(int tipoLicencia, char opcionObtenida[])
 {
 	int retorno = -1;
@@ -359,3 +365,30 @@ int posicionArancelaria_obtenerCadenaPorTipoLicencia(int tipoLicencia, char opci
 
 	return retorno;
 }
+
+/* \brief Compara el Nomenclador ingresado con el de todos los elementos
+ * \param pElement void*
+ * \param codigoIngresadoBuscado void*
+ * \return int: 0 si no encontró
+ 	 	 	    1 si encontró
+ */
+int funcionCriterio_buscarPorNomenclador(void* pElement, void* nomencladorIngresadoBuscado)
+{
+	int retorno = 0;
+	char* nomencladorAux;
+	int flagError;
+	if(pElement != NULL && nomencladorIngresadoBuscado != NULL)
+	{
+		PosicionArancelaria* pPosicionArancelaria = (PosicionArancelaria*)pElement;
+		nomencladorAux = posicionArancelaria_getNomenclador(pPosicionArancelaria, &flagError);
+
+		if(!flagError && (strcmp(nomencladorIngresadoBuscado, nomencladorAux) == 0) )
+			retorno = 1;
+	}
+	return retorno;
+}
+
+
+
+
+
