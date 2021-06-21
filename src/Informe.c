@@ -259,20 +259,15 @@ int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionAran
 	int retorno = -1;
 	void* pPosicionAranElement;
 	void* pArticuloElement;
-	char nomencladorAux[NOMENCLADOR_LEN];
 
 	if(listaPosicionArancelaria != NULL && listaArticulos != NULL )
 	{
-		// Pido busco el elemento y lo retorno
+		// Pido que ingrese el Nomenclador, busco el elemento y lo retorno
 		pPosicionAranElement = busquedaPorNomencladorPosicionArancelaria(listaPosicionArancelaria, listaArticulos);
-
 
 		// Verifico el elemento y imprimo
 		if(pPosicionAranElement != NULL && !posicionArancelaria_imprimirUnaPosicionArancelaria(pPosicionAranElement))
 		{
-			//------------------ QUE QUIERE HACER? MENU SWTICH
-			//menuPorNomenclador(pArticuloElement, pPosicionAranElement);
-			//------------------------------------------------------ MUESTRO EEL QUE COINCIDE
 			pArticuloElement = ll_getNext(listaArticulos, 1);
 			while(pArticuloElement != NULL)
 			{
@@ -287,7 +282,11 @@ int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionAran
 	return retorno;
 }
 
-// retorna el pElement a posicion arancelaria
+/** \brief Pido que ingrese el Nomenclador, busca el elemento y lo retorna
+ * \param listaArticulos LinkedList*
+ * \param listaPosicionArancelaria LinkedList*
+ * \return void* puntero al Elemento encontrado, NULL si no lo encontró
+ */
 void* busquedaPorNomencladorPosicionArancelaria(LinkedList* listaPosicionArancelaria, LinkedList* listaArticulos)
 {
 	void* pRetornoElement = NULL;
@@ -308,12 +307,29 @@ void* busquedaPorNomencladorPosicionArancelaria(LinkedList* listaPosicionArancel
 	return pRetornoElement;
 }
 
+/** \brief Pido que ingrese el Coido, busca el elemento y lo retorna
+ * \param listaArticulos LinkedList*
+ * \return void* puntero al Elemento encontrado, NULL si no lo encontró
+ */
+void* busquedaPorCodigoArticulo(LinkedList* listaArticulos)
+{
+	void* pRetornoElement = NULL;
+	void* pArticulo;
+	char codigoAux[CODIGO_LEN];
 
+	if(listaArticulos != NULL &&
+	   !utn_getTexto(codigoAux, CODIGO_LEN,"\n - BUSCAR ARTICULO -"
+							               "\n > Ingrese el codigo del Articulo: ", "\n\x1b[31m * ERROR\x1b[0m", 2))
+	{
+		// Busco elemento
+		pArticulo = ll_buscarElement(listaArticulos, funcionCriterio_buscarPorCodigoArticulo, codigoAux);
 
-
-
-
-
+		// Verifico el elemento y lo retorno
+		if(pArticulo != NULL)
+			pRetornoElement = pArticulo;
+	}
+	return pRetornoElement;
+}
 
 int sonIgualesIdPosicionArancelaria(void* pArticuloElement, void* pPosicionAranElement)
 {

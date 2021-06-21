@@ -39,6 +39,8 @@ int sonIgualesIdPosicionArancelaria(void* pArticuloElement, void* pPosicionAranE
 
 // Busqueda Posicion Arancelaria por nomenclador
 void* busquedaPorNomencladorPosicionArancelaria(LinkedList* listaPosicionArancelaria, LinkedList* listaArticulos);
+// Busqueda Articulo por codigo
+void* busquedaPorCodigoArticulo(LinkedList* listaArticulos);
 
 
 

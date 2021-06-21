@@ -45,7 +45,7 @@ int main(void)
 					"\n | 11  -  |"
 					"\n | 12  -  |"
 					"\n | 13  -  |"
-					"\n | 14  -  Guardar todo                                                  |"
+					"\n | 14  -  Guardar todo (SE SACA ESTA OPCION)                            |"
 					"\n | 15  -  Salir                                                         |"
 					"\n * -------------------------------------------------------------------- *"
 					"\n > Eliga opcion: ",

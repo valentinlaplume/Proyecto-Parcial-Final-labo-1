@@ -380,18 +380,15 @@ int controller_listarArticuloPorBusquedaCodigo(Dictionary* articulos)
 {
 	int retorno = -1;
 	LinkedList* listaArticulos;
-	char codigoAux[CODIGO_LEN];
 	void* pArticulo;
 
 	if(articulos != NULL)
 	{
 		listaArticulos = dict_getValues(articulos);
-		if(listaArticulos != NULL &&
-		  !utn_getTexto(codigoAux, CODIGO_LEN,"\n - BUSCAR ARTICULO -"
-				                              "\n > Ingrese el codigo del Articulo: ", "\n\x1b[31m * ERROR\x1b[0m", 2))
+		if(listaArticulos != NULL )
 		{
 			// Busco elemento
-			pArticulo = ll_buscarElement(listaArticulos, funcionCriterio_buscarPorCodigoArticulo, codigoAux);
+			pArticulo = busquedaPorCodigoArticulo(listaArticulos);
 			// Verifico y imprimo elemento
 			if(pArticulo != NULL && !articulo_imprimirUnArticulo(pArticulo))
 				retorno = 0;
@@ -399,6 +396,8 @@ int controller_listarArticuloPorBusquedaCodigo(Dictionary* articulos)
 	}
 	return retorno;
 }
+
+
 //******************************************************************************* ABM
 /** \brief Submenu: Alta, Baja, Modificacion - listar [Articulo]
  * \param articulos Dictionary*
@@ -442,6 +441,7 @@ int controller_ABMPosicionArancelaria(Dictionary* posicionesArancelarias, Dictio
 						break;
 				}
 			}
+			controller_guardarPosicionesArancelarias("posicionesArancelarias.csv", posicionesArancelarias);
 			// acordarse de guardar en archivo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}while(opcion != opcion_salir);
 		retorno = 0;
@@ -490,6 +490,7 @@ int controller_ABMArticulo(Dictionary* articulos, Dictionary* posicionesArancela
 						break;
 				}
 			}
+			controller_guardarArticulos("articulos.csv", articulos);
 			// acordarse de guardar en archivo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}while(opcion != opcion_salir);
 		retorno = 0;
@@ -580,6 +581,7 @@ int controller_subMenuTransporteAereo(TransporteAereo* pTransporteAereo)
 					break;
 				}
 			}
+			controller_guardarTransporteAereo("transporteAereo.csv", pTransporteAereo);
 			// acordarse de guardar en archivo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}while(opcion != opcion_salir);
 		retorno = 0;
@@ -619,6 +621,7 @@ int controller_subMenuTransporteMaritimo(TransporteMaritimo* pTransporteMaritimo
 					break;
 				}
 			}
+			controller_guardarTransporteMaritimo("transporteMaritimo.csv", pTransporteMaritimo);
 			// acordarse de guardar en archivo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}while(opcion != opcion_salir);
 		retorno = 0;
