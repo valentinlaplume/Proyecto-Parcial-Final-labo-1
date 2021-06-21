@@ -365,11 +365,9 @@ int controller_listarArticulosPorBusquedaNomenclador(Dictionary* articulos, Dict
 		listaPosicionArancelaria = dict_getValues(posicionesArancelarias);
 		listaArticulos = dict_getValues(articulos);
 		//--------------------------------------------------------------------------------
-		if(listaPosicionArancelaria != NULL && listaArticulos != NULL )
-		{
-			informe_listarPorBusquedaPorNomencladorPosAran(listaPosicionArancelaria, listaArticulos);
+		if(listaPosicionArancelaria != NULL && listaArticulos != NULL &&
+		   !informe_listarPorBusquedaPorNomencladorPosAran(listaPosicionArancelaria, listaArticulos))
 			retorno = 0;
-		}
 	}
 	return retorno;
 }

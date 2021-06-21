@@ -248,6 +248,7 @@ int informe_listarArticulosConCostoFinalPorTransportes(LinkedList* listaArticulo
 	}
 	return retorno;
 }
+
 /** \brief Lista Posicion Arancelaria buscada por Nomencladorcon y sus Articulos
  * \param listaArticulos LinkedList*
  * \param listaPosicionArancelaria LinkedList*
@@ -260,12 +261,11 @@ int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionAran
 	void* pArticuloElement;
 	char nomencladorAux[NOMENCLADOR_LEN];
 
-	if(listaPosicionArancelaria != NULL && listaArticulos != NULL &&
-	  !utn_getTexto(nomencladorAux, NOMENCLADOR_LEN,"\n - BUSCAR POSICION ARANCELARIA -"
-									                "\n > Ingrese nomenclador: ", "\n\x1b[31m * ERROR\x1b[0m", 2))
+	if(listaPosicionArancelaria != NULL && listaArticulos != NULL )
 	{
-		// Busco elemento
-		pPosicionAranElement = ll_buscarElement(listaPosicionArancelaria, funcionCriterio_buscarPorNomenclador, nomencladorAux);
+		// Pido busco el elemento y lo retorno
+		pPosicionAranElement = busquedaPorNomencladorPosicionArancelaria(listaPosicionArancelaria, listaArticulos);
+
 
 		// Verifico el elemento y imprimo
 		if(pPosicionAranElement != NULL && !posicionArancelaria_imprimirUnaPosicionArancelaria(pPosicionAranElement))
@@ -277,17 +277,43 @@ int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionAran
 			while(pArticuloElement != NULL)
 			{
 				if(sonIgualesIdPosicionArancelaria(pArticuloElement, pPosicionAranElement))
-				{
 					articulo_imprimirUnArticulo(pArticuloElement);
-				}
+
 				pArticuloElement = ll_getNext(listaArticulos, 0);
 			}
-
 			retorno = 0;
 		}
 	}
 	return retorno;
 }
+
+// retorna el pElement a posicion arancelaria
+void* busquedaPorNomencladorPosicionArancelaria(LinkedList* listaPosicionArancelaria, LinkedList* listaArticulos)
+{
+	void* pRetornoElement = NULL;
+	void* pPosicionArancelariaElem;
+	char nomencladorAux[NOMENCLADOR_LEN];
+
+	if(listaPosicionArancelaria != NULL && listaArticulos != NULL &&
+	  !utn_getTexto(nomencladorAux, NOMENCLADOR_LEN,"\n - POSICION ARANCELARIA -"
+									                "\n > Ingrese nomenclador: ", "\n\x1b[31m * ERROR\x1b[0m", 3))
+	{
+		// Busco elemento
+		pPosicionArancelariaElem = ll_buscarElement(listaPosicionArancelaria, funcionCriterio_buscarPorNomenclador, nomencladorAux);
+
+		// Verifico el elemento y lo retorno
+		if(pPosicionArancelariaElem != NULL)
+			pRetornoElement = pPosicionArancelariaElem;
+	}
+	return pRetornoElement;
+}
+
+
+
+
+
+
+
 
 int sonIgualesIdPosicionArancelaria(void* pArticuloElement, void* pPosicionAranElement)
 {
@@ -313,3 +339,27 @@ int sonIgualesIdPosicionArancelaria(void* pArticuloElement, void* pPosicionAranE
 	}
 	return retorno;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

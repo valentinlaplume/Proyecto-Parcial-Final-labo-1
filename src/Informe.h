@@ -37,6 +37,8 @@ int informe_listarArticulosConCostoFinalPorTransportes(LinkedList* listaArticulo
 int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionArancelaria, LinkedList* listaArticulos);
 int sonIgualesIdPosicionArancelaria(void* pArticuloElement, void* pPosicionAranElement);
 
+// Busqueda Posicion Arancelaria por nomenclador
+void* busquedaPorNomencladorPosicionArancelaria(LinkedList* listaPosicionArancelaria, LinkedList* listaArticulos);
 
 
 
