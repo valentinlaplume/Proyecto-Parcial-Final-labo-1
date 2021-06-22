@@ -9,11 +9,6 @@
 #include "laplume.h"
 #include "TransporteMaritimo.h"
 
-/*TransporteMaritimo* transporteMaritimo_new(void)
-{
-	return (TransporteMaritimo*)malloc(sizeof(TransporteMaritimo));
-}*/
-
 TransporteMaritimo* transporteMaritimo_newParam(TransporteMaritimo* pTransporteMaritimo,
 		                                        float metrosCubicos, float precioContenedor)
 {
@@ -113,20 +108,27 @@ int transporteMaritimo_imprimirTransporteMaritimo(TransporteMaritimo* pTransport
 	if(pTransporteMaritimo != NULL)
 	{
 		float metrosCubicos;
-		float precioMetroCubico;
+		float precioContenedor;
 		int flagErrorA, flagErrorB;
 
 		// Obtengo cada campo
 		metrosCubicos = transporteMaritimo_getMetrosCubicos(pTransporteMaritimo, &flagErrorA);
-		precioMetroCubico = transporteMaritimo_getPrecioContenedor(pTransporteMaritimo, &flagErrorB);
+		precioContenedor = transporteMaritimo_getPrecioContenedor(pTransporteMaritimo, &flagErrorB);
 		if(!flagErrorA && !flagErrorB)
 		{
-			printf("\n\x1b[34m -------------------------------------------- \x1b[0m");
-			printf("\n Metros Cubicos \t Precio Contenedor");
-			printf("\n m^3 %.2f \t\t USS %.2f",metrosCubicos, precioMetroCubico);
-			printf("\n\x1b[34m -------------------------------------------- \x1b[0m");
+			transporteMaritimo_encabezado();
+			printf("\n m^3 %-30.2f USS %-30.2f",metrosCubicos, precioContenedor);
 			retorno = 0;
 		}
 	}
 	return retorno;
+}
+
+void transporteMaritimo_encabezado(void)
+{
+	char metrosCubicos[] = {"Metros Cubicos"};
+	char precioContenedor[] = {"Precio Contenedor"};
+
+	//printf("\n\x1b[34m ----------------------------------------------------------------------------------------------------------------------------------  \x1b[0m");
+	printf("\n \x1b[40m\x1b[36m%-30s %-30s\x1b[0m\x1b[0m ", metrosCubicos,precioContenedor);
 }

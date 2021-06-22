@@ -11,8 +11,9 @@
 #include "TransporteMaritimo.h"
 #include "TransporteAereo.h"
 
-// BUSCA POSICION ARANCELARIA POR NOMENCLADOR Y LISTAR SUS ARTICULOS
-int controller_listarArticulosPorBusquedaPorNomenclador(Dictionary* articulos, Dictionary* posicionesArancelarias);
+// BUSCA POSICION ARANCELARIA POR NOMENCLADOR Y LISTAR SUS ARTICULOS CON SUS COSTOS DE TRANSPORTE
+int controller_listarArticulosPorBusquedaPorNomenclador(Dictionary* articulos, Dictionary* posicionesArancelarias,
+		                                               TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo);
 // BUSCAR ARTICULO POR CODIGO
 int controller_listarUnArticuloPorBusquedaPorCodigo(Dictionary* articulos);
 
@@ -63,7 +64,15 @@ int controller_subMenuTransporteMaritimo(TransporteMaritimo* pTransporteMaritimo
 int controller_listarArticulos(Dictionary* articulos);
 int controller_listarPosicionesArancelarias(Dictionary* posicionesArancelarias);
 
-int controller_listarPosicionArancelariaConSusArticulo(Dictionary* articulos, Dictionary* posicionesArancelarias);
+// Listar todas las Posicion Arancelaria con sus Articulos [Inclusive las que no poseen articulos]
+int controller_listarTotalPosicionesArancelariaConSusArticulos(Dictionary* articulos, Dictionary* posicionesArancelarias);
+// Listar solo las Posicion Arancelaria con Articulos
+int controller_listarSoloPosicionesArancelariaConArticulos(Dictionary* articulos, Dictionary* posicionesArancelarias);
+
+// Lista Posiciones Arancelarias con tipo de licencia NO AUTOMÁTICA
+int controller_listarPosicionesArancelariasNoAutomatica(Dictionary* posicionesArancelarias);
+// Lista Posiciones Arancelarias con tipo de licencia AUTOMÁTICA
+int controller_listarPosicionesArancelariasAutomatica(Dictionary* posicionesArancelarias);
 
 // ALTAS
 int controller_altaArticulo(Dictionary* articulos, Dictionary* posicionesArancelarias);

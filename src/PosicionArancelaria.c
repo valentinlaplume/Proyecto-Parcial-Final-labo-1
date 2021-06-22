@@ -151,7 +151,7 @@ float posicionArancelaria_getPorcentajeSeguro(PosicionArancelaria* this,int* fla
 int isValidPorcentajeSeguro(float porcentajeSeguro)
 {
 	int retorno = 0;
-	if(porcentajeSeguro > 0 && porcentajeSeguro < 101)
+	if(porcentajeSeguro >= 0 && porcentajeSeguro < 101)
 	{
 		retorno = 1;
 	}
@@ -184,7 +184,7 @@ float posicionArancelaria_getPorcentajeImportacion(PosicionArancelaria* this,int
 int isValidPorcentajeImportacion(float porcentajeImportacion)
 {
 	int retorno = 0;
-	if(porcentajeImportacion > 0 && porcentajeImportacion < 101)
+	if(porcentajeImportacion >= 0 && porcentajeImportacion < 101)
 	{
 		retorno = 1;
 	}
@@ -217,7 +217,7 @@ float posicionArancelaria_getPorcentajeTasaEstadistica(PosicionArancelaria* this
 int isValidPorcentajeTasaEstadistica(float porcentajeTasaEstadistica)
 {
 	int retorno = 0;
-	if(porcentajeTasaEstadistica > 0 && porcentajeTasaEstadistica < 101)
+	if(porcentajeTasaEstadistica >= 0 && porcentajeTasaEstadistica < 101)
 	{
 		retorno = 1;
 	}
@@ -297,6 +297,7 @@ int posicionArancelaria_imprimirUnaPosicionArancelaria(void* pElement)
 	}
 	return retorno;
 }
+
 /** \brief print encabezado al listar
  * \param void
  * \return void
@@ -387,7 +388,42 @@ int funcionCriterio_buscarPorNomenclador(void* pElement, void* nomencladorIngres
 	}
 	return retorno;
 }
+//---------------------------------------------------------------
+int funcionCriterio_porTipoLicenciaNoAutomatica(void* pElement)
+ {
+	 int flagError, tipoLicencia;
+	 int retorno = 0;
 
+	 if(pElement != NULL)
+	 {
+		 tipoLicencia = posicionArancelaria_getTipoLicencia( (PosicionArancelaria*)pElement, &flagError);
+
+		if(!flagError &&
+		   tipoLicencia == NO_AUTOMATICA)
+		{
+			retorno = 1; // TRUE
+		}
+	 }
+	 return retorno;
+ }
+
+int funcionCriterio_porTipoLicenciaAutomatica(void* pElement)
+ {
+	 int flagError, tipoLicencia;
+	 int retorno = 0;
+
+	 if(pElement != NULL)
+	 {
+		 tipoLicencia = posicionArancelaria_getTipoLicencia( (PosicionArancelaria*)pElement, &flagError);
+
+		if(!flagError &&
+		   tipoLicencia == AUTOMATICA)
+		{
+			retorno = 1; // TRUE
+		}
+	 }
+	 return retorno;
+ }
 
 
 

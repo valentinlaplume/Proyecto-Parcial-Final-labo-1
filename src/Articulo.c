@@ -40,7 +40,70 @@ Articulo* articulo_newParam(int idArticulo, int IdPosicionArancelaria,
 	}
 	return pArticulo;
 }
-
+//----------------------------------------------------------------------------------------
+/** \brief Valida un Costo Transporte Maritimo y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param costoTransporteMaritimo float
+ * \return int  -1 error, 0 si ok
+ */
+int articulo_setCostoTransporteMaritimo(Articulo* this, float costoTransporteMaritimo)
+{
+    int retorno = -1;
+    if(this != NULL && costoTransporteMaritimo > 0)
+    {
+        this->costoTransporteMaritimo = costoTransporteMaritimo;
+        retorno = 0;
+    }
+    return retorno;
+}
+/** \brief Obtiene Costo Transporte Maritimo del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Valor Fob si ok
+ */
+float articulo_getCostoTransporteMaritimo(Articulo* this,int* flagError)
+{
+    *flagError = -1;
+    float aux = -1;
+    if(this != NULL && flagError != NULL )
+    {
+    	aux = this->costoTransporteMaritimo;
+        *flagError = 0;
+    }
+    return aux;
+}
+//---------------------------------------------------------------------------------------
+/** \brief Valida un Costo Transporte Aereo y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param costoTransporteAereo float
+ * \return int  -1 error, 0 si ok
+ */
+int articulo_setCostoTransporteAereo(Articulo* this, float costoTransporteAereo)
+{
+    int retorno = -1;
+    if(this != NULL && costoTransporteAereo > 0)
+    {
+        this->costoTransporteAereo = costoTransporteAereo;
+        retorno = 0;
+    }
+    return retorno;
+}
+/** \brief Obtiene Costo Transporte Aereo del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Valor Fob si ok
+ */
+float articulo_getCostoTransporteAereo(Articulo* this,int* flagError)
+{
+    *flagError = -1;
+    float aux = -1;
+    if(this != NULL && flagError != NULL )
+    {
+    	aux = this->costoTransporteAereo;
+        *flagError = 0;
+    }
+    return aux;
+}
 //******************************************************************************** DESTRUCTOR
 /* \brief Libera el espacio reservado en memoria para un Articulo
  * \param this Articulo*
@@ -217,7 +280,7 @@ int isValidCodigo(char* codigo)
 {
 	int retorno = 0;
 	if(codigo != NULL)
-		retorno = esAlfanumerico(codigo);
+		retorno = esTexto(codigo);
 
 	return retorno;
 }
@@ -578,7 +641,7 @@ int articulo_imprimirUnArticulo(void* pElement)
 		{
 			//printf("\n\x1b[34m --------------------------------------------------------------------------------------------------------------------------------------------------------------  \x1b[0m");
 			articulo_encabezado();
-			printf("\n %-10d %-13d %-15s %-12s %-25s %-10s %-15.2f %-12.2f %-12.2f %-12.2f %-12.2f",idArticulo,idPosicionArancelaria,
+			printf("\n %-10d %-13d %-15s %-12s %-25s %-10s %-15.2f %-12.3f %-12.3f %-12.3f %-12.3f",idArticulo,idPosicionArancelaria,
 																                             nombre,codigo,descripcion,paisDeFabricacion,
 																                             fob,peso,ancho,altura,profundidad);
 			retorno = 0;

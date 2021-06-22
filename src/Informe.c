@@ -24,6 +24,18 @@
 // Entidad general
 #include "eGeneral.h"
 
+//-------------------------------------------------------------------------------Funciones estaticas:
+// Print costos finales por Transporte maritimo o aereo
+static int printCostosFinalesTransportes(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+		                                 TransporteAereo* pTransporteAereo,TransporteMaritimo* pTransporteMaritimo);
+// Print costos finales por Transporte Aereo
+static int printCostoFinalTransporteAereo(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+		                                  TransporteAereo* pTransporteAereo);
+// Print costos finales por Transporte Maritimo
+static int printCostoFinalTransporteMaritimo(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+		                                     TransporteMaritimo* pTransporteMaritimo);
+//-------------------------------------------------------------------------------------------------------------------------
+
 /** \brief Pide los datos del Articulo para a ser dada de Alta
  * \param (char* nombre, char* codigo, char* descripcion, char* paisDeFabricacion,
 		  float* fob, float* peso, float* ancho, float* altura, float* profundidad)
@@ -78,12 +90,12 @@ int informe_pedirDatosPosicionArancelaria(char* nomenclador, float* porcentajeSe
 	return retorno;
 }
 
-/** \brief Lista Posiciones Arancelarias Con Sus Articulos
+/** \brief Lista Todas las Posiciones Arancelarias Con Sus Articulos [inclusive las que no poseen articulos]
  * \param listaArticulos LinkedList*
  * \param listaPosicionesArancelarias LinkedList*
  * \return int 0 si ok, -1 error
  */
-int informe_listarPosicionArancelariaConSusArticulo(LinkedList* listaArticulos, LinkedList* listaPosicionesArancelarias)
+int informe_listarTotalPosicionArancelariaConSusArticulos(LinkedList* listaArticulos, LinkedList* listaPosicionesArancelarias)
 {
 	int retorno = -1;
 	int i, k;
@@ -123,6 +135,54 @@ int informe_listarPosicionArancelariaConSusArticulo(LinkedList* listaArticulos, 
 	}
 	return retorno;
 }
+
+
+/** \brief Lista solo las Posiciones Arancelarias Con Articulos
+ * \param listaArticulos LinkedList*
+ * \param listaPosicionesArancelarias LinkedList*
+ * \return int 0 si ok, -1 error
+ */
+int informe_listarSoloPosicionArancelariaConArticulos(LinkedList* listaArticulos, LinkedList* listaPosicionesArancelarias)
+{
+	int retorno = -1;
+	int i, k;
+	if(listaArticulos != NULL && listaPosicionesArancelarias != NULL)
+	{
+		int lenArticulos;
+		int lenPosicionesArancelarias;
+
+		lenArticulos = ll_len(listaArticulos);
+		lenPosicionesArancelarias = ll_len(listaPosicionesArancelarias);
+
+		Articulo* pArticulo;
+		PosicionArancelaria* pPosicionArancelaria;
+		int idPosAranArticulo, idPosAran, flagErrorA, flagErrorPA;
+		// ---------------------------------------------------------------------
+		for(i=0; i<lenPosicionesArancelarias; i++)
+		{
+			pPosicionArancelaria = (PosicionArancelaria*)ll_get(listaPosicionesArancelarias, i);
+			idPosAran = posicionArancelaria_getIdPosicionArancelaria(pPosicionArancelaria, &flagErrorPA);
+			printf("\n\n");
+			for(k=0; k<lenArticulos; k++)
+			{
+				pArticulo = (Articulo*)ll_get(listaArticulos, k);
+				idPosAranArticulo = articulo_getIdPosicionArancelaria(pArticulo, &flagErrorA);
+				// ------------------------------------
+				if(!flagErrorA && !flagErrorPA &&
+				   idPosAranArticulo == idPosAran)
+				{
+					posicionArancelaria_imprimirUnaPosicionArancelaria(pPosicionArancelaria);
+					articulo_imprimirUnArticulo(pArticulo);
+				}
+				// ------------------------------------
+			}
+		}
+		// ---------------------------------------------------------------------
+		retorno = 0;
+	}
+	return retorno;
+}
+
 /** \brief Listar Articulos con su costo final por Transporte Aereo
  * \param listaArticulos LinkedList*
  * \param listaPosicionesArancelarias LinkedList*
@@ -139,11 +199,9 @@ int informe_listarArticulosConCostoFinalTransporteAereo(LinkedList* listaArticul
 	{
 		int i, k;
 		int lenArticulos, lenPosicionArancelaria;
-		//float resultadoTransporteAereo;
 		lenArticulos = ll_len(listaArticulos);
 		lenPosicionArancelaria = ll_len(listaPosicionArancelaria);
 		int idPosAranArticulo, idPosicionArancelaria, flagErrorA, flagErrorB;
-
 		float resultadoTransporteAereo;
 	// ------------------------------------------------------------------------------------------------------
 		for(i=0; i<lenArticulos; i++)
@@ -161,10 +219,9 @@ int informe_listarArticulosConCostoFinalTransporteAereo(LinkedList* listaArticul
 					{
 						idPosicionArancelaria = posicionArancelaria_getIdPosicionArancelaria(pPosicionArancelaria, &flagErrorB);
 						if(!flagErrorA && !flagErrorB &&
-						   idPosAranArticulo == idPosicionArancelaria)
+						   idPosAranArticulo == idPosicionArancelaria &&
+						   !printCostoFinalTransporteAereo(pArticulo, pPosicionArancelaria, pTransporteAereo))
 						{
-							resultadoTransporteAereo = transporteAereo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteAereo);
-							printf("\n > \x1b[43m \x1b[30m Costo final por Transporte Aereo: \x1b[0m \x1b[0m  USD %.2f \n", resultadoTransporteAereo);
 							retorno = 0;
 						}
 					}
@@ -214,6 +271,7 @@ int informe_listarArticulosConCostoFinalTransporteMaritimo(LinkedList* listaArti
 						if(!flagErrorA && !flagErrorB &&
 						   idPosAranArticulo == idPosicionArancelaria)
 						{
+
 							resultadoTransporteMaritimo = transporteMaritimo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteMaritimo);
 							printf("\n > \x1b[46m \x1b[30m Costo final por Transporte Maritimo: \x1b[0m \x1b[0m  USD %.2f \n", resultadoTransporteMaritimo);
 							retorno = 0;
@@ -249,7 +307,6 @@ int informe_listarArticulosConCostoFinalPorTransportes(LinkedList* listaArticulo
 		lenPosicionArancelaria = ll_len(listaPosicionArancelaria);
 		int idPosAranArticulo, idPosicionArancelaria, flagErrorA, flagErrorB;
 
-		float resultadoTransporteAereo, resultadoTransporteMaritimo;
 	// ------------------------------------------------------------------------------------------------------
 		for(i=0; i<lenArticulos; i++)
 		{
@@ -268,10 +325,7 @@ int informe_listarArticulosConCostoFinalPorTransportes(LinkedList* listaArticulo
 						if(!flagErrorA && !flagErrorB &&
 						   idPosAranArticulo == idPosicionArancelaria)
 						{
-							resultadoTransporteAereo = transporteAereo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteAereo);
-							resultadoTransporteMaritimo = transporteMaritimo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteMaritimo);
-							printf("\n > \x1b[43m \x1b[30m Costo final por Transporte Aereo: \x1b[0m \x1b[0m  USD %.2f", resultadoTransporteAereo);
-							printf("\n > \x1b[46m \x1b[30m Costo final por Transporte Maritimo: \x1b[0m \x1b[0m  USD %.2f \n", resultadoTransporteMaritimo);
+							printCostosFinalesTransportes(pArticulo,pPosicionArancelaria,pTransporteAereo,pTransporteMaritimo);
 							retorno = 0;
 						}
 					}
@@ -283,18 +337,19 @@ int informe_listarArticulosConCostoFinalPorTransportes(LinkedList* listaArticulo
 	return retorno;
 }
 
-/** \brief Lista Posicion Arancelaria buscada por Nomenclador con sus Articulos
+/** \brief Lista Posicion Arancelaria buscada por Nomenclador con sus Articulos y sus costos por Transporte
  * \param listaArticulos LinkedList*
  * \param listaPosicionArancelaria LinkedList*
  * \return int 0 si ok, -1 error
  */
-int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionArancelaria, LinkedList* listaArticulos)
+int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionArancelaria, LinkedList* listaArticulos,
+		                                           TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo)
 {
 	int retorno = -1;
 	void* pPosicionAranElement;
 	void* pArticuloElement;
 
-	if(listaPosicionArancelaria != NULL && listaArticulos != NULL )
+	if(listaPosicionArancelaria != NULL && listaArticulos != NULL  && pTransporteAereo != NULL && pTransporteMaritimo != NULL)
 	{
 		// Pido que ingrese el Nomenclador, busco el elemento y lo retorno
 		pPosicionAranElement = busquedaPorNomencladorPosicionArancelaria(listaPosicionArancelaria);
@@ -306,8 +361,10 @@ int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionAran
 			while(pArticuloElement != NULL)
 			{
 				if(sonIgualesIdPosicionArancelaria(pArticuloElement, pPosicionAranElement))
+				{
 					articulo_imprimirUnArticulo(pArticuloElement);
-
+					printCostosFinalesTransportes((Articulo*)pArticuloElement,(PosicionArancelaria*)pPosicionAranElement,pTransporteAereo,pTransporteMaritimo);
+				}
 				pArticuloElement = ll_getNext(listaArticulos, 0);
 			}
 			retorno = 0;
@@ -315,7 +372,65 @@ int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionAran
 	}
 	return retorno;
 }
-
+//------------------------------------------------------------------------------------------ PRINT COSTO FINAL TRANSPORTES
+/** \brief Llama a la funcion calcular costo final por Transporte Aereo y Maritimo, y le hace un print
+ * \param pArticulo Articulo*
+ * \param pPosicionArancelaria PosicionArancelaria*
+ * \param pTransporteAereo TransporteAereo*
+ * \param pTransporteMaritimo TransporteMaritimo*
+ * \return int -1 error, 0 si ok
+ */
+static int printCostosFinalesTransportes(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+		                                 TransporteAereo* pTransporteAereo,TransporteMaritimo* pTransporteMaritimo)
+{
+	int retorno = -1;
+	if(pArticulo != NULL && pPosicionArancelaria != NULL  && pTransporteAereo != NULL && pTransporteMaritimo != NULL &&
+	  !printCostoFinalTransporteAereo(pArticulo, pPosicionArancelaria, pTransporteAereo) &&
+	  !printCostoFinalTransporteMaritimo(pArticulo, pPosicionArancelaria, pTransporteMaritimo))
+	{
+		retorno = 0;
+	}
+	return retorno;
+}
+/** \brief Llama a la funcion calcular costo final Transporte Aereo y le hace un print
+ * \param pArticulo Articulo*
+ * \param pPosicionArancelaria PosicionArancelaria*
+ * \param pTransporteAereo TransporteAereo*
+ * \return int -1 error, 0 si ok
+ */
+static int printCostoFinalTransporteAereo(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+		                                  TransporteAereo* pTransporteAereo)
+{
+	int retorno = -1;
+	float resultadoTransporteAereo;
+	if(pArticulo != NULL && pPosicionArancelaria != NULL  && pTransporteAereo != NULL)
+	{
+		resultadoTransporteAereo = transporteAereo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteAereo);
+		printf("\n > \x1b[43m \x1b[30m Costo final por Transporte Aereo: \x1b[0m \x1b[0m  USD %.2f", resultadoTransporteAereo);
+		retorno = 0;
+	}
+	return retorno;
+}
+/** \brief Llama a la funcion calcular costo final Transporte Maritimo y le hace un print
+ * \param pArticulo Articulo*
+ * \param pPosicionArancelaria PosicionArancelaria*
+ * \param pTransporteMaritimo TransporteMaritimo*
+ * \return int -1 error, 0 si ok
+ */
+static int printCostoFinalTransporteMaritimo(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+		                                     TransporteMaritimo* pTransporteMaritimo)
+{
+	int retorno = -1;
+	float resultadoTransporteMaritimo;
+	if(pArticulo != NULL && pPosicionArancelaria != NULL  && pTransporteMaritimo != NULL)
+	{
+		resultadoTransporteMaritimo = transporteMaritimo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteMaritimo);
+		printf("\n > \x1b[46m \x1b[30m Costo final por Transporte Maritimo: \x1b[0m \x1b[0m  USD %.2f \n", resultadoTransporteMaritimo);
+		retorno = 0;
+	}
+	return retorno;
+}
+//------------------------------------------------------------------------------------------- Funciones de Busqueda
 /** \brief Pido que ingrese el Nomenclador, busca el elemento y lo retorna
  * \param listaArticulos LinkedList*
  * \param listaPosicionArancelaria LinkedList*
@@ -364,6 +479,7 @@ void* busquedaPorCodigoArticulo(LinkedList* listaArticulos)
 	}
 	return pRetornoElement;
 }
+//-----------------------------------------------------------------------------------------------------
 /** \brief Veerifica si los Ids de los parametros ingresados son iguales
  * \param void* pArticuloElement
  * \param pPosicionAranElement

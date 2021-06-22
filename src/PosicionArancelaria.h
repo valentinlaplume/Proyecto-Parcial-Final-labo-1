@@ -43,6 +43,10 @@ void posicionArancelaria_encabezado(void);
 // FUNCION CRITERIO BUSCAR POR NOMENCLATURA ARANCELARIA
 int funcionCriterio_buscarPorNomenclador(void* pElement, void* nomencladorIngresadoBuscado);
 
+// FUN CRIT POR TIPO DE LICENCIA: NO AUTOMATICA
+int funcionCriterio_porTipoLicenciaNoAutomatica(void* pElement);
+// FUN CRIT POR TIPO DE LICENCIA: NO AUTOMATICA
+int funcionCriterio_porTipoLicenciaAutomatica(void* pElement);
 
 //------------------------------------------------------------------------------------------------------------------
 // CONSTRUCTORES

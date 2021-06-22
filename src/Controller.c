@@ -440,12 +440,68 @@ int controller_listarPosicionesArancelarias(Dictionary* posicionesArancelarias)
 	}
 	return retorno;
 }
-/** \brief Lista Posiciones Arancelarias con sus Articulos correspondientes
+/** \brief Lista Posiciones Arancelarias con tipo de licencia NO AUTOMÁTICA
+ * \param posicionesArancelarias Dictionary*
+ * \return int 0 si ok, -1 error
+ */
+int controller_listarPosicionesArancelariasNoAutomatica(Dictionary* posicionesArancelarias)
+{
+	int retorno = -1;
+	LinkedList* listaPosicionesArancelarias;
+	LinkedList* listaFiltradaNoAutomatica;
+	if(posicionesArancelarias != NULL)
+	{
+		// Obtengo posicionesArancelarias del diccionario
+		listaPosicionesArancelarias = dict_getValues(posicionesArancelarias);
+		if(listaPosicionesArancelarias != NULL)
+		{
+			listaFiltradaNoAutomatica = ll_filter(listaPosicionesArancelarias,funcionCriterio_porTipoLicenciaNoAutomatica);
+			if(listaFiltradaNoAutomatica != NULL &&
+			  !posicionArancelaria_imprimirPosicionesArancelarias(listaFiltradaNoAutomatica) &&
+			  !ll_deleteLinkedList(listaPosicionesArancelarias) &&
+			  !ll_deleteLinkedList(listaFiltradaNoAutomatica))
+			{
+				printf("\n\n > Listado Posiciones Arancelarias con tipo de licencia NO AUTOMÁTICA");
+				retorno = 0;
+			}
+		}
+	}
+	return retorno;
+}
+/** \brief Lista Posiciones Arancelarias con tipo de licencia AUTOMÁTICA
+ * \param posicionesArancelarias Dictionary*
+ * \return int 0 si ok, -1 error
+ */
+int controller_listarPosicionesArancelariasAutomatica(Dictionary* posicionesArancelarias)
+{
+	int retorno = -1;
+	LinkedList* listaPosicionesArancelarias;
+	LinkedList* listaFiltradaAutomatica;
+	if(posicionesArancelarias != NULL)
+	{
+		// Obtengo posicionesArancelarias del diccionario
+		listaPosicionesArancelarias = dict_getValues(posicionesArancelarias);
+		if(listaPosicionesArancelarias != NULL)
+		{
+			listaFiltradaAutomatica = ll_filter(listaPosicionesArancelarias,funcionCriterio_porTipoLicenciaAutomatica);
+			if(listaFiltradaAutomatica != NULL &&
+			  !posicionArancelaria_imprimirPosicionesArancelarias(listaFiltradaAutomatica) &&
+			  !ll_deleteLinkedList(listaPosicionesArancelarias) &&
+			  !ll_deleteLinkedList(listaFiltradaAutomatica))
+			{
+				printf("\n\n > Listado Posiciones Arancelarias con tipo de licencia NO AUTOMÁTICA");
+				retorno = 0;
+			}
+		}
+	}
+	return retorno;
+}
+/** \brief Lista todas las Posiciones Arancelarias con sus Articulos correspondientes, incluye las que no poseen articulos
  * \param articulos Dictionary*
  * \param posicionesArancelarias Dictionary*
  * \return int 0 si ok, -1 error
  */
-int controller_listarPosicionArancelariaConSusArticulo(Dictionary* articulos, Dictionary* posicionesArancelarias)
+int controller_listarTotalPosicionesArancelariaConSusArticulos(Dictionary* articulos, Dictionary* posicionesArancelarias)
 {
 	int retorno = -1;
 	LinkedList* listaArticulos;
@@ -454,11 +510,42 @@ int controller_listarPosicionArancelariaConSusArticulo(Dictionary* articulos, Di
 	{
 		// Obtengo articulos del diccionario
 		listaArticulos = dict_getValues(articulos);
+
 		listaPosicionesArancelarias = dict_getValues(posicionesArancelarias);
+
 		if(listaArticulos != NULL && listaPosicionesArancelarias != NULL &&
-		  !informe_listarPosicionArancelariaConSusArticulo(listaArticulos, listaPosicionesArancelarias))
+		  !informe_listarTotalPosicionArancelariaConSusArticulos(listaArticulos, listaPosicionesArancelarias))
 		{
-			printf("\n\n > Listado de Posiciones Arancelarias junto con sus Articulos");
+			printf("\n\n > Listado de todas las Posiciones Arancelarias junto con sus Articulos "
+					 "\n > [ Inclusive las que no poseen articulos ]");
+			ll_deleteLinkedList(listaArticulos);
+			ll_deleteLinkedList(listaPosicionesArancelarias);
+			retorno = 0;
+		}
+	}
+	return retorno;
+}
+/** \brief Lista solamente Posiciones Arancelarias con Articulos
+ * \param articulos Dictionary*
+ * \param posicionesArancelarias Dictionary*
+ * \return int 0 si ok, -1 error
+ */
+int controller_listarSoloPosicionesArancelariaConArticulos(Dictionary* articulos, Dictionary* posicionesArancelarias)
+{
+	int retorno = -1;
+	LinkedList* listaArticulos;
+	LinkedList* listaPosicionesArancelarias;
+	if(articulos != NULL && posicionesArancelarias != NULL)
+	{
+		// Obtengo articulos del diccionario
+		listaArticulos = dict_getValues(articulos);
+
+		listaPosicionesArancelarias = dict_getValues(posicionesArancelarias);
+
+		if(listaArticulos != NULL && listaPosicionesArancelarias != NULL &&
+		  !informe_listarSoloPosicionArancelariaConArticulos(listaArticulos, listaPosicionesArancelarias))
+		{
+			printf("\n\n > Listado de Posiciones Arancelarias con Articulos incluidos");
 			ll_deleteLinkedList(listaArticulos);
 			ll_deleteLinkedList(listaPosicionesArancelarias);
 			retorno = 0;
@@ -471,19 +558,20 @@ int controller_listarPosicionArancelariaConSusArticulo(Dictionary* articulos, Di
  * \param posicionesArancelarias Dictionary*
  * \return int 0 si ok, -1 error
  */
-int controller_listarArticulosPorBusquedaPorNomenclador(Dictionary* articulos, Dictionary* posicionesArancelarias)
+int controller_listarArticulosPorBusquedaPorNomenclador(Dictionary* articulos, Dictionary* posicionesArancelarias,
+		                                               TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo)
 {
 	int retorno = -1;
 	LinkedList* listaPosicionArancelaria;
 	LinkedList* listaArticulos;
 
-	if(articulos != NULL && posicionesArancelarias != NULL)
+	if(articulos != NULL && posicionesArancelarias != NULL && pTransporteAereo != NULL && pTransporteMaritimo != NULL)
 	{
 		listaPosicionArancelaria = dict_getValues(posicionesArancelarias);
 		listaArticulos = dict_getValues(articulos);
 		//--------------------------------------------------------------------------------
 		if(listaPosicionArancelaria != NULL && listaArticulos != NULL &&
-		   !informe_listarPorBusquedaPorNomencladorPosAran(listaPosicionArancelaria, listaArticulos))
+		   !informe_listarPorBusquedaPorNomencladorPosAran(listaPosicionArancelaria, listaArticulos, pTransporteAereo, pTransporteMaritimo))
 		{
 			ll_deleteLinkedList(listaArticulos);
 			ll_deleteLinkedList(listaPosicionArancelaria);
@@ -511,7 +599,8 @@ int controller_listarUnArticuloPorBusquedaPorCodigo(Dictionary* articulos)
 			// Busco elemento
 			pArticulo = busquedaPorCodigoArticulo(listaArticulos);
 			// Verifico y imprimo elemento
-			if(pArticulo != NULL && !articulo_imprimirUnArticulo(pArticulo))
+			if(pArticulo != NULL && !articulo_imprimirUnArticulo(pArticulo) &&
+			  !ll_deleteLinkedList(listaArticulos))
 				retorno = 0;
 		}
 	}
@@ -529,19 +618,21 @@ int controller_ABMPosicionArancelaria(Dictionary* posicionesArancelarias, Dictio
 {
 	int retorno = -1;
 	int opcion;
-	int opcion_salir = 5;
+	int opcion_salir = 7;
 	if(posicionesArancelarias != NULL && articulos != NULL)
 	{
 		do
 		{
 			if(!utn_getNumero(&opcion,
-					            "\n\n * ================== \x1b[30m\x1b[46m SUBMENU \x1b[0m\x1b[0m ================== *"
+					            "\n\n * ============ \x1b[32m\x1b[40m MENU POSICION ARANCELARIA \x1b[0m\x1b[0m ============ *"
 								"\n | =============================================== |"
-								"\n | 1 -  Listar posiciones arancelarias             |"
+								"\n | 1 -  Listar Posiciones Arancelarias             |"
 								"\n | 2 -  Dar de alta una Posicion Arancelaria       |"
 								"\n | 3 -  Dar de baja una Posicion Arancelaria       |"
 								"\n | 4 -  Modificar una Posicion Arancelaria         |"
-								"\n | 5 -  Salir                                      |"
+								"\n | 5 -  Listar los tipo de licencia NO AUTOMÁTICA  |"
+								"\n | 6 -  Listar los tipo de licencia AUTOMÁTICA     |"
+								"\n | 7 -  Volver al menu principal                   |"
 								"\n * ----------------------------------------------- *"
 								"\n > Eliga opcion: ",
 								"\n\x1b[31m * OPCION INVALIDA * \x1b[0m", 1, opcion_salir, 2))
@@ -550,16 +641,22 @@ int controller_ABMPosicionArancelaria(Dictionary* posicionesArancelarias, Dictio
 				{
 					case 1: // Listar posiciones arancelarias
 						controller_listarPosicionesArancelarias(posicionesArancelarias);
-						break;
+					break;
 					case 2: // Dar de alta una Posicion Arancelaria
 						controller_altaPosicionArancelaria(posicionesArancelarias);
-						break;
+					break;
 					case 3: // Dar de baja una Posicion Arancelaria
 						controller_bajaPosicionArancelaria(posicionesArancelarias, articulos);
-						break;
+					break;
 					case 4: // Modificar una Posicion Arancelaria
 						controller_modificarPosicionArancelaria(posicionesArancelarias);
-						break;
+					break;
+					case 5: // Listar los tipo de licencia NO AUTOMÁTICA
+						controller_listarPosicionesArancelariasNoAutomatica(posicionesArancelarias);
+					break;
+					case 6: // Listar los tipo de licencia AUTOMÁTICA
+						controller_listarPosicionesArancelariasAutomatica(posicionesArancelarias);
+					break;
 				}
 			}
 			// acordarse de guardar en archivo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -568,6 +665,7 @@ int controller_ABMPosicionArancelaria(Dictionary* posicionesArancelarias, Dictio
 	}
 	return retorno;
 }
+
 /** \brief Submenu: Alta, Baja, Modificacion - listar [Posiciones Arancelarias]
  * \param articulos Dictionary*
  * \param posicionesArancelarias Dictionary*
@@ -577,19 +675,20 @@ int controller_ABMArticulo(Dictionary* articulos, Dictionary* posicionesArancela
 {
 	int retorno = -1;
 	int opcion;
-	int opcion_salir = 5;
+	int opcion_salir = 6;
 	if(articulos != NULL && posicionesArancelarias != NULL)
 	{
 		do
 		{
 			if(!utn_getNumero(&opcion,
-								"\n\n * ================== \x1b[30m\x1b[46m SUBMENU \x1b[0m\x1b[0m ================== *"
+								"\n\n * \x1b[37m\x1b[40m===============  MENU ARTICULO  ===============\x1b[0m\x1b[0m *"
 								"\n | =============================================== |"
 								"\n | 1 -  Listar articulos                           |"
 								"\n | 2 -  Dar de alta un Articulo                    |"
 								"\n | 3 -  Dar de baja un Articulo                    |"
 								"\n | 4 -  Modificar un Articulo                      |"
-								"\n | 5 -  Salir                                      |"
+								"\n | 5 -  Buscar y listar Articulo por Codigo        |"
+								"\n | 6 -  Volver al menu principal                   |"
 								"\n * ----------------------------------------------- *"
 								"\n > Eliga opcion: ",
 								"\n\x1b[31m * OPCION INVALIDA * \x1b[0m", 1, opcion_salir, 2))
@@ -608,6 +707,9 @@ int controller_ABMArticulo(Dictionary* articulos, Dictionary* posicionesArancela
 					case 4: // Modificar un articulo
 						controller_modificarArticulo(articulos, posicionesArancelarias);
 						break;
+					case 5: // Buscar y listar Articulo por Codigo
+						controller_listarUnArticuloPorBusquedaPorCodigo(articulos);
+					break;
 				}
 			}
 			// acordarse de guardar en archivo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -637,12 +739,12 @@ int controller_subMenuInforme(Dictionary* articulos, Dictionary* posicionesAranc
 		{
 			if(!utn_getNumero(&opcion,
 								"\n"
-								"\n * ========================= \x1b[95m\x1b[40m  MENU INFORME  \x1b[0m\x1b[0m ========================= *"
+								"\n * \x1b[95m\x1b[40m=========================   MENU INFORME   =========================\x1b[0m\x1b[0m *"
 								"\n | ==================================================================== |"
 								"\n |  1  - Listar Articulos con costo final por Transporte Maritimo       |"
 								"\n |  2  - Listar Articulos con costo final por Transporte Aereo          |"
 								"\n |  3  - Listar Articulos con costo final por Transportes               |"
-								"\n |  4  - Salir                                                          |"
+								"\n |  4  - Volver al menu principal                                       |"
 								"\n * -------------------------------------------------------------------- *"
 								"\n > Eliga opcion: ", "\n\x1b[31m * OPCION INVALIDA * \x1b[0m",1, opcion_salir, 2))
 			{
@@ -681,12 +783,12 @@ int controller_subMenuTransporteAereo(TransporteAereo* pTransporteAereo)
 		do
 		{
 			if(!utn_getNumero(&opcion,
-					            "\n\n * ================== \x1b[30m\x1b[46m SUBMENU \x1b[0m\x1b[0m ================== *"
-								"\n | =============================================== |"
-								"\n | 1 -  Mostrar información Transporte Aereo       |"
-								"\n | 2 -  Modificar información del Transporte Aereo |"
-								"\n | 3 -  Salir                                      |"
-								"\n * ----------------------------------------------- *"
+					            "\n\n * ============== \x1b[30m\x1b[43m TRANSPORTE AEREO \x1b[0m\x1b[0m ============== *"
+								"\n | ================================================ |"
+								"\n | 1 -  Mostrar información Transporte Aereo        |"
+								"\n | 2 -  Modificar información del Transporte Aereo  |"
+								"\n | 3 -  Volver al menu principal                    |"
+								"\n * ------------------------------------------------ *"
 								"\n > Eliga opcion: ",
 								"\n\x1b[31m * OPCION INVALIDA * \x1b[0m", 1, opcion_salir, 2))
 			{
@@ -700,7 +802,6 @@ int controller_subMenuTransporteAereo(TransporteAereo* pTransporteAereo)
 					break;
 				}
 			}
-			controller_guardarTransporteAereo("transporteAereo.csv", pTransporteAereo);
 			// acordarse de guardar en archivo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}while(opcion != opcion_salir);
 		retorno = 0;
@@ -721,12 +822,12 @@ int controller_subMenuTransporteMaritimo(TransporteMaritimo* pTransporteMaritimo
 		do
 		{
 			if(!utn_getNumero(&opcion,
-					            "\n\n * =================== \x1b[30m\x1b[46m SUBMENU \x1b[0m\x1b[0m ==================== *"
-								"\n | ================================================== |"
-								"\n | 1 -  Mostrar información Transporte Maritimo       |"
-								"\n | 2 -  Modificar información del Transporte Maritimo |"
-								"\n | 3 -  Salir                                         |"
-								"\n * -------------------------------------------------- *"
+					            "\n\n * ============= \x1b[30m\x1b[46m MENU TRANSPORTE MARITIMO \x1b[0m\x1b[0m ============= *"
+								"\n | ====================================================== |"
+								"\n | 1 -  Mostrar información Transporte Maritimo           |"
+								"\n | 2 -  Modificar información del Transporte Maritimo     |"
+								"\n | 3 -  Volver al menu principal                          |"
+								"\n * ------------------------------------------------------ *"
 								"\n > Eliga opcion: ",
 								"\n\x1b[31m * OPCION INVALIDA * \x1b[0m", 1, opcion_salir, 2))
 			{
@@ -740,7 +841,6 @@ int controller_subMenuTransporteMaritimo(TransporteMaritimo* pTransporteMaritimo
 					break;
 				}
 			}
-			controller_guardarTransporteMaritimo("transporteMaritimo.csv", pTransporteMaritimo);
 			// acordarse de guardar en archivo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}while(opcion != opcion_salir);
 		retorno = 0;
@@ -767,8 +867,8 @@ int controller_costoFinalPorTransportes(Dictionary* articulos, Dictionary* posic
 		listaPosicionArancelaria = dict_getValues(posicionesArancelarias);
 		//-----------------------------------------
 		if(listaArticulos != NULL && listaPosicionArancelaria != NULL &&
-		  !informe_listarArticulosConCostoFinalPorTransportes(listaArticulos, listaPosicionArancelaria,
-				                                               pTransporteAereo, pTransporteMaritimo))
+		  !informe_listarArticulosConCostoFinalPorTransportes(listaArticulos, listaPosicionArancelaria,pTransporteAereo, pTransporteMaritimo) &&
+		  !ll_deleteLinkedList(listaArticulos) && !ll_deleteLinkedList(listaPosicionArancelaria))
 			retorno = 0;
 	}
 	return retorno;
@@ -791,7 +891,8 @@ int controller_costoFinalTransporteAereo(Dictionary* articulos, Dictionary* posi
 		listaPosicionArancelaria = dict_getValues(posicionesArancelarias);
 		//-----------------------------------------
 		if(listaArticulos != NULL && listaPosicionArancelaria != NULL &&
-		  !informe_listarArticulosConCostoFinalTransporteAereo(listaArticulos, listaPosicionArancelaria, pTransporteAereo))
+		  !informe_listarArticulosConCostoFinalTransporteAereo(listaArticulos, listaPosicionArancelaria, pTransporteAereo) &&
+		  !ll_deleteLinkedList(listaArticulos) && !ll_deleteLinkedList(listaPosicionArancelaria))
 			retorno = 0;
 	}
 	return retorno;
@@ -814,7 +915,8 @@ int controller_costoFinalTransporteMaritimo(Dictionary* articulos, Dictionary* p
 		listaPosicionArancelaria = dict_getValues(posicionesArancelarias);
 		//-----------------------------------------
 		if(listaArticulos != NULL && listaPosicionArancelaria != NULL &&
-		  !informe_listarArticulosConCostoFinalTransporteMaritimo(listaArticulos, listaPosicionArancelaria, pTransporteMaritimo))
+		  !informe_listarArticulosConCostoFinalTransporteMaritimo(listaArticulos, listaPosicionArancelaria, pTransporteMaritimo) &&
+		  !ll_deleteLinkedList(listaArticulos) && !ll_deleteLinkedList(listaPosicionArancelaria))
 			retorno = 0;
 	}
 	return retorno;
@@ -1451,6 +1553,7 @@ static int controller_subMenuEditTransporteMaritimo(TransporteMaritimo* pTranspo
 					break;
 				}
 			}
+			controller_guardarTransporteMaritimo("transporteMaritimo.csv", pTransporteMaritimo);
 		}while(opcion != opcion_salir);
 
 		if(flagModificado == 1 &&
@@ -1512,6 +1615,7 @@ static int controller_subMenuEditTransporteAereo(TransporteAereo* pTransporteAer
 					break;
 				}
 			}
+			controller_guardarTransporteAereo("transporteAereo.csv", pTransporteAereo);
 		}while(opcion != opcion_salir);
 
 		if(flagModificado == 1 &&

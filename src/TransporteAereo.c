@@ -112,14 +112,21 @@ int transporteAereo_imprimirTransporteAereo(TransporteAereo* pTransporteAereo)
 		precioPorKg = transporteAereo_getPrecioPorKg(pTransporteAereo, &flagErrorB);
 		if(!flagErrorA && !flagErrorB)
 		{
-			printf("\n\x1b[34m -------------------------------------------- \x1b[0m");
-			printf("\n Constante Volumetrica	  PrecioPorKg");
-			printf("\n %-15.2f   USS %-15.2f",constanteVolumetrica, precioPorKg);
-			printf("\n\x1b[34m -------------------------------------------- \x1b[0m");
+			transporteAereo_encabezado(); // Imprimo encabezado
+			printf("\n %-30.2f   USD %-30.2f",constanteVolumetrica,precioPorKg);
 			retorno = 0;
 		}
 	}
 	return retorno;
+}
+
+void transporteAereo_encabezado(void)
+{
+	char constanteVolumetrica[] = {"Constante Volumetrica"};
+	char precioPorKg[] = {"Precio por [Kg]"};
+
+	//printf("\n\x1b[34m ----------------------------------------------------------------------------------------------------------------------------------  \x1b[0m");
+	printf("\n \x1b[40m\x1b[33m%-30s %-30s\x1b[0m\x1b[0m ", constanteVolumetrica,precioPorKg);
 }
 
 

@@ -32,8 +32,9 @@ typedef struct
 	float altura;
 	float profundidad;
 
-	//float costoTransporteAereo;
-	//float costoTransporteMaritimo;
+	//-----------------------------
+	float costoTransporteAereo;
+	float costoTransporteMaritimo;
 }Articulo;
 
 // LISTAR
@@ -58,7 +59,12 @@ Articulo* articulo_newParam(int idArticulo, int IdPosicionArancelaria,
 // DESTRUCTOR
 int articulo_delete(Articulo* this);
 //---------------------------------------------- SET - GET - IS VALID ----------------------------------------------
+int articulo_setCostoTransporteMaritimo(Articulo* this, float costoTransporteMaritimo);
+float articulo_getCostoTransporteMaritimo(Articulo* this,int* flagError);
 
+int articulo_setCostoTransporteAereo(Articulo* this, float costoTransporteAereo);
+float articulo_getCostoTransporteAereo(Articulo* this,int* flagError);
+//----------------------------------------------------------
 int articulo_setIdArticulo(Articulo* this,int idArticulo);
 int articulo_getIdArticulo(Articulo* this,int* flagError);
 int isValidId(int);

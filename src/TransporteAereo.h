@@ -16,7 +16,6 @@ typedef struct
 	float precioPorKg;
 }TransporteAereo;
 
-//TransporteAereo* TransporteAereo_new(void);
 TransporteAereo* transporteAereo_newParam(TransporteAereo* pTransporteAereo,
 		                                  float constanteVolumetrica, float precioPorKg);
 
@@ -32,6 +31,8 @@ int transporteAereo_setPrecioPorKg(TransporteAereo* this, float precioPorKg);
 float transporteAereo_getPrecioPorKg(TransporteAereo* this,int* flagError);
 int isValidPrecioPorKg(float );
 
+// Enzabezado
+void transporteAereo_encabezado(void);
 //******************************************************************************** LISTAR
 int transporteAereo_imprimirTransporteAereo(TransporteAereo* pTransporteAereo);
 

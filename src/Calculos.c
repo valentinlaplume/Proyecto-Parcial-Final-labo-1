@@ -7,7 +7,7 @@
 #include "Calculos.h"
 
 //******************************************************************************************** CALCULOS
-//******************************************************************************************** TRANSPORTE AEREO
+//  TRANSPORTE AEREO
 
 //  Costo final - Base imponible - Porcentajes
 float transporteAereo_calcularCostoFinal(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
@@ -24,6 +24,7 @@ float transporteAereo_calcularCostoFinal(Articulo* pArticulo, PosicionArancelari
 
 		//if(resulBaseImponible > 0 && resulImportacion > 0 && resultTasaEstadistica > 0)
 			retornoResultado = (resulBaseImponible + resulImportacion + resultTasaEstadistica);
+			articulo_setCostoTransporteAereo(pArticulo, retornoResultado);
 	}
 	return retornoResultado;
 }
@@ -189,6 +190,7 @@ float transporteMaritimo_calcularCostoFinal(Articulo* pArticulo, PosicionArancel
 
 		//if(resulBaseImponible > 0 && resulImportacion > 0 && resultTasaEstadistica > 0)
 			retornoResultado = (resulBaseImponible + resulImportacion + resultTasaEstadistica);
+			articulo_setCostoTransporteMaritimo(pArticulo, retornoResultado);
 	}
 	return retornoResultado;
 }
