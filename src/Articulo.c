@@ -8,11 +8,22 @@
 #include "laplume.h"
 
 //******************************************************************************* CONSTRUCTORES
+// CONSTRUCTORES
+
+/* \brief Reserva espacio en memoria para un Articulo
+ * \param void
+ * \return Articulo* [direccion de memoria] si obtuvo memoria, [NULL] si no hay mas memoria
+ */
 Articulo* articulo_new(void)
 {
 	return (Articulo*) malloc(sizeof(Articulo));
 }
-
+/* \brief Valida los campos y convierte al tipo de dato que corresponda en cada campo, y los carga en una variable Articulo
+ * \param (int idArticulo, int IdPosicionArancelaria,
+		char* nombre, char* codigo,char* descripcion,char* paisDeFabricacion,
+		float fob, float peso, float ancho, float altura, float profundidad)
+ * \return Articulo* Retorna puntero a la PosicionArancelaria cargado
+ */
 Articulo* articulo_newParam(int idArticulo, int IdPosicionArancelaria,
 		                    char* nombre, char* codigo,char* descripcion,char* paisDeFabricacion,
 		                    float fob, float peso, float ancho, float altura, float profundidad)
@@ -39,6 +50,21 @@ Articulo* articulo_newParam(int idArticulo, int IdPosicionArancelaria,
 		//	FLAG_CARGUE_ARTICULO = 1;
 	}
 	return pArticulo;
+}
+//******************************************************************************** DESTRUCTOR
+/* \brief Libera el espacio reservado en memoria para un Articulo
+ * \param this Articulo*
+ * \return void
+ */
+int articulo_delete(Articulo* this)
+{
+	int retorno = -1;
+	if(this != NULL)
+	{
+		free(this);
+		retorno = 0;
+	}
+	return retorno;
 }
 //----------------------------------------------------------------------------------------
 /** \brief Valida un Costo Transporte Maritimo y lo carga en la variable Articulo
@@ -104,21 +130,7 @@ float articulo_getCostoTransporteAereo(Articulo* this,int* flagError)
     }
     return aux;
 }
-//******************************************************************************** DESTRUCTOR
-/* \brief Libera el espacio reservado en memoria para un Articulo
- * \param this Articulo*
- * \return void
- */
-int articulo_delete(Articulo* this)
-{
-	int retorno = -1;
-	if(this != NULL)
-	{
-		free(this);
-		retorno = 0;
-	}
-	return retorno;
-}
+
 //******************************************************************************** GET - SET - IS VALID
 /** \brief Valida un ID y lo carga en la variable Articulo
  * \param this Articulo*

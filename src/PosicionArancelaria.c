@@ -76,10 +76,10 @@ int posicionArancelaria_setIdPosicionArancelaria(PosicionArancelaria* this, int 
 	}
 	return retorno;
 }
-/** \brief Obtiene Id Articulo del Articulo
- * \param this Articulo*
+/** \brief Obtiene Id PosicionArancelaria del PosicionArancelaria
+ * \param this PosicionArancelaria*
  * \param flagError int*
- * \return int retorna -1 ERROR, retorna Id Articulo si ok
+ * \return int retorna -1 ERROR, retorna Id PosicionArancelaria si ok
  */
 int posicionArancelaria_getIdPosicionArancelaria(PosicionArancelaria* this,int* flagError)
 {
@@ -106,8 +106,8 @@ int isValidIdPosicionArancelaria(int idPosicionArancelaria)
 	return retorno;
 }
 //-----------------------------------------------------------------------------
-/** \brief Valida un nomenclador y lo carga en la variable Articulo
- * \param this Articulo*
+/** \brief Valida un nomenclador y lo carga en la variable PosicionArancelaria
+ * \param this PosicionArancelaria*
  * \param nomenclador char*
  * \return int  -1 error, 0 si ok
  */
@@ -121,8 +121,8 @@ int posicionArancelaria_setNomenclador(PosicionArancelaria* this, char* nomencla
 	}
 	return retorno;
 }
-/** \brief Obtiene nomenclador del Articulo
- * \param this Articulo*
+/** \brief Obtiene nomenclador del PosicionArancelaria
+ * \param this PosicionArancelaria*
  * \param flagError int*
  * \return int retorna -1 ERROR, retorna Nombre si ok
  */
@@ -152,8 +152,8 @@ int isValidNomenclador(char nomenclador[])
 	return retorno;
 }
 //-----------------------------------------------------------------------------
-/** \brief Valida un porcentajeSeguro y lo carga en la variable Articulo
- * \param this Articulo*
+/** \brief Valida un porcentajeSeguro y lo carga en la variable PosicionArancelaria
+ * \param this PosicionArancelaria*
  * \param porcentajeSeguro float
  * \return int  -1 error, 0 si ok
  */
@@ -167,8 +167,8 @@ int posicionArancelaria_setPorcentajeSeguro(PosicionArancelaria* this, float por
     }
     return retorno;
 }
-/** \brief Obtiene porcentajeSeguro del Articulo
- * \param this Articulo*
+/** \brief Obtiene porcentajeSeguro del PosicionArancelaria
+ * \param this PosicionArancelaria*
  * \param flagError int*
  * \return float retorna -1 ERROR, retorna porcentajeSeguro si ok
  */
@@ -197,8 +197,8 @@ int isValidPorcentajeSeguro(float porcentajeSeguro)
 	return retorno;
 }
 //-----------------------------------------------------------------------------
-/** \brief Valida un porcentajeImportacion y lo carga en la variable Articulo
- * \param this Articulo*
+/** \brief Valida un porcentajeImportacion y lo carga en la variable PosicionArancelaria
+ * \param this PosicionArancelaria*
  * \param porcentajeImportacion float
  * \return int  -1 error, 0 si ok
  */
@@ -212,8 +212,8 @@ int posicionArancelaria_setPorcentajeImportacion(PosicionArancelaria* this, floa
     }
     return retorno;
 }
-/** \brief Obtiene porcentajeImportacion del Articulo
- * \param this Articulo*
+/** \brief Obtiene porcentajeImportacion del PosicionArancelaria
+ * \param this PosicionArancelaria*
  * \param flagError int*
  * \return float retorna -1 ERROR, retorna porcentajeImportacion si ok
  */
@@ -242,8 +242,8 @@ int isValidPorcentajeImportacion(float porcentajeImportacion)
 	return retorno;
 }
 //-----------------------------------------------------------------------------
-/** \brief Valida un porcentajeTasaEstadistica y lo carga en la variable Articulo
- * \param this Articulo*
+/** \brief Valida un porcentajeTasaEstadistica y lo carga en la variable PosicionArancelaria
+ * \param this PosicionArancelaria*
  * \param porcentajeTasaEstadistica float
  * \return int  -1 error, 0 si ok
  */
@@ -257,8 +257,8 @@ int posicionArancelaria_setPorcentajeTasaEstadistica(PosicionArancelaria* this, 
     }
     return retorno;
 }
-/** \brief Obtiene porcentajeTasaEstadistica del Articulo
- * \param this Articulo*
+/** \brief Obtiene porcentajeTasaEstadistica del PosicionArancelaria
+ * \param this PosicionArancelaria*
  * \param flagError int*
  * \return float retorna -1 ERROR, retorna porcentajeTasaEstadistica si ok
  */
@@ -287,8 +287,8 @@ int isValidPorcentajeTasaEstadistica(float porcentajeTasaEstadistica)
 	return retorno;
 }
 //-----------------------------------------------------------------------------
-/** \brief Valida un tipoLicencia y lo carga en la variable Articulo
- * \param this Articulo*
+/** \brief Valida un tipoLicencia y lo carga en la variable PosicionArancelaria
+ * \param this PosicionArancelaria*
  * \param tipoLicencia int
  * \return int  -1 error, 0 si ok
  */
@@ -302,8 +302,8 @@ int posicionArancelaria_setTipoLicencia(PosicionArancelaria* this, int tipoLicen
 	}
 	return retorno;
 }
-/** \brief Obtiene tipoLicencia del Articulo
- * \param this Articulo*
+/** \brief Obtiene tipoLicencia del PosicionArancelaria
+ * \param this PosicionArancelaria*
  * \param flagError int*
  * \return int retorna -1 ERROR, retorna porcentajeTasaEstadistica si ok
  */

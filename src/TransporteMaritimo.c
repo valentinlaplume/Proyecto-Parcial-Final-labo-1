@@ -9,6 +9,11 @@
 #include "laplume.h"
 #include "TransporteMaritimo.h"
 
+/* \brief Valida los campos y convierte al tipo de dato que corresponda en cada campo, y los carga en una variable TransporteMaritimo
+ * \param TransporteMaritimo* pTransporteMaritimo,
+		float metrosCubicos, float precioContenedor
+ * \return TransporteMaritimo* Retorna puntero a la PosicionArancelaria cargado
+ */
 TransporteMaritimo* transporteMaritimo_newParam(TransporteMaritimo* pTransporteMaritimo,
 		                                        float metrosCubicos, float precioContenedor)
 {
@@ -24,6 +29,10 @@ TransporteMaritimo* transporteMaritimo_newParam(TransporteMaritimo* pTransporteM
 	return pTransporteMaritimo;
 }
 //******************************************************************************** DESTRUCTOR
+/* \brief Libera el espacio reservado en memoria para un TransporteMaritimo
+ * \param this TransporteMaritimo*
+ * \return void
+ */
 int transporteMaritimo_delete(TransporteMaritimo* this)
 {
 	int retorno = -1;
@@ -35,6 +44,11 @@ int transporteMaritimo_delete(TransporteMaritimo* this)
 	return retorno;
 }
 //******************************************************************************** SET - GET - IS VALID
+/** \brief Valida metrosCubicos del TransporteMaritimo y lo carga en la variable TransporteMaritimo
+ * \param this TransporteMaritimo*
+ * \param metrosCubicos float
+ * \return int  -1 error, 0 si ok
+ */
 int transporteMaritimo_setMetrosCubicos(TransporteMaritimo* this, float metrosCubicos)
 {
     int retorno = -1;
@@ -45,7 +59,11 @@ int transporteMaritimo_setMetrosCubicos(TransporteMaritimo* this, float metrosCu
     }
     return retorno;
 }
-
+/** \brief Obtiene metrosCubicos del TransporteMaritimo
+ * \param this TransporteMaritimo*
+ * \param flagError int*
+ * \return float retorna -1 ERROR, retorna metrosCubicos si ok
+ */
 float transporteMaritimo_getMetrosCubicos(TransporteMaritimo* this,int* flagError)
 {
     *flagError = -1;
@@ -57,7 +75,10 @@ float transporteMaritimo_getMetrosCubicos(TransporteMaritimo* this,int* flagErro
     }
     return aux;
 }
-
+/** \brief Valida metrosCubicos del TransporteMaritimo
+ * \param metrosCubicos float
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidMetrosCubicos(float metrosCubicos)
 {
 	int retorno = 0;
@@ -68,6 +89,11 @@ int isValidMetrosCubicos(float metrosCubicos)
 	return retorno;
 }
 //---------------------------------------------------
+/** \brief Valida precioContenedor del TransporteMaritimo y lo carga en la variable TransporteMaritimo
+ * \param this TransporteMaritimo*
+ * \param precioContenedor float
+ * \return int  -1 error, 0 si ok
+ */
 int transporteMaritimo_setPrecioContenedor(TransporteMaritimo* this, float precioContenedor)
 {
     int retorno = -1;
@@ -78,7 +104,11 @@ int transporteMaritimo_setPrecioContenedor(TransporteMaritimo* this, float preci
     }
     return retorno;
 }
-
+/** \brief Obtiene precioContenedor del TransporteMaritimo
+ * \param this TransporteMaritimo*
+ * \param flagError int*
+ * \return float retorna -1 ERROR, retorna precioContenedor si ok
+ */
 float transporteMaritimo_getPrecioContenedor(TransporteMaritimo* this,int* flagError)
 {
     *flagError = -1;
@@ -90,7 +120,10 @@ float transporteMaritimo_getPrecioContenedor(TransporteMaritimo* this,int* flagE
     }
     return aux;
 }
-
+/** \brief Valida precioContenedor del Articulo
+ * \param precioContenedor float
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidPrecioContenedor(float precioContenedor)
 {
 	int retorno = 0;
@@ -102,6 +135,10 @@ int isValidPrecioContenedor(float precioContenedor)
 }
 
 //******************************************************************************** LISTAR
+/** \brief Lista un Transporte Maritimo
+ * \param pElement void*
+ * \return int 0 si ok, -1 error
+ */
 int transporteMaritimo_imprimirTransporteMaritimo(TransporteMaritimo* pTransporteMaritimo)
 {
 	int retorno = -1;
@@ -123,7 +160,10 @@ int transporteMaritimo_imprimirTransporteMaritimo(TransporteMaritimo* pTransport
 	}
 	return retorno;
 }
-
+/** \brief print encabezado al listar
+ * \param void
+ * \return void
+ */
 void transporteMaritimo_encabezado(void)
 {
 	char metrosCubicos[] = {"Metros Cubicos"};

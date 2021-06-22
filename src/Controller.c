@@ -741,9 +741,9 @@ int controller_subMenuInforme(Dictionary* articulos, Dictionary* posicionesAranc
 								"\n"
 								"\n * \x1b[95m\x1b[40m=========================   MENU INFORME   =========================\x1b[0m\x1b[0m *"
 								"\n | ==================================================================== |"
-								"\n |  1  - Calcular costo final por Transporte Maritimo                   |"
-								"\n |  2  - Calcular con costo final por Transporte Aereo                  |"
-								"\n |  3  - Calcular costos finales por Transportes                        |"
+								"\n |  1  - Calcular y ver costo final por Transporte Maritimo             |"
+								"\n |  2  - Calcular y ver con costo final por Transporte Aereo            |"
+								"\n |  3  - Calcular y ver costos finales por Transportes                  |"
 								"\n |  4  - Volver al menu principal                                       |"
 								"\n * -------------------------------------------------------------------- *"
 								"\n > Eliga opcion: ", "\n\x1b[31m * OPCION INVALIDA * \x1b[0m",1, opcion_salir, 2))
