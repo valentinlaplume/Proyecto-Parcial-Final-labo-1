@@ -451,6 +451,7 @@ static int printCostoFinalTransporteAereo(Articulo* pArticulo, PosicionArancelar
 	{
 		if(transporteAereo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteAereo) > -1)
 		{
+			//costoTransporteAereo = transporteAereo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteAereo)
 			costoTransporteAereo = articulo_getCostoTransporteAereo(pArticulo, &flagError);
 			if(!flagError)
 			{

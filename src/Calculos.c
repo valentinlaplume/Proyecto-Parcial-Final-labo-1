@@ -8,8 +8,13 @@
 
 //******************************************************************************************** CALCULOS
 //  TRANSPORTE AEREO
-
 //  Costo final - Base imponible - Porcentajes
+
+/** \brief Calcula costo final del Transporte Aereo
+ * \param path (Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+        												TransporteAereo* pTransporteAereo)
+ * \return int [-1] error, resultado final si ok
+ */
 float transporteAereo_calcularCostoFinal(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
 		                                 TransporteAereo* pTransporteAereo)
 {
@@ -28,6 +33,11 @@ float transporteAereo_calcularCostoFinal(Articulo* pArticulo, PosicionArancelari
 	}
 	return retornoResultado;
 }
+/** \brief Calcula porcentaje Tasa Estadistica del Transporte Aereo
+ * \param (Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+        												TransporteAereo* pTransporteAereo)
+ * \return int [-1] error, resultado final si ok
+ */
 float transporteAereo_calcularPorcentajeTasaEstadistica(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
         												TransporteAereo* pTransporteAereo)
 {
@@ -44,6 +54,11 @@ float transporteAereo_calcularPorcentajeTasaEstadistica(Articulo* pArticulo, Pos
 	}
 	return retornoResultado;
 }
+/** \brief Calcula porcentaje Importacion del Transporte Aereo
+ * \param (Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+        												TransporteAereo* pTransporteAereo)
+ * \return int [-1] error, resultado final si ok
+ */
 float transporteAereo_calcularPorcentajeImportacion(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
 		                                            TransporteAereo* pTransporteAereo)
 {
@@ -60,7 +75,11 @@ float transporteAereo_calcularPorcentajeImportacion(Articulo* pArticulo, Posicio
 	}
 	return retornoResultado;
 }
-
+/** \brief Calcula porcentaje BaseI mponible del Transporte Aereo
+ * \param (Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+        												TransporteAereo* pTransporteAereo)
+ * \return int [-1] error, resultado final si ok
+ */
 float transporteAereo_calcularBaseImponible(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
 		                                    TransporteAereo* pTransporteAereo)
 {
@@ -109,7 +128,11 @@ float transporteAereo_calcularProporcionalFlete(Articulo* pArticulo, TransporteA
 	}
 	return retornoResultado;
 }
-
+/** \brief Calcula Precio Peso Volumetrico del Transporte Aereo
+ * \param path (Articulo* pArticulo,
+        							TransporteAereo* pTransporteAereo)
+ * \return int [-1] error, resultado final si ok
+ */
 float transporteAereo_calcularPrecioPesoVolumetrico(Articulo* pArticulo, TransporteAereo* pTransporteAereo)
 {
 	float retornoResultado = -1;
@@ -126,7 +149,11 @@ float transporteAereo_calcularPrecioPesoVolumetrico(Articulo* pArticulo, Transpo
 	return retornoResultado;
 }
 
-// Calcula volumen en centimetros cubicos
+/** \brief Calcula volumen en centimetros cubicos del Transporte Aereo
+ * \param path (Articulo* pArticulo,
+        						TransporteAereo* pTransporteAereo)
+ * \return int [-1] error, resultado final si ok
+ */
 float transporteAereo_calcularKgVolumetrico(Articulo* pArticulo, TransporteAereo* pTransporteAereo)
 {
 	float retornoResultado = -1;
@@ -158,6 +185,11 @@ float transporteAereo_calcularVolumen(Articulo* pArticulo)
 	return retornoResultado;
 }
 
+/** \brief Calcula Precio Peso Real del Transporte Aereo
+ * \param path (Articulo* pArticulo,
+        							TransporteAereo* pTransporteAereo)
+ * \return int [-1] error, resultado final si ok
+ */
 float transporteAereo_calcularPrecioPesoReal(Articulo* pArticulo, TransporteAereo* pTransporteAereo)
 {
 	float retornoResultado = -1;
@@ -176,7 +208,11 @@ float transporteAereo_calcularPrecioPesoReal(Articulo* pArticulo, TransporteAere
 
 //******************************************************************************************** CALCULOS
 //******************************************************************************************** TRANSPORTE MARITIMO
-
+/** \brief Calcula costo final del Transporte Maritimo
+ * \param path (Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+        												TransporteMaritimo* pTransporteMaritimo)
+ * \return int [-1] error, resultado final si ok
+ */
 float transporteMaritimo_calcularCostoFinal(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
                                             TransporteMaritimo* pTransporteMaritimo)
 {
@@ -194,7 +230,11 @@ float transporteMaritimo_calcularCostoFinal(Articulo* pArticulo, PosicionArancel
 	}
 	return retornoResultado;
 }
-
+/** \brief Calcula Porcentaje Tasa Estadistica Transporte Maritimo
+ * \param path (Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+        												TransporteMaritimo* pTransporteMaritimo)
+ * \return int [-1] error, resultado final si ok
+ */
 float transporteMaritimo_calcularPorcentajeTasaEstadistica(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
 		                                TransporteMaritimo* pTransporteMaritimo)
 {
@@ -211,7 +251,11 @@ float transporteMaritimo_calcularPorcentajeTasaEstadistica(Articulo* pArticulo, 
 	}
 	return retornoResultado;
 }
-
+/** \brief Calcula Porcentaje Importacion Transporte Maritimo
+ * \param path (Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+        												TransporteMaritimo* pTransporteMaritimo)
+ * \return int [-1] error, resultado final si ok
+ */
 float transporteMaritimo_calcularPorcentajeImportacion(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
 		                                               TransporteMaritimo* pTransporteMaritimo)
 {
@@ -229,7 +273,11 @@ float transporteMaritimo_calcularPorcentajeImportacion(Articulo* pArticulo, Posi
 	return retornoResultado;
 }
 
-
+/** \brief Calcula Base Imponible Transporte Maritimo
+ * \param path (Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+        												TransporteMaritimo* pTransporteMaritimo)
+ * \return int [-1] error, resultado final si ok
+ */
 float transporteMaritimo_calcularBaseImponible(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
 											   TransporteMaritimo* pTransporteMaritimo)
 {
@@ -250,7 +298,11 @@ float transporteMaritimo_calcularBaseImponible(Articulo* pArticulo, PosicionAran
 	}
 	return retornoResultado;
 }
-
+/** \brief Calcula porcentaje Seguro  Transporte Maritimo
+ * \param path (Articulo* pArticulo,
+        							TransporteMaritimo* pTransporteMaritimo)
+ * \return int [-1] error, resultado final si ok
+ */
 float calcularPorcentajeSeguro(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria)
 {
 	float retornoResultado = -1;
@@ -266,7 +318,11 @@ float calcularPorcentajeSeguro(Articulo* pArticulo, PosicionArancelaria* pPosici
 	}
 	return retornoResultado;
 }
-//Proporcional Flete
+//---------------------------------------------------------------Proporcional Flete
+/** \brief Calcula Volumen Cubico Transporte Maritimo
+ * \param path (Articulo* pArticulo,
+ * \return int [-1] error, resultado final si ok
+ */
 float transporteMaritimo_calcularVolumenCubico(Articulo* pArticulo) // Calcula volumen en metros cubicos 1)
 {
 	float retornoResultado = -1;
@@ -284,7 +340,10 @@ float transporteMaritimo_calcularVolumenCubico(Articulo* pArticulo) // Calcula v
 	}
 	return retornoResultado;
 }
-
+/** \brief Calcula Precio Por Metro Cubico Transporte Maritimo
+ * \param path (TransporteMaritimo* pTransporteMaritimo,
+ * \return int [-1] error, resultado final si ok
+ */
 float transporteMaritimo_calcularPrecioPorMetroCubico(TransporteMaritimo* pTransporteMaritimo) // 2)
 {
 	float retornoResultado = -1;
@@ -302,7 +361,10 @@ float transporteMaritimo_calcularPrecioPorMetroCubico(TransporteMaritimo* pTrans
 	}
 	return retornoResultado;
 }
-// creo que es flete
+/** \brief Calcula Proporcional Flete Transporte Maritimo
+ * \param path (TransporteMaritimo* pTransporteMaritimo,
+ * \return int [-1] error, resultado final si ok
+ */
 float transporteMaritimo_calcularProporcionalFlete(Articulo* pArticulo, TransporteMaritimo* pTransporteMaritimo) // 3)
 {
 	float retornoResultado = -1;
