@@ -37,7 +37,7 @@ typedef int (*FunctionFilter)(void*, void*);
 // ************************************** Funciones agregadas **************************************
 
 // Buscar element por funcion criterio
-void* ll_buscarElement(LinkedList* lista, int(*pFuncionCriterio)(void*, void*), void* datoIngresadoBuscado);
+void* ll_buscarElement_VL(LinkedList* lista, int(*pFuncionCriterio)(void*, void*), void* datoIngresadoBuscado);
 
 // Filter
 LinkedList* ll_filter(LinkedList* pListaOriginal, int(*pFuncionCriterio)(void*));

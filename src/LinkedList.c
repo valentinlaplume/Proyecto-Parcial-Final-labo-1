@@ -842,7 +842,7 @@ int ll_reduceInt2(LinkedList* this,int (*pFunc)(void*,void*),void* arg)
  *                      ( 0) Si ok
  */
 
-void* ll_buscarElement(LinkedList* lista, int(*pFuncionCriterio)(void*, void*), void* datoIngresadoBuscado)
+void* ll_buscarElement_VL(LinkedList* lista, int(*pFuncionCriterio)(void*, void*), void* datoIngresadoBuscado)
 {
 	void* retornoElement = NULL;
 	if(lista != NULL && pFuncionCriterio != NULL)

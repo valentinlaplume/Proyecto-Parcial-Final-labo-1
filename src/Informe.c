@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -101,7 +100,11 @@ int informe_pedirDatosPosicionArancelaria(LinkedList* listaPosAran, char* nomenc
 	return retorno;
 }
 
-//Busca si existe nomenclatura ingresada
+/** \brief Busca si existe la Nomenclatura ingresado por el usuario en las Posiciones Arancelarias
+ * \param listaPosAran LinkedList*
+ * \param nomenclador char* puntero al nomenclador ingresado
+ * \return int: retorna 1 si existe, 0 si no existe
+ */
 int buscarSiExisteNomenclatura(LinkedList* listaPosAran, char* nomenclador)
 {
 	int retorno = 0;
@@ -109,7 +112,7 @@ int buscarSiExisteNomenclatura(LinkedList* listaPosAran, char* nomenclador)
 	{
 		void* pElement;
 		//-----------------------------------------
-		pElement = ll_buscarElement(listaPosAran, funcionCriterio_buscarPorNomenclador, nomenclador);
+		pElement = ll_buscarElement_VL(listaPosAran, funcionCriterio_buscarPorNomenclador, nomenclador);
 		if(pElement != NULL)
 		{
 			// significa que existe
@@ -118,15 +121,19 @@ int buscarSiExisteNomenclatura(LinkedList* listaPosAran, char* nomenclador)
 	}
 	return retorno;
 }
-//Busca si existe codigo ingresada
+/** \brief Busca si existe el Codigo ingresado por el usuario en Articulos
+ * \param listaArticulos LinkedList*
+ * \param codigo char* puntero al codigo ingresado
+ * \return int: retorna 1 si existe, 0 si no existe
+ */
 int buscarSiExisteCodigo(LinkedList* listaArticulos, char* codigo)
 {
 	int retorno = 0;
 	if(listaArticulos != NULL && codigo != NULL)
 	{
 		void* pElement;
-		//-----------------------------------------
-		pElement = ll_buscarElement(listaArticulos, funcionCriterio_buscarPorCodigoArticulo, codigo);
+		//----------------------------------------- // busca el elemento depende la funcion criterio pasada
+		pElement = ll_buscarElement_VL(listaArticulos, funcionCriterio_buscarPorCodigoArticulo, codigo);
 		if(pElement != NULL)
 		{
 			// significa que existe
@@ -135,7 +142,6 @@ int buscarSiExisteCodigo(LinkedList* listaArticulos, char* codigo)
 	}
 	return retorno;
 }
-
 
 /** \brief Lista Todas las Posiciones Arancelarias Con Sus Articulos [inclusive las que no poseen articulos]
  * \param listaArticulos LinkedList*
@@ -505,7 +511,7 @@ void* busquedaPorNomencladorPosicionArancelaria(LinkedList* listaPosicionArancel
 									                "\n > Ingrese nomenclador: ", "\n\x1b[31m * ERROR\x1b[0m", 3))
 	{
 		// Busco elemento
-		pPosicionArancelariaElem = ll_buscarElement(listaPosicionArancelaria, funcionCriterio_buscarPorNomenclador, nomencladorAux);
+		pPosicionArancelariaElem = ll_buscarElement_VL(listaPosicionArancelaria, funcionCriterio_buscarPorNomenclador, nomencladorAux);
 
 		// Verifico el elemento y lo retorno
 		if(pPosicionArancelariaElem != NULL)
@@ -529,7 +535,7 @@ void* busquedaPorCodigoArticulo(LinkedList* listaArticulos)
 							               "\n > Ingrese el codigo del Articulo: ", "\n\x1b[31m * ERROR\x1b[0m", 2))
 	{
 		// Busco elemento
-		pArticulo = ll_buscarElement(listaArticulos, funcionCriterio_buscarPorCodigoArticulo, codigoAux);
+		pArticulo = ll_buscarElement_VL(listaArticulos, funcionCriterio_buscarPorCodigoArticulo, codigoAux);
 
 		// Verifico el elemento y lo retorno
 		if(pArticulo != NULL)

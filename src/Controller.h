@@ -11,6 +11,8 @@
 #include "TransporteMaritimo.h"
 #include "TransporteAereo.h"
 
+#define ID_STR 10
+
 // BUSCA POSICION ARANCELARIA POR NOMENCLADOR Y LISTAR SUS ARTICULOS CON SUS COSTOS DE TRANSPORTE
 int controller_listarArticulosPorBusquedaPorNomenclador(Dictionary* articulos, Dictionary* posicionesArancelarias,
 		                                               TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo);

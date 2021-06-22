@@ -978,12 +978,12 @@ int controller_altaArticulo(Dictionary* articulos, Dictionary* posicionesArancel
 	int flagDiAlta = 0;
 	int opcion;
 	//------------------ Variables para Posicion Arancelria
-	char idPosAranArtSTR[10];
+	char idPosAranArtSTR[ID_STR];
 	PosicionArancelaria* pPosArancelariaElegida;
 	//------------------------------------------------------------------------------
 	if(articulos != NULL && posicionesArancelarias != NULL &&
 	  !controller_listarPosicionesArancelarias(posicionesArancelarias) &&
-	  !utn_getNumero(&opcion, "\n\n * =============== \x1b[30m\x1b[46m ALTA ARTICULO \x1b[0m\x1b[0m =============== *"
+	  !utn_getNumero(&opcion, "\n\n * =============== \x1b[30m\x1b[47m ALTA ARTICULO \x1b[0m\x1b[0m =============== *"
 				              "\n | ================================================= |"
 			                  "\n |  1 - Elegir una Posicion Arancelaria Existente    |"
 	  				          "\n |  2 - Dar de alta a una nueva Posicion Arancelaria |"
@@ -1041,7 +1041,7 @@ static Articulo* cargaDelArticulo(Dictionary* articulos, int idPosArancelariaEnA
 	Articulo* pArticulo;
 	Articulo* pArticuloRetorno = NULL;
 	Articulo bufferArticulo;
-	char idArticuloStrAux[10];
+	char idArticuloStrAux[ID_STR];
 	//------------------------------------------------------------------------------------------
 	LinkedList* listaArticulo;
 	listaArticulo = dict_getValues(articulos);
@@ -1081,7 +1081,7 @@ int controller_altaPosicionArancelaria(Dictionary* posicionesArancelarias)
 	int IdRetorno = -1;
 	PosicionArancelaria buffer;
 	PosicionArancelaria* pPosicionArancelaria;
-	char idPosicionArancelariaSTR[10];
+	char idPosicionArancelariaSTR[ID_STR];
 	LinkedList* listaPosAran;
 
 	listaPosAran = dict_getValues(posicionesArancelarias);
@@ -1112,12 +1112,12 @@ int controller_altaPosicionArancelaria(Dictionary* posicionesArancelarias)
  */
 int controller_bajaArticulo(Dictionary* articulos)
 {
-	char idStr[10];
+	char idStr[ID_STR];
 	int retorno = -1;
 	Articulo* pArticulo;
 
 	if(articulos != NULL && flagCargueArticulo == 1 && !controller_listarArticulos(articulos) &&
-	  !utn_getTexto(idStr, sizeof(idStr), "\n\n - BAJA DE ARTICULO -"
+	  !utn_getTexto(idStr, ID_STR, "\n\n - BAJA DE ARTICULO -"
 			                              "\n > Ingrese ID del [Articulo] a dar de baja: ", "\n\x1b[31m * ERROR \x1b[0m", 2))
 	{
 		pArticulo = (Articulo*) dict_get(articulos, idStr);
@@ -1173,7 +1173,7 @@ int controller_bajaPosicionArancelaria(Dictionary* posicionesArancelarias, Dicti
 	}
 	return retorno;
 }
-void* busquedaPorIdPosicionArancelaria(Dictionary* posicionesArancelarias, char* pId);
+//void* busquedaPorIdPosicionArancelaria(Dictionary* posicionesArancelarias, char* pId);
 /*int controller_bajaPosicionArancelaria(Dictionary* posicionesArancelarias, Dictionary* articulos)
 {
 	char idStr[10];
@@ -1210,7 +1210,7 @@ void* busquedaPorIdPosicionArancelaria(Dictionary* posicionesArancelarias, char*
  * \param char* pId
  * \return void* puntero al Elemento encontrado, NULL si no lo encontró
  */
-void* busquedaPorIdPosicionArancelaria(Dictionary* posicionesArancelarias, char* pId)
+/*void* busquedaPorIdPosicionArancelaria(Dictionary* posicionesArancelarias, char* pId)
 {
 	void* pRetornoElement = NULL;
 	void* pElementAuxiliar;
@@ -1222,7 +1222,7 @@ void* busquedaPorIdPosicionArancelaria(Dictionary* posicionesArancelarias, char*
 			pRetornoElement = pElementAuxiliar;
 	}
 	return pRetornoElement;
-}
+}*/
 //******************************************************************************** MODIFICAR
 /** \brief Modificacion de un [Articulo]
  * \param articulos Dictionary*
@@ -1231,7 +1231,7 @@ void* busquedaPorIdPosicionArancelaria(Dictionary* posicionesArancelarias, char*
  */
 int controller_modificarArticulo(Dictionary* articulos, Dictionary* posicionesArancelarias)
 {
-	char IdStr[10];
+	char IdStr[ID_STR];
 	int retorno = -1;
 	void* pElemento;
 	Articulo* pArticulo;
@@ -1259,7 +1259,7 @@ int controller_modificarArticulo(Dictionary* articulos, Dictionary* posicionesAr
  */
 int controller_modificarPosicionArancelaria(Dictionary* posicionesArancelarias)
 {
-	char IdStr[10];
+	char IdStr[ID_STR];
 	int retorno = -1;
 	void* pElemento;
 	PosicionArancelaria* pPosicionArancelaria;
@@ -1653,7 +1653,7 @@ static int controller_subMenuEditTransporteAereo(TransporteAereo* pTransporteAer
 static int verificarIdPosicionArancelaria(Dictionary* posicionesArancelarias, int idPosicionArancelaria)
 {
 	int retorno = 0;
-	char idAux[10];
+	char idAux[ID_STR];
 	void* pElement;
 	if(posicionesArancelarias != NULL && idPosicionArancelaria >= 0)
 	{
@@ -1672,7 +1672,10 @@ static int verificarIdPosicionArancelaria(Dictionary* posicionesArancelarias, in
 	}
 	return retorno;
 }
-
+/** \brief Verifica si existee id posicion arancelaria en articulo
+ * \param Dictionary* articulos
+ * \return int 0 si no existe, 1 si existe
+ */
 static int existeIdPosicionArancelariaEnArticulo(Dictionary* articulos, int idPosicionArancelaria)
 {
 	int lenArticulos, i;

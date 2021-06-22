@@ -59,7 +59,7 @@ int parser_articulosFromText(FILE* pFile, Dictionary* articulos, int* pIdMaxEnco
 			{
 				if(flagOnce != 0)
 				{
-					if(esNumerica(idArticuloStr, 10) && esNumerica(idPosicionArancelariaStr, 10) &&
+					if(esNumerica(idArticuloStr, ID_STR) && esNumerica(idPosicionArancelariaStr, ID_STR) &&
 					   esFlotante(fobStr, 10) && esFlotante(pesoStr, 10) && esFlotante(alturaStr, 10) &&
 					   esFlotante(anchoStr, 10) && esFlotante(profundidadStr, 10))
 					{
@@ -142,7 +142,7 @@ int parser_eGeneralFromText(FILE* pFile, Dictionary* datosGenerales)
 			{
 				if(flagOnce != 0)
 				{
-					if(esNumerica(idArticuloGeneralStr, 10) &&
+					if(esNumerica(idArticuloGeneralStr, ID_STR) &&
 					   esFlotante(fobStr, 10) && esFlotante(pesoStr, 10) && esFlotante(alturaStr, 10) &&
 					   esFlotante(anchoStr, 10) && esFlotante(profundidadStr, 10) &&
 					   esFlotante(porcentajeSeguroStr, 10) && esFlotante(porcentajeImportacionStr, 10) && esFlotante(porcentajeTasaEstadisticaStr, 10))
@@ -216,7 +216,7 @@ int parser_posicionesArancelariasFromText(FILE* pFile, Dictionary* posicionesAra
 			{
 				if(flagOnce != 0)
 				{
-					if(esNumerica(idPosicionArancelariaStr, 10) && esFlotante(porcentajeSeguroStr, 10) &&
+					if(esNumerica(idPosicionArancelariaStr, ID_STR) && esFlotante(porcentajeSeguroStr, 10) &&
 					   esFlotante(porcentajeImportacionStr, 10) && esFlotante(porcentajeTasaEstadisticaStr, 10) &&
 					   esNumerica(tipoLicenciaStr, 10))
 					{

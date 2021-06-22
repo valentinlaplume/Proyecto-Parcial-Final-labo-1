@@ -5,7 +5,7 @@
 #include "utn.h"
 #include "Controller.h"
 
-#define OPCION_SALIR 15
+#define OPCION_SALIR 10
 
 int main(void)
 {
@@ -34,34 +34,34 @@ int main(void)
 			if(!utn_getNumero(&opcion,
 					"\n"
 					"\n * \x1b[93m\x1b[44m=========================  MENU PRINCIPAL  =========================\x1b[0m\x1b[0m *"
-					"\n | ==================================================================== |"
+					"\n | -------------------------------------------------------------------- |"
 					"\n |  1  - Listar Articulos                                               |"
 					"\n |                                                                      |"
 					"\n |  2  - Listar Posiciones Arancelarias                                 |"
 					"\n |                                                                      |"
 					"\n |  3  - Listar todas las Posiciones Arancelarias con sus Articulos     |"
 					"\n |                                                                      |"
-					"\n |  4  - Submenu: Alta, Baja, Modificacion [Articulo]                   |"
+					"\n |  4  - Submenu: Alta, Baja, Modificacion \x1b[37m\x1b[40m [Articulo] \x1b[0m\x1b[0m                 |"
 					"\n |              * Buscar Articulo por codigo                            |"
 					"\n |                                                                      |"
-					"\n |  5  - Submenu: Alta, Baja, Modificacion [Posicion Arancelaria]       |"
-					"\n |              * Listas Filtradas [AUTOMÁTICA - NO AUTOMÁTICA]         |"
+					"\n |  5  - Submenu: Alta, Baja, Modificacion \x1b[32m\x1b[40m [Posicion Arancelaria] \x1b[0m\x1b[0m     |"
+					"\n |              * Ver listas Filtradas [AUTOMÁTICA - NO AUTOMÁTICA]     |"
 					"\n |                                                                      |"
-					"\n |  6  - Ver información - Modificar información [Transporte Aereo]     |"
+					"\n |  6  - Ver información - Modificar información \x1b[30m\x1b[43m [Transporte Aereo] \x1b[0m\x1b[0m   |"
 					"\n |                                                                      |"
-					"\n |  7  - Ver información - Modificar información [Transporte Maritimo]  |"
+					"\n |  7  - Ver información - Modificar información \x1b[30m\x1b[46m [Transporte Maritimo] \x1b[0m\x1b[0m|"
 					"\n |                                                                      |"
-					"\n |  8  - Submenu: Informes, calcular costos final por Transportes       |"
+					"\n |  8  - Submenu: \x1b[95m\x1b[40m Informes \x1b[0m\x1b[0m calcular costos final por Transportes      |"
 					"\n |                                                                      |"
 					"\n |  9  - Buscar Posicion Arancelaria por Nomenclador:                   |"
 					"\n |                        * Listar Articulos y su costo por Transportes |"
 					"\n |                                                                      |"
-				  /*"\n | 10  -  |"
-					"\n | 11  -  |"
+					"\n | 10  - Salir y cerrar programa                                        |"
+				  /*"\n | 11  -  |"
 					"\n | 12  -  |"
 					"\n | 13  -  |"
-					"\n | 14  -  |"*/
-					"\n | 15  - Salir y cerrar programa                                        |"
+					"\n | 14  -  |"
+					"\n | 15  -  |"*/
 					"\n * -------------------------------------------------------------------- *"
 					"\n > Eliga opcion: ",
 					"\n\x1b[31m * OPCION INVALIDA * \x1b[0m", 1, OPCION_SALIR, 9999))
@@ -95,7 +95,7 @@ int main(void)
 					case 9: // Buscar Posicion Arancelaria por Nomenclador y Listar Articulos
 						controller_listarArticulosPorBusquedaPorNomenclador(articulos, posicionesArancelarias, &transporteAereo, &transporteMaritimo);
 					break;
-					case 10:
+					/*case 10:
 					break;
 					case 11:
 					break;
@@ -104,7 +104,7 @@ int main(void)
 					case 13:
 					break;
 					case 14:
-					break;
+					break;*/
 				}
 			}
 		}while(opcion != OPCION_SALIR);

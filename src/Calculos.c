@@ -29,6 +29,7 @@ float transporteAereo_calcularCostoFinal(Articulo* pArticulo, PosicionArancelari
 
 		//if(resulBaseImponible > 0 && resulImportacion > 0 && resultTasaEstadistica > 0)
 			retornoResultado = (resulBaseImponible + resulImportacion + resultTasaEstadistica);
+			// Seteo el campo costo Transporte Aereo
 			articulo_setCostoTransporteAereo(pArticulo, retornoResultado);
 	}
 	return retornoResultado;
