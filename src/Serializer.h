@@ -21,4 +21,8 @@ int serializer_posicionesArancelariasFromText(FILE* pFile, Dictionary* posicione
 int serializer_transporteMaritimoFromText(FILE* pFile, TransporteMaritimo* pTransporteMaritimo);
 int serializer_transporteAereoFromText(FILE* pFile, TransporteAereo* pTransporteAereo);
 
+// Geneal datos
+int serializer_eGeneralFromText(FILE* pFile, Dictionary* articulos, Dictionary* posicionesArancelarias,
+		                        TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo);
+
 #endif /* SERIALIZER_H_ */

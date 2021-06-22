@@ -20,26 +20,85 @@
 
 #include "Informe.h"
 
+#include "eGeneral.h"
+
 // Flags estaticos
 static int flagCargueArticulo = 0;
 static int flagCarguePosicionArancelaria = 0;
 static int flagCargueTransporteMaritimo = 0;
 static int flagCargueTransporteAereo = 0;
+static int flagCargueDatosGenerales = 0;
 
 // Contadores estaticos
 static int staticIdArticulo = 0;
 static int staticIdPosicionArancelaria = 0;
 
 // Funciones estáticas
-//static PosicionArancelaria* buscarPorPosicionArancelariaPorId(LinkedList* listaPosicionArancelaria,int idABuscar);
 static int verificarIdPosicionArancelaria(Dictionary* posicionesArancelarias, int idPosicionArancelaria);
 static int existeIdPosicionArancelariaEnArticulo(Dictionary* articulos, int idPosicionArancelaria);
 
+// SubMenus edit
 static Articulo* subMenuEditArticulo(void* pElement, Dictionary* posicionesArancelarias);
 static PosicionArancelaria* subMenuEditPosicionArancelaria(void* pElement);
-
 static int controller_subMenuEditTransporteAereo(TransporteAereo* pTransporteAereo);
 static int controller_subMenuEditTransporteMaritimo(TransporteMaritimo* pTransporteMaritimo);
+
+// Carga del datos del articulo
+static Articulo* cargaDelArticulo(Dictionary* articulos, int idPosArancelariaEnArticulo);
+
+// nueva entidad
+#include "eGeneral.h"
+
+
+int calcularCostosFinales(Dictionary* datosGenerales, Dictionary* articulos)
+{
+	int retorno = -1;
+	LinkedList* listaGeneral;
+	LinkedList* listaArticulos;
+	if(datosGenerales != NULL && articulos != NULL)
+	{
+		listaGeneral = dict_getValues(datosGenerales);
+		listaArticulos = dict_getValues(articulos);
+		if(listaGeneral != NULL && listaArticulos != NULL)
+		{
+			//ll_map(listaGeneral, pFuncion);
+
+			//------------------------------
+			eGeneral* pGeneral;
+			int i;
+			for(i=0; i<ll_len(listaGeneral); i++)
+			{
+				pGeneral = (eGeneral*)ll_get(listaGeneral, i);
+				printf("\n Precio final por Transporte Aereo: USD %.2f"
+					   "\n Precio final por Transporte Maritimo: USD %.2f",pGeneral->costoTransporteAereo,
+					                                                       pGeneral->costoTransporteMaritimo);
+			}
+			retorno = 0;
+			ll_deleteLinkedList(listaGeneral);
+			ll_deleteLinkedList(listaArticulos);
+		}
+	}
+	return retorno;
+}
+/*
+int funCalcCostoFinal(void* pGeneralElement)
+{
+	int retorno = 0;
+	eGeneral* pGeneral;
+	int flagErrorA, flagErrorB;
+	if(pGeneralElement != NULL)
+	{
+		pGeneral = (eGeneral*) pGeneralElement;
+		costoTransporteAereo = transporteAereo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteAereo)
+		eGeneral_setCostoTransporteAereo(pGeneral, costoTransporteAereo)
+	}
+	return retorno;
+}*/
+
+
+
+
+
 
 
 //*********************************************************************************************
@@ -65,6 +124,34 @@ int controller_generarIdPosicionArancelaria(void)
 	return staticIdPosicionArancelaria;
 }
 //*********************************************************************************************
+/** \brief Carga los datos Generales desde el archivo datosGenerales.csv (modo texto).
+ * \param path char*
+ * \param articulos Dictionary*
+ * \return int [-1] si path == NULL o articulos == NULL, 0 si OK
+ */
+int controller_cargarDatosGenerales(char* path, Dictionary* datosGenerales)
+{
+	FILE* pFile;
+	int retorno = -1;
+	int cantidadCargados = -1;
+
+	if(path != NULL && datosGenerales != NULL)
+	{
+		pFile = fopen(path,"r");
+		if(pFile != NULL)
+		{
+			cantidadCargados = parser_eGeneralFromText(pFile, datosGenerales);
+			if(cantidadCargados > 0)
+			{
+				flagCargueDatosGenerales = 1;
+				retorno = 0;
+			}
+			fclose(pFile);
+		}
+		printf("\n - Leiste del archivo %s [ %d Datos Generales]",path,cantidadCargados);
+	}
+	return retorno;
+}
 /** \brief Carga los datos de los Articulos desde el archivo articulos.csv (modo texto).
  * \param path char*
  * \param articulos Dictionary*
@@ -229,6 +316,31 @@ int controller_guardarPosicionesArancelarias(char* path, Dictionary* posicionesA
 	}
 	return retorno;
 }
+/** \brief Guarda los datos Generales en el archivo datosGenerales.csv (modo texto).
+ * \param path char*
+ * \param posicionesArancelarias Dictionary*
+ * \return int 0 si ok, -1 error
+ */
+int controller_guardarDatosGenerales(char* path, Dictionary* articulos, Dictionary* posicionesArancelarias,
+		TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo)
+{
+	int retorno = -1;
+	FILE* pFile;
+	if(path != NULL && articulos != NULL && posicionesArancelarias != NULL)
+	{
+		pFile = fopen(path,"w");
+		if(pFile != NULL)
+		{
+			if(!serializer_eGeneralFromText(pFile, articulos, posicionesArancelarias, pTransporteAereo, pTransporteMaritimo))
+			{
+				retorno = 0;
+			}
+			fclose(pFile);
+		}
+	}
+	return retorno;
+}
+
 /** \brief Guarda los datos del Transporte Maritimo en el archivo transporteMaritimo.csv (modo texto).
  * \param path char*
  * \param pTransporteMaritimo TransporteMaritimo*
@@ -293,10 +405,13 @@ int controller_listarArticulos(Dictionary* articulos)
 		listaArticulos = dict_getValues(articulos);
 
 		if(listaArticulos != NULL &&
-		  !articulo_imprimirArticulos(listaArticulos) &&
-		  !ll_deleteLinkedList(listaArticulos))
+		  !articulo_imprimirArticulos(listaArticulos))
 		{
-			printf("\n\n > Listado Articulos");
+			/*printf("\n\n");
+			ll_sort(listaArticulos, funcionCriterio_compararPorNombreArticulo, 1);
+			articulo_imprimirArticulos(listaArticulos);
+			printf("\n\n > Listado Articulos");*/
+			ll_deleteLinkedList(listaArticulos);
 			retorno = 0;
 		}
 	}
@@ -343,7 +458,9 @@ int controller_listarPosicionArancelariaConSusArticulo(Dictionary* articulos, Di
 		if(listaArticulos != NULL && listaPosicionesArancelarias != NULL &&
 		  !informe_listarPosicionArancelariaConSusArticulo(listaArticulos, listaPosicionesArancelarias))
 		{
-			printf("\n > Listado de Articulos junto con su Posicion Arancelaria");
+			printf("\n\n > Listado de Posiciones Arancelarias junto con sus Articulos");
+			ll_deleteLinkedList(listaArticulos);
+			ll_deleteLinkedList(listaPosicionesArancelarias);
 			retorno = 0;
 		}
 	}
@@ -354,7 +471,7 @@ int controller_listarPosicionArancelariaConSusArticulo(Dictionary* articulos, Di
  * \param posicionesArancelarias Dictionary*
  * \return int 0 si ok, -1 error
  */
-int controller_listarArticulosPorBusquedaNomenclador(Dictionary* articulos, Dictionary* posicionesArancelarias)
+int controller_listarArticulosPorBusquedaPorNomenclador(Dictionary* articulos, Dictionary* posicionesArancelarias)
 {
 	int retorno = -1;
 	LinkedList* listaPosicionArancelaria;
@@ -367,7 +484,11 @@ int controller_listarArticulosPorBusquedaNomenclador(Dictionary* articulos, Dict
 		//--------------------------------------------------------------------------------
 		if(listaPosicionArancelaria != NULL && listaArticulos != NULL &&
 		   !informe_listarPorBusquedaPorNomencladorPosAran(listaPosicionArancelaria, listaArticulos))
+		{
+			ll_deleteLinkedList(listaArticulos);
+			ll_deleteLinkedList(listaPosicionArancelaria);
 			retorno = 0;
+		}
 	}
 	return retorno;
 }
@@ -376,7 +497,7 @@ int controller_listarArticulosPorBusquedaNomenclador(Dictionary* articulos, Dict
  * \param posicionesArancelarias Dictionary*
  * \return int 0 si ok, -1 error
  */
-int controller_listarArticuloPorBusquedaCodigo(Dictionary* articulos)
+int controller_listarUnArticuloPorBusquedaPorCodigo(Dictionary* articulos)
 {
 	int retorno = -1;
 	LinkedList* listaArticulos;
@@ -441,7 +562,6 @@ int controller_ABMPosicionArancelaria(Dictionary* posicionesArancelarias, Dictio
 						break;
 				}
 			}
-			controller_guardarPosicionesArancelarias("posicionesArancelarias.csv", posicionesArancelarias);
 			// acordarse de guardar en archivo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}while(opcion != opcion_salir);
 		retorno = 0;
@@ -490,7 +610,6 @@ int controller_ABMArticulo(Dictionary* articulos, Dictionary* posicionesArancela
 						break;
 				}
 			}
-			controller_guardarArticulos("articulos.csv", articulos);
 			// acordarse de guardar en archivo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}while(opcion != opcion_salir);
 		retorno = 0;
@@ -518,7 +637,7 @@ int controller_subMenuInforme(Dictionary* articulos, Dictionary* posicionesAranc
 		{
 			if(!utn_getNumero(&opcion,
 								"\n"
-								"\n * ========================= \x1b[91m\x1b[40m MENU PRINCIPAL \x1b[0m\x1b[0m ========================= *"
+								"\n * ========================= \x1b[95m\x1b[40m  MENU INFORME  \x1b[0m\x1b[0m ========================= *"
 								"\n | ==================================================================== |"
 								"\n |  1  - Listar Articulos con costo final por Transporte Maritimo       |"
 								"\n |  2  - Listar Articulos con costo final por Transporte Aereo          |"
@@ -706,7 +825,7 @@ int controller_costoFinalTransporteMaritimo(Dictionary* articulos, Dictionary* p
  * \param posicionesArancelarias Dictionary*
  * \return int 0 si ok, -1 error
  */
-int controller_altaArticulo(Dictionary* articulos, Dictionary* posicionesArancelarias)
+/*int controller_altaArticulo(Dictionary* articulos, Dictionary* posicionesArancelarias)
 {
 	int retorno = -1;
 	Articulo buffer;
@@ -747,6 +866,97 @@ int controller_altaArticulo(Dictionary* articulos, Dictionary* posicionesArancel
 
 	}
 	return retorno;
+}*/
+
+int controller_altaArticulo(Dictionary* articulos, Dictionary* posicionesArancelarias)
+{
+	int retorno = -1;
+	Articulo bufferArticulo;
+	Articulo* pArticulo;
+	int flagDiAlta = 0;
+	int opcion;
+	//------------------ Variables para Posicion Arancelria
+	char idPosAranArtSTR[10];
+	PosicionArancelaria* pPosArancelariaElegida;
+	//------------------------------------------------------------------------------
+	if(articulos != NULL && posicionesArancelarias != NULL &&
+	  !controller_listarPosicionesArancelarias(posicionesArancelarias) &&
+	  !utn_getNumero(&opcion, "\n\n * =============== \x1b[30m\x1b[46m ALTA ARTICULO \x1b[0m\x1b[0m =============== *"
+				              "\n | ================================================= |"
+			                  "\n |  1 - Elegir una Posicion Arancelaria Existente    |"
+	  				          "\n |  2 - Dar de alta a una nueva Posicion Arancelaria |"
+	  				          "\n |  3 - Volver atras                                 |"
+			  	  	  	  	  "\n > Opcion: ",
+							  "\n\x1b[31m * ERROR \x1b[0m", 1, 3, 2))
+	{
+		switch(opcion)
+		{
+			case 1:
+				if(!utn_getAlfanumerico(idPosAranArtSTR, 10,
+				"\n > Ingrese ID de la [Posicion Arancelaria] existente: ", "\n\x1b[31m * ERROR \x1b[0m", 2))
+
+				{
+					pPosArancelariaElegida = (PosicionArancelaria*) dict_get(posicionesArancelarias, idPosAranArtSTR);
+					if(pPosArancelariaElegida == NULL)
+						printf("\n > ID de la Posicion Arancelaria no existente");
+					else
+					{
+						posicionArancelaria_imprimirUnaPosicionArancelaria(pPosArancelariaElegida);
+						bufferArticulo.idPosicionArancelaria = atoi(idPosAranArtSTR);
+						pArticulo = cargaDelArticulo(articulos, bufferArticulo.idPosicionArancelaria);
+						printf("\n > Articulo dado de alta con éxito\n");
+						articulo_imprimirUnArticulo(pArticulo);
+						flagDiAlta = 1;
+					}
+				}
+			break;
+			case 2:
+				bufferArticulo.idPosicionArancelaria = controller_altaPosicionArancelaria(posicionesArancelarias);
+				if(bufferArticulo.idPosicionArancelaria > 0)
+				{
+					pArticulo = cargaDelArticulo(articulos, bufferArticulo.idPosicionArancelaria);
+					printf("\n > Articulo dado de alta con éxito\n");
+					articulo_imprimirUnArticulo(pArticulo);
+					flagDiAlta = 1;
+				}
+			break;
+		}
+		//---------------------- FIN SWITCH -----------------------------------------------
+		if(flagDiAlta == 1 && !controller_guardarArticulos("articulos.csv", articulos))
+			retorno = 0;
+	}
+	return retorno;
+}
+
+static Articulo* cargaDelArticulo(Dictionary* articulos, int idPosArancelariaEnArticulo)
+{
+	Articulo* pArticulo;
+	Articulo* pArticuloRetorno = NULL;
+	Articulo bufferArticulo;
+	char idArticuloStrAux[10];
+	//------------------------------------------------------------------------------------------
+	if(articulos != NULL &&
+	   !informe_pedirDatosArticulo(bufferArticulo.nombre, bufferArticulo.codigo, bufferArticulo.descripcion, bufferArticulo.paisDeFabricacion,
+								  &bufferArticulo.fob, &bufferArticulo.peso, &bufferArticulo.ancho, &bufferArticulo.altura, &bufferArticulo.profundidad))
+	{
+		// Genero ID Articulo
+		bufferArticulo.idArticulo = controller_generarIdArticulo();
+		// Creo un nuevo Articulo
+		pArticulo = articulo_newParam(bufferArticulo.idArticulo, idPosArancelariaEnArticulo, bufferArticulo.nombre, bufferArticulo.codigo,
+									  bufferArticulo.descripcion, bufferArticulo.paisDeFabricacion, bufferArticulo.fob, bufferArticulo.peso, bufferArticulo.ancho,
+									  bufferArticulo.altura, bufferArticulo.profundidad);
+		if(pArticulo != NULL)
+		{
+			// Convierto ID para usarlo como Key e insertarlo en el Disccionario
+			snprintf(idArticuloStrAux, sizeof(idArticuloStrAux), "%d", bufferArticulo.idArticulo);
+			if(!dict_insert(articulos, idArticuloStrAux, pArticulo))
+			{
+				flagCargueArticulo = 1;
+				pArticuloRetorno = pArticulo;
+			}
+		}
+	}
+	return pArticuloRetorno;
 }
 
 /** \brief Alta de la [Posicion Arancelaria]
@@ -775,6 +985,7 @@ int controller_altaPosicionArancelaria(Dictionary* posicionesArancelarias)
 			{
 				flagCarguePosicionArancelaria = 1;
 				IdRetorno = buffer.idPosicionArancelaria;
+				controller_guardarPosicionesArancelarias("posicionesArancelarias.csv", posicionesArancelarias);
 			}
 		}
 	}
@@ -801,6 +1012,7 @@ int controller_bajaArticulo(Dictionary* articulos)
 			if(!dict_remove(articulos, idStr))
 			{
 				printf("\n > Articulo dado de baja");
+				controller_guardarArticulos("articulos.csv", articulos);
 				retorno = 0;
 			}
 		}
@@ -808,7 +1020,7 @@ int controller_bajaArticulo(Dictionary* articulos)
 	}
 	return retorno;
 }
-/** \brief Baja de una [Posicion Arancelaria]
+/* \brief Baja de una [Posicion Arancelaria]
  * \param articulos Dictionary*
  * \param posicionesArancelarias Dictionary*
  * \return int 0 si ok, -1 error
@@ -840,11 +1052,62 @@ int controller_bajaPosicionArancelaria(Dictionary* posicionesArancelarias, Dicti
 			  !dict_remove(posicionesArancelarias, idStr))
 			{
 				printf("\n > Posicion Arancelaria dada de baja");
+				controller_guardarPosicionesArancelarias("posicionesArancelarias.csv", posicionesArancelarias);
 				retorno = 0;
 			}
 		}
 	}
 	return retorno;
+}
+void* busquedaPorIdPosicionArancelaria(Dictionary* posicionesArancelarias, char* pId);
+/*int controller_bajaPosicionArancelaria(Dictionary* posicionesArancelarias, Dictionary* articulos)
+{
+	char idStr[10];
+	int retorno = -1;
+	int idPosAranAux, flagErrorA;
+	int flagExisteEnArticulo = 0;
+	PosicionArancelaria* pPosicionArancelaria;
+
+	if(posicionesArancelarias != NULL && articulos != NULL && flagCarguePosicionArancelaria == 1 &&
+	  !controller_listarPosicionesArancelarias(posicionesArancelarias))
+	{
+		pPosicionArancelaria = (PosicionArancelaria*) busquedaPorIdPosicionArancelaria(posicionesArancelarias, idStr);
+		if(pPosicionArancelaria != NULL)
+		{
+			//-------- Verifico si esa Posicion Arancelaria pertenece a un Articulo ---------
+			idPosAranAux = posicionArancelaria_getIdPosicionArancelaria(pPosicionArancelaria, &flagErrorA);
+			if(!flagErrorA)
+				flagExisteEnArticulo = existeIdPosicionArancelariaEnArticulo(articulos, idPosAranAux);
+			if(flagExisteEnArticulo == 1)
+				printf("\n > La Posicion Arancelaria no puede ser dada de baja ya que posee a un articulo existente");
+			//-------- Si no pertenece entonces elimino -------------------------------------
+			if(flagExisteEnArticulo == 0 && !posicionArancelaria_delete(pPosicionArancelaria)&&
+			  !dict_remove(posicionesArancelarias, idStr))
+			{
+				printf("\n > Posicion Arancelaria dada de baja");
+				retorno = 0;
+			}
+		}
+	}
+	return retorno;
+}*/
+/** \brief Pide que ingrese el ID de la Posicion Arancelaria, busca el elemento y lo retorna
+ * \param posicionesArancelarias Dictionary*
+ * \param char* pId
+ * \return void* puntero al Elemento encontrado, NULL si no lo encontró
+ */
+void* busquedaPorIdPosicionArancelaria(Dictionary* posicionesArancelarias, char* pId)
+{
+	void* pRetornoElement = NULL;
+	void* pElementAuxiliar;
+	if(posicionesArancelarias != NULL && !utn_getTexto(pId, sizeof(pId),
+			"\n > Ingrese ID de la [Posicion Arancelaria]: ", "\n\x1b[31m * ERROR \x1b[0m", 2))
+	{
+		pElementAuxiliar =  dict_get(posicionesArancelarias, pId);
+		if(pElementAuxiliar != NULL)
+			pRetornoElement = pElementAuxiliar;
+	}
+	return pRetornoElement;
 }
 //******************************************************************************** MODIFICAR
 /** \brief Modificacion de un [Articulo]
@@ -869,7 +1132,8 @@ int controller_modificarArticulo(Dictionary* articulos, Dictionary* posicionesAr
 		{
 			articulo_imprimirUnArticulo(pArticulo);
 			printf("\n\n > Modificacion con exito");
-			retorno = 0;
+			if(!controller_guardarArticulos("articulos.csv", articulos))
+					retorno = 0;
 		}
 	}
 	return retorno;
@@ -897,6 +1161,7 @@ int controller_modificarPosicionArancelaria(Dictionary* posicionesArancelarias)
 		{
 			posicionArancelaria_imprimirUnaPosicionArancelaria(pPosicionArancelaria);
 			printf("\n\n > Modificacion con exito");
+			controller_guardarPosicionesArancelarias("posicionesArancelarias.csv", posicionesArancelarias);
 			retorno = 0;
 		}
 	}
@@ -1298,7 +1563,7 @@ static int existeIdPosicionArancelariaEnArticulo(Dictionary* articulos, int idPo
 	LinkedList* listaArticulos;
 	Articulo* pArticulo;
 	int flagExisteEnArticulo = 0;
-	int idArticuloAux,flagError;
+	int idPosAranArticulo,flagError;
 
 	listaArticulos = dict_getValues(articulos);
 	if(listaArticulos != NULL && articulos != NULL)
@@ -1307,9 +1572,10 @@ static int existeIdPosicionArancelariaEnArticulo(Dictionary* articulos, int idPo
 		for(i=0; i<lenArticulos; i++)
 		{
 			pArticulo = (Articulo*) ll_get(listaArticulos, i);
-			idArticuloAux = articulo_getIdArticulo(pArticulo, &flagError);
+			idPosAranArticulo = articulo_getIdPosicionArancelaria(pArticulo, &flagError);
+			//------------------------------------------------------------
 			if(pArticulo != NULL && !flagError &&
-			   idPosicionArancelaria == idArticuloAux)
+			   idPosicionArancelaria == idPosAranArticulo)
 			{
 				flagExisteEnArticulo = 1;
 				break;

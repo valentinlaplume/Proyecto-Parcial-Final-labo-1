@@ -12,9 +12,9 @@
 #include "TransporteAereo.h"
 
 // BUSCA POSICION ARANCELARIA POR NOMENCLADOR Y LISTAR SUS ARTICULOS
-int controller_listarArticulosPorBusquedaNomenclador(Dictionary* articulos, Dictionary* posicionesArancelarias);
+int controller_listarArticulosPorBusquedaPorNomenclador(Dictionary* articulos, Dictionary* posicionesArancelarias);
 // BUSCAR ARTICULO POR CODIGO
-int controller_listarArticuloPorBusquedaCodigo(Dictionary* articulos);
+int controller_listarUnArticuloPorBusquedaPorCodigo(Dictionary* articulos);
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // SUB MENU INFORME
@@ -37,12 +37,15 @@ void controller_setearValorInicialDeIdArticulo(int);
 void controller_setearValorInicialDeIdPosicionArancelaria(int );
 
 // CARGAR DATOS DESDE EL ARCHIVO
+int controller_cargarDatosGenerales(char* path, Dictionary* datosGenerales); // Carga datos generales
 int controller_cargarArticulos(char* path, Dictionary* articulos);
 int controller_cargarPosicionesArancelarias(char* path, Dictionary* posicionesArancelarias);
 int controller_cargarTransporteMaritimo(char* path, TransporteMaritimo* pTransporteMaritimo);
 int controller_cargarTransporteAereo(char* path, TransporteAereo* pTransporteAereo);
 
 // VOLCAR DATOS AL ARCHIVO
+int controller_guardarDatosGenerales(char* path, Dictionary* articulos, Dictionary* posicionesArancelarias,
+		TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo); // Guarda datos generales
 int controller_guardarArticulos(char* path, Dictionary* articulos);
 int controller_guardarPosicionesArancelarias(char* path, Dictionary* posicionesArancelarias);
 int controller_guardarTransporteMaritimo(char* path, TransporteMaritimo* pTransporteMaritimo);

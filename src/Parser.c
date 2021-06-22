@@ -12,9 +12,11 @@
 #include "TransporteMaritimo.h"
 #include "TransporteAereo.h"
 
+#include "eGeneral.h"
+
 /** \brief Parsea los datos los datos de los Articulos desde el archivo articulos.csv (modo texto).
  * \param pFile FILE*
- * \param pArrayListArticulo LinkedList*
+ * \param articulos Dictionary*
  * \return int
  *
  */
@@ -94,10 +96,92 @@ int parser_articulosFromText(FILE* pFile, Dictionary* articulos, int* pIdMaxEnco
 	}
 	return cantidadCargados; // devuelve cantidad leidos
 }
+/** \brief Parsea los datos los datos de los Datos Generales desde el archivo datosGenerales.csv (modo texto).
+ * \param pFile FILE*
+ * \param datosGenerales Dictionary*
+ * \return int
+ *
+ */
+int parser_eGeneralFromText(FILE* pFile, Dictionary* datosGenerales)
+{
+	char idArticuloGeneralStr[STR_LEN];
+	char pesoStr[STR_LEN];
+	char fobStr[STR_LEN];
+	char alturaStr[STR_LEN];
+	char anchoStr[STR_LEN];
+	char profundidadStr[STR_LEN];
+	//-------------
+	int idArticuloGeneral;
+	float peso;
+	float fob;
+	float altura;
+	float ancho;
+	float profundidad;
+    //------------------------------------
+	char porcentajeSeguroStr[STR_LEN];
+	char porcentajeImportacionStr[STR_LEN];
+	char porcentajeTasaEstadisticaStr[STR_LEN];
+	//-------------
+	float porcentajeSeguro;
+	float porcentajeImportacion;
+	float porcentajeTasaEstadistica;
+	//------------------------------------
+	eGeneral* pGeneral;
+	int flagOnce = 0;
+	int cantidadCargados = -1;
 
+	if(pFile != NULL && datosGenerales != NULL)
+	{
+		cantidadCargados = 0;
+		do
+		{
+			if(fscanf(pFile,"%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n",
+					                          idArticuloGeneralStr,
+			                          fobStr, pesoStr, anchoStr, alturaStr, profundidadStr,
+		                              porcentajeSeguroStr, porcentajeImportacionStr,porcentajeTasaEstadisticaStr) == 9)
+			{
+				if(flagOnce != 0)
+				{
+					if(esNumerica(idArticuloGeneralStr, 10) &&
+					   esFlotante(fobStr, 10) && esFlotante(pesoStr, 10) && esFlotante(alturaStr, 10) &&
+					   esFlotante(anchoStr, 10) && esFlotante(profundidadStr, 10) &&
+					   esFlotante(porcentajeSeguroStr, 10) && esFlotante(porcentajeImportacionStr, 10) && esFlotante(porcentajeTasaEstadisticaStr, 10))
+					{
+						// Convierto los datos de Articulo
+						idArticuloGeneral = atoi(idArticuloGeneralStr);
+						fob = atof(fobStr);
+						peso = atof(pesoStr);
+						ancho = atof(anchoStr);
+						altura = atof(alturaStr);
+						profundidad = atof(profundidadStr);
+
+						// Convierto los datos de Posicion Arancelaria
+						porcentajeSeguro = atof(porcentajeSeguroStr);
+						porcentajeImportacion = atof(porcentajeImportacionStr);
+						porcentajeTasaEstadistica = atof(porcentajeTasaEstadisticaStr);
+
+						pGeneral = eGeneral_newParam(idArticuloGeneral, fob, peso, ancho, altura, profundidad,
+								                     porcentajeSeguro, porcentajeImportacion, porcentajeTasaEstadistica);
+
+						// Guardo en diccionario el articulo construido
+						if(pGeneral != NULL &&
+						  !dict_insert(datosGenerales, idArticuloGeneralStr, pGeneral)) // La clave(key) es el ID : de TIPO cadena
+						{
+							cantidadCargados++;
+						}
+					}
+				}
+			}
+			flagOnce = 1;
+		}
+		while(!feof(pFile));
+	}
+	return cantidadCargados; // devuelve cantidad leidos
+}
+//---------------------------------------------------------------------------------------------------------------
 /** \brief Parsea los datos los datos de las Posiciones Arancelarias desde el archivo posicionesArancelarias.csv (modo texto).
  * \param pFile FILE*
- * \param pArrayListArticulo LinkedList*
+ * \param posicionesArancelarias Dictionary*
  * \return int
  *
  */
@@ -168,7 +252,7 @@ int parser_posicionesArancelariasFromText(FILE* pFile, Dictionary* posicionesAra
 
 /** \brief Parsea .
  * \param pFile FILE*
- * \param pArrayListArticulo LinkedList*
+ * \param pTransporteMaritimo TransporteMaritimo*
  * \return int
  */
 int parser_transporteMaritimoFromText(FILE* pFile, TransporteMaritimo* pTransporteMaritimo)
@@ -212,7 +296,7 @@ int parser_transporteMaritimoFromText(FILE* pFile, TransporteMaritimo* pTranspor
 
 /** \brief Parsea .
  * \param pFile FILE*
- * \param pArrayListArticulo LinkedList*
+ * \param pTransporteAereo TransporteAereo*
  * \return int
  */
 int parser_transporteAereoFromText(FILE* pFile, TransporteAereo* pTransporteAereo)

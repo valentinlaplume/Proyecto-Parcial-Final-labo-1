@@ -32,8 +32,8 @@ typedef struct
 	float altura;
 	float profundidad;
 
-	float costoTransporteAereo;
-	float costoTransporteMaritimo;
+	//float costoTransporteAereo;
+	//float costoTransporteMaritimo;
 }Articulo;
 
 // LISTAR
@@ -44,6 +44,7 @@ int articulo_imprimirArticulos(LinkedList* listaArticulos);
 void articulo_encabezado(void);
 
 //int articulo_pedirIdPosicionArancelaria(int* idPosicionArancelaria);
+int funcionCriterio_compararPorNombreArticulo(void* thisUno, void* thisDos);
 
 // FUNCION CRITERIO BUSCAR POR CODIGO
 int funcionCriterio_buscarPorCodigoArticulo(void* pElement, void* codigoIngresadoBuscado);

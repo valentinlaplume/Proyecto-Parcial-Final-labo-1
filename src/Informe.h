@@ -16,11 +16,13 @@
 #include "TransporteMaritimo.h"
 #include "Calculos.h"
 
+// Pedir los datos del Articulo
 int informe_pedirDatosArticulo(char* nombre, char* codigo, char* descripcion, char* paisDeFabricacion,
 		                       float* fob, float* peso, float* ancho, float* altura, float* profundidad);
-
+// Pedir los datos de la Posicion Arancelaria
 int informe_pedirDatosPosicionArancelaria(char* nomenclador, float* porcentajeSeguro, float* porcentajeImportacion,
 		                                  float* porcentajeTasaEstadistica, int* tipoLicencia);
+//-------------------------------------------------------------------------------------------------------------------------------------------------
 
 // Listar Posicion Arancelaria con sus Articulos
 int informe_listarPosicionArancelariaConSusArticulo(LinkedList* listaArticulos, LinkedList* listaPosicionesArancelarias);
@@ -31,19 +33,15 @@ int informe_listarArticulosConCostoFinalTransporteAereo(LinkedList* listaArticul
 // Listar Articulos con costo final por Transportes
 int informe_listarArticulosConCostoFinalPorTransportes(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria, TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo);
 
-
-
 // Listar Articulos por Busqueda nomenclador
 int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionArancelaria, LinkedList* listaArticulos);
 int sonIgualesIdPosicionArancelaria(void* pArticuloElement, void* pPosicionAranElement);
 
+//-------------------------------------------------------------------------------------------------------------------------------------------------
 // Busqueda Posicion Arancelaria por nomenclador
-void* busquedaPorNomencladorPosicionArancelaria(LinkedList* listaPosicionArancelaria, LinkedList* listaArticulos);
+void* busquedaPorNomencladorPosicionArancelaria(LinkedList* listaPosicionArancelaria);
 // Busqueda Articulo por codigo
 void* busquedaPorCodigoArticulo(LinkedList* listaArticulos);
-
-
-
 
 
 #endif /* INFORME_H_ */

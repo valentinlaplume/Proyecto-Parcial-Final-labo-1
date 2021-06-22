@@ -42,10 +42,11 @@ void* ll_buscarElement(LinkedList* lista, int(*pFuncionCriterio)(void*, void*), 
 // Filter
 LinkedList* ll_filter(LinkedList* pListaOriginal, int(*pFuncionCriterio)(void*));
 
+int ll_map(LinkedList* plistaFiltrada, int (*pFuncion)(void*));
+
 // Get mas optimo
 void* ll_getNext(LinkedList* this, int isFirst);
 //-----------------------------------------------------------------------------------------------------------
-
 int ll_map2(LinkedList* this, Function pFunc);
 int ll_filter3(LinkedList * this, Function pFunc);
 int ll_reduceInt(LinkedList* this, Function pFunc);

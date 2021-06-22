@@ -42,6 +42,10 @@ Articulo* articulo_newParam(int idArticulo, int IdPosicionArancelaria,
 }
 
 //******************************************************************************** DESTRUCTOR
+/* \brief Libera el espacio reservado en memoria para un Articulo
+ * \param this Articulo*
+ * \return void
+ */
 int articulo_delete(Articulo* this)
 {
 	int retorno = -1;
@@ -53,6 +57,11 @@ int articulo_delete(Articulo* this)
 	return retorno;
 }
 //******************************************************************************** GET - SET - IS VALID
+/** \brief Valida un ID y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param idarticulo int
+ * \return int  -1 error, 0 si ok
+ */
 int articulo_setIdArticulo(Articulo* this, int idarticulo)
 {
 	int retorno = -1;
@@ -63,7 +72,11 @@ int articulo_setIdArticulo(Articulo* this, int idarticulo)
 	}
 	return retorno;
 }
-
+/** \brief Obtiene Id Articulo del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Id Articulo si ok
+ */
 int articulo_getIdArticulo(Articulo* this,int* flagError)
 {
 	*flagError = -1;
@@ -76,6 +89,11 @@ int articulo_getIdArticulo(Articulo* this,int* flagError)
 	return auxId;
 }
 //---------------------------------------------------
+/** \brief Valida un ID y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param id int
+ * \return int  -1 error, 0 si ok
+ */
 int articulo_setIdPosicionArancelaria(Articulo* this, int id)
 {
 	int retorno = -1;
@@ -86,7 +104,11 @@ int articulo_setIdPosicionArancelaria(Articulo* this, int id)
 	}
 	return retorno;
 }
-
+/** \brief Obtiene Id Posicion Arancelaria del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Id Posicion Arancelaria si ok
+ */
 int articulo_getIdPosicionArancelaria(Articulo* this,int* flagError)
 {
 	*flagError = -1;
@@ -98,7 +120,10 @@ int articulo_getIdPosicionArancelaria(Articulo* this,int* flagError)
 	}
 	return auxId;
 }
-
+/** \brief Valida un id
+ * \param int id)
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidId(int id)
 {
 	int retorno = 0;
@@ -109,6 +134,11 @@ int isValidId(int id)
 	return retorno;
 }
 //---------------------------------------------------
+/** \brief Valida un nombre y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param nombre char*
+ * \return int  -1 error, 0 si ok
+ */
 int articulo_setNombre(Articulo* this,char* nombre)
 {
 	int retorno = -1;
@@ -119,7 +149,11 @@ int articulo_setNombre(Articulo* this,char* nombre)
 	}
 	return retorno;
 }
-
+/** \brief Obtiene Nombre del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Nombre si ok
+ */
 char* articulo_getNombre(Articulo* this,int* flagError)
 {
 	*flagError = -1;
@@ -131,7 +165,10 @@ char* articulo_getNombre(Articulo* this,int* flagError)
 	}
 	return auxNombre;
 }
-
+/** \brief Valida un nombre
+ * \param nombre char*
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidNombre(char* nombre)
 {
 	int retorno = 0;
@@ -141,7 +178,11 @@ int isValidNombre(char* nombre)
 	}
 	return retorno;
 }
-
+/** \brief Valida un Codigo y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param Codigo char*
+ * \return int  -1 error, 0 si ok
+ */
 int articulo_setCodigo(Articulo* this, char* Codigo)
 {
 	int retorno = -1;
@@ -152,7 +193,11 @@ int articulo_setCodigo(Articulo* this, char* Codigo)
 	}
 	return retorno;
 }
-
+/** \brief Obtiene Codigo del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Codigo si ok
+ */
 char* articulo_getCodigo(Articulo* this,int* flagError)
 {
 	*flagError = -1;
@@ -164,7 +209,10 @@ char* articulo_getCodigo(Articulo* this,int* flagError)
 	}
 	return auxCodigo;
 }
-
+/** \brief Valida un Codigo
+ * \param nombre char*
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidCodigo(char* codigo)
 {
 	int retorno = 0;
@@ -174,6 +222,11 @@ int isValidCodigo(char* codigo)
 	return retorno;
 }
 //---------------------------------------------------
+/** \brief Valida una Descripcion y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param descripcion char*
+ * \return int  -1 error, 0 si ok
+ */
 int articulo_setDescripcion(Articulo* this, char* descripcion)
 {
 	int retorno = -1;
@@ -184,7 +237,11 @@ int articulo_setDescripcion(Articulo* this, char* descripcion)
 	}
 	return retorno;
 }
-
+/** \brief Obtiene Descripcion( del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Pais de Descripcion si ok
+ */
 char* articulo_getDescripcion(Articulo* this,int* flagError)
 {
 	*flagError = -1;
@@ -196,7 +253,10 @@ char* articulo_getDescripcion(Articulo* this,int* flagError)
 	}
 	return aux;
 }
-
+/** \brief Valida una Descripcion
+ * \param nombre char*
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidDescripcion(char* descripcion)
 {
 	int retorno = 0;
@@ -205,6 +265,11 @@ int isValidDescripcion(char* descripcion)
 	return retorno;
 }
 //---------------------------------------------------
+/** \brief Valida un Pais de Fabricacion y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param paisDeFabricacion char*
+ * \return int  -1 error, 0 si ok
+ */
 int articulo_setPaisDeFabricacion(Articulo* this, char* paisDeFabricacion)
 {
 	int retorno = -1;
@@ -215,7 +280,11 @@ int articulo_setPaisDeFabricacion(Articulo* this, char* paisDeFabricacion)
 	}
 	return retorno;
 }
-
+/** \brief Obtiene Pais de Fabricacion del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Pais de Fabricacion si ok
+ */
 char* articulo_getPaisDeFabricacion(Articulo* this,int* flagError)
 {
 	*flagError = -1;
@@ -227,7 +296,10 @@ char* articulo_getPaisDeFabricacion(Articulo* this,int* flagError)
 	}
 	return aux;
 }
-
+/** \brief Valida un Pais de Fabricacion
+ * \param paisDeFabricacion char*
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidPaisDeFabricacion(char* paisDeFabricacion)
 {
 	int retorno = 0;
@@ -236,6 +308,11 @@ int isValidPaisDeFabricacion(char* paisDeFabricacion)
 	return retorno;
 }
 //---------------------------------------------------
+/** \brief Valida un valor Fob y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param fob char*
+ * \return int  -1 error, 0 si ok
+ */
 int articulo_setFob(Articulo* this, float fob)
 {
     int retorno = -1;
@@ -246,7 +323,11 @@ int articulo_setFob(Articulo* this, float fob)
     }
     return retorno;
 }
-
+/** \brief Obtiene Valor Fob del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Valor Fob si ok
+ */
 float articulo_getFob(Articulo* this,int* flagError)
 {
     *flagError = -1;
@@ -258,7 +339,10 @@ float articulo_getFob(Articulo* this,int* flagError)
     }
     return aux;
 }
-
+/** \brief Valida un valor Fob
+ * \param fob float
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidFob(float fob)
 {
 	int retorno = 0;
@@ -269,6 +353,11 @@ int isValidFob(float fob)
 	return retorno;
 }
 //---------------------------------------------------
+/** \brief Valida un Peso y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param peso char*
+ * \return int  -1 error, 0 si ok
+ */
 int articulo_setPeso(Articulo* this, float peso)
 {
     int retorno = -1;
@@ -279,7 +368,11 @@ int articulo_setPeso(Articulo* this, float peso)
     }
     return retorno;
 }
-
+/** \brief Obtiene Peso del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Peso si ok
+ */
 float articulo_getPeso(Articulo* this,int* flagError)
 {
     *flagError = -1;
@@ -291,7 +384,10 @@ float articulo_getPeso(Articulo* this,int* flagError)
     }
     return aux;
 }
-
+/** \brief Valida un Peso
+ * \param peso float
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidPeso(float peso)
 {
 	int retorno = 0;
@@ -302,6 +398,11 @@ int isValidPeso(float peso)
 	return retorno;
 }
 //---------------------------------------------------
+/** \brief Valida una Altura y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param altura float
+ * \return int  -1 error, 0 si ok
+ */
 int articulo_setAltura(Articulo* this, float altura)
 {
     int retorno = -1;
@@ -312,7 +413,11 @@ int articulo_setAltura(Articulo* this, float altura)
     }
     return retorno;
 }
-
+/** \brief Obtiene Altura del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Altura si ok
+ */
 float articulo_getAltura(Articulo* this,int* flagError)
 {
     *flagError = -1;
@@ -324,7 +429,10 @@ float articulo_getAltura(Articulo* this,int* flagError)
     }
     return aux;
 }
-
+/** \brief Valida Altura
+ * \param altura float
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidAltura(float altura)
 {
 	int retorno = 0;
@@ -335,6 +443,11 @@ int isValidAltura(float altura)
 	return retorno;
 }
 //---------------------------------------------------
+/** \brief Valida una Ancho del articulo y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param altura float
+ * \return int  -1 error, 0 si ok
+ */
 int articulo_setAncho(Articulo* this, float ancho)
 {
     int retorno = -1;
@@ -345,7 +458,11 @@ int articulo_setAncho(Articulo* this, float ancho)
     }
     return retorno;
 }
-
+/** \brief Obtiene Ancho del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Ancho si ok
+ */
 float articulo_getAncho(Articulo* this,int* flagError)
 {
     *flagError = -1;
@@ -357,7 +474,10 @@ float articulo_getAncho(Articulo* this,int* flagError)
     }
     return aux;
 }
-
+/** \brief Valida Ancho
+ * \param ancho float
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidAncho(float ancho)
 {
 	int retorno = 0;
@@ -368,6 +488,11 @@ int isValidAncho(float ancho)
 	return retorno;
 }
 //---------------------------------------------------
+/** \brief Valida Profundidad del articulo y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param altura float
+ * \return int  -1 error, 0 si ok
+ */
 int articulo_setProfundidad(Articulo* this, float profundidad)
 {
     int retorno = -1;
@@ -378,7 +503,11 @@ int articulo_setProfundidad(Articulo* this, float profundidad)
     }
     return retorno;
 }
-
+/** \brief Obtiene Profundidad del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Profundidad si ok
+ */
 float articulo_getProfundidad(Articulo* this,int* flagError)
 {
     *flagError = -1;
@@ -390,7 +519,10 @@ float articulo_getProfundidad(Articulo* this,int* flagError)
     }
     return aux;
 }
-
+/** \brief Valida Profundidad del Articulo
+ * \param ancprofundidadho float
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidProfundidad(float profundidad)
 {
 	int retorno = 0;
@@ -400,28 +532,6 @@ int isValidProfundidad(float profundidad)
 	}
 	return retorno;
 }
-//---------------------------------------------------
-
-/* \brief Pide id PosicionArancelaria articulo al usuarios
- * \param int* idPosicionArancelaria
- * \return -1 ERROR, 0 si ok
- */
-/*int articulo_pedirIdPosicionArancelaria(int* idPosicionArancelaria)
-{
-	int retorno = -1;
-	if(idPosicionArancelaria != NULL )
-	{
-		if(!utn_getNumero(idPosicionArancelaria,  "\n > Ingrese ID de la Posicion Arancelaria que corresponda"
-				                                  "\n > De caso que no exista, ingrese [0] y se le pedira los datos para dar de alta a una nueva Posicion Arancelaria"
-				                                  "\n > ",  "\x1b[31m * ERROR \x1b[0m", 0, 99999999, 2))
-		{
-
-			retorno = 0;
-		}
-	}
-	return retorno;
-}*/
-
 
 //******************************************************************************** LISTAR
 /** \brief Lista un Articulo
@@ -468,7 +578,7 @@ int articulo_imprimirUnArticulo(void* pElement)
 		{
 			//printf("\n\x1b[34m --------------------------------------------------------------------------------------------------------------------------------------------------------------  \x1b[0m");
 			articulo_encabezado();
-			printf("\n %-10d %-13d %-15s %-15s %-20s %-15s %-15.2f %-12.2f %-12.2f %-12.2f %-12.2f",idArticulo,idPosicionArancelaria,
+			printf("\n %-10d %-13d %-15s %-12s %-25s %-10s %-15.2f %-12.2f %-12.2f %-12.2f %-12.2f",idArticulo,idPosicionArancelaria,
 																                             nombre,codigo,descripcion,paisDeFabricacion,
 																                             fob,peso,ancho,altura,profundidad);
 			retorno = 0;
@@ -495,7 +605,7 @@ void articulo_encabezado(void)
 	char ancho[] = {"ANCHO"};
 	char profundidad[] = {"PROFUNDIDAD"};
 
-	printf("\n \x1b[40m\x1b[37m%-10s %-13s %-15s %-15s %-20s %-15s %-15s %-12s %-12s %-12s %-12s \x1b[0m\x1b[0m ",   idArticulo,idPosicionArancelaria,
+	printf("\n \x1b[40m\x1b[37m%-10s %-13s %-15s %-12s %-25s %-10s %-15s %-12s %-12s %-12s %-12s \x1b[0m\x1b[0m ",   idArticulo,idPosicionArancelaria,
 																													nombre,codigo,descripcion,paisDeFabricacion,
 																													fob,peso,ancho,altura,profundidad);
 }
@@ -587,3 +697,4 @@ int funcionCriterio_compararPorNombreArticulo(void* thisUno, void* thisDos)
     }
     return retorno;
 }
+//---------------------------------------------------------------

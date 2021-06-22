@@ -123,7 +123,7 @@ int transporteMaritimo_imprimirTransporteMaritimo(TransporteMaritimo* pTransport
 		{
 			printf("\n\x1b[34m -------------------------------------------- \x1b[0m");
 			printf("\n Metros Cubicos \t Precio Contenedor");
-			printf("\n m^3 %.2f \t USS %.2f",metrosCubicos, precioMetroCubico);
+			printf("\n m^3 %.2f \t\t USS %.2f",metrosCubicos, precioMetroCubico);
 			printf("\n\x1b[34m -------------------------------------------- \x1b[0m");
 			retorno = 0;
 		}

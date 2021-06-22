@@ -15,6 +15,7 @@ C_SRCS += \
 ../src/Serializer.c \
 ../src/TransporteAereo.c \
 ../src/TransporteMaritimo.c \
+../src/eGeneral.c \
 ../src/laplume.c \
 ../src/main_Parcial2.c \
 ../src/utn.c 
@@ -31,6 +32,7 @@ OBJS += \
 ./src/Serializer.o \
 ./src/TransporteAereo.o \
 ./src/TransporteMaritimo.o \
+./src/eGeneral.o \
 ./src/laplume.o \
 ./src/main_Parcial2.o \
 ./src/utn.o 
@@ -47,6 +49,7 @@ C_DEPS += \
 ./src/Serializer.d \
 ./src/TransporteAereo.d \
 ./src/TransporteMaritimo.d \
+./src/eGeneral.d \
 ./src/laplume.d \
 ./src/main_Parcial2.d \
 ./src/utn.d 

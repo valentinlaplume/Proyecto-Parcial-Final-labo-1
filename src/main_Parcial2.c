@@ -15,13 +15,15 @@ int main(void)
 	TransporteMaritimo transporteMaritimo;
 	TransporteAereo transporteAereo;
 
+	Dictionary* datosGenerales;
+	datosGenerales = dict_new(0);
+
 	articulos = dict_new(0);
 	posicionesArancelarias = dict_new(0);
 
-
-
 	if(articulos != NULL && posicionesArancelarias != NULL)
 	{
+		controller_cargarDatosGenerales("datosGenerales.csv", datosGenerales);
 		controller_cargarArticulos("articulos.csv", articulos);
 		controller_cargarPosicionesArancelarias("posicionesArancelarias.csv", posicionesArancelarias);
 		//-------------------------------------------------------------------------------
@@ -40,8 +42,8 @@ int main(void)
 					"\n |  6  - Ver información - Modificar información [Transporte Maritimo]  |"
 					"\n |  7  - Listar Posiciones Arancelarias con sus Articulos               |"
 					"\n |  8  - Informe costo final por Transportes                            |"
-					"\n |  9  - Buscar Posicion Arancelaria por Nomenclador y listar Articulos |"
-					"\n | 10  - Buscar Articulo por Codigo                                     |"
+					"\n |  9  - Buscar Posicion Arancelaria por Nomenclador y Listar Articulos |"
+					"\n | 10  - Buscar Articulo por su Codigo y listarlo                       |"
 					"\n | 11  -  |"
 					"\n | 12  -  |"
 					"\n | 13  -  |"
@@ -77,22 +79,22 @@ int main(void)
 					case 8: // Informe costo final por Transportes
 						controller_subMenuInforme(articulos, posicionesArancelarias, &transporteAereo, &transporteMaritimo);
 					break;
-					case 9: // Buscar Posicion Arancelaria por Nomenclador y listar Articulos
-						controller_listarArticulosPorBusquedaNomenclador(articulos, posicionesArancelarias);
+					case 9: // Buscar Posicion Arancelaria por Nomenclador y Listar Articulos
+						controller_listarArticulosPorBusquedaPorNomenclador(articulos, posicionesArancelarias);
 					break;
 					case 10: // Buscar Articulo por Codigo
-						controller_listarArticuloPorBusquedaCodigo(articulos);
+						controller_listarUnArticuloPorBusquedaPorCodigo(articulos);
 					break;
 					case 11:
-
 					break;
-					case 12:
-
+					case 12: // Listar Posicion Arancelaria con tipo de Licencia Autometica con sus Articulos
+						controller_listarPosicionArancelariaConSusArticulo(articulos, posicionesArancelarias);
 					break;
 					case 13:
 
 					break;
 					case 14:
+						controller_guardarDatosGenerales("datosGenerales.csv", articulos, posicionesArancelarias, &transporteAereo, &transporteMaritimo);
 						controller_guardarTransporteAereo("transporteAereo.csv", &transporteAereo);
 						controller_guardarTransporteMaritimo("transporteMaritimo.csv", &transporteMaritimo);
 						controller_guardarArticulos("articulos.csv", articulos);
