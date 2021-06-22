@@ -17,10 +17,10 @@
 #include "Calculos.h"
 
 // Pedir los datos del Articulo
-int informe_pedirDatosArticulo(char* nombre, char* codigo, char* descripcion, char* paisDeFabricacion,
+int informe_pedirDatosArticulo(LinkedList* listaArticulos,char* nombre, char* codigo, char* descripcion, char* paisDeFabricacion,
 		                       float* fob, float* peso, float* ancho, float* altura, float* profundidad);
 // Pedir los datos de la Posicion Arancelaria
-int informe_pedirDatosPosicionArancelaria(char* nomenclador, float* porcentajeSeguro, float* porcentajeImportacion,
+int informe_pedirDatosPosicionArancelaria(LinkedList* listaPosAran, char* nomenclador, float* porcentajeSeguro, float* porcentajeImportacion,
 		                                  float* porcentajeTasaEstadistica, int* tipoLicencia);
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 // Listar solo las Posicion Arancelaria con Articulos
@@ -44,6 +44,11 @@ int sonIgualesIdPosicionArancelaria(void* pArticuloElement, void* pPosicionAranE
 void* busquedaPorNomencladorPosicionArancelaria(LinkedList* listaPosicionArancelaria);
 // Busqueda Articulo por codigo
 void* busquedaPorCodigoArticulo(LinkedList* listaArticulos);
+
+//Busca si existe nomenclatura ingresada
+int buscarSiExisteNomenclatura(LinkedList* listaPosAran, char* nomenclador);
+//Busca si existe codigo ingresada
+int buscarSiExisteCodigo(LinkedList* listaArticulos, char* codigo);
 
 
 #endif /* INFORME_H_ */

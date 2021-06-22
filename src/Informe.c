@@ -43,28 +43,34 @@ static int printCostoFinalTransporteMaritimo(Articulo* pArticulo, PosicionArance
 
  * \return int 0 si ok, -1 error
  */
-int informe_pedirDatosArticulo(char* nombre, char* codigo, char* descripcion, char* paisDeFabricacion,
+int informe_pedirDatosArticulo(LinkedList* listaArticulos,char* nombre, char* codigo, char* descripcion, char* paisDeFabricacion,
 		                       float* fob, float* peso, float* ancho, float* altura, float* profundidad)
 {
 	int retorno = -1;
 	if(nombre != NULL && codigo != NULL && descripcion != NULL &&
 	   paisDeFabricacion != NULL && fob  != NULL && peso != NULL && ancho != NULL && altura != NULL && profundidad != NULL )
 	{
-		if(!utn_getNombre(nombre, NOMBRE_LEN, "\n > Ingrese nombre del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
-		   !utn_getAlfanumerico(codigo, CODIGO_LEN, " > Ingrese el codigo del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
-		   !utn_getTexto(descripcion, DESCRIPCION_LEN, " > Ingrese descripcion del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
-		   !utn_getNombre(paisDeFabricacion, PAIS_LEN, " > Ingrese pais de fabricación del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
-		   !utn_getNumeroFloat(fob, " > Ingrese valor fob del articulo: USS ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
-		   !utn_getNumeroFloat(peso, " > Ingrese peso en [kg] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
-		   !utn_getNumeroFloat(ancho, "\n > DIMENSIONES:\n > Ingrese ancho[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
-		   !utn_getNumeroFloat(altura, " > Ingrese altura[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
-		   !utn_getNumeroFloat(profundidad, " > Ingrese profundidad[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2))
+		if(!utn_getTexto(codigo, CODIGO_LEN, "\n > Ingrese el codigo del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
+		   !buscarSiExisteCodigo(listaArticulos, codigo))
 		{
-			retorno = 0;
+			if(!utn_getNombre(nombre, NOMBRE_LEN, " > Ingrese nombre del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
+			   !utn_getTexto(descripcion, DESCRIPCION_LEN, " > Ingrese descripcion del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
+			   !utn_getNombre(paisDeFabricacion, PAIS_LEN, " > Ingrese pais de fabricación del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
+			   !utn_getNumeroFloat(fob, " > Ingrese valor fob del articulo: USS ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
+			   !utn_getNumeroFloat(peso, " > Ingrese peso en [kg] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
+			   !utn_getNumeroFloat(ancho, "\n > DIMENSIONES:\n > Ingrese ancho[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
+			   !utn_getNumeroFloat(altura, " > Ingrese altura[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
+			   !utn_getNumeroFloat(profundidad, " > Ingrese profundidad[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2))
+			{
+				retorno = 0;
+			}
 		}
+		else
+			printf("\n > Codigo ya existente en un Articulo, no se puede dar de alta");
 	}
 	return retorno;
 }
+
 /** \brief Pide los datos de la Posicion Arancelaria a ser dada de Alta
  * \param (char* nomenclador, float* porcentajeSeguro, float* porcentajeImportacion,
 		   float* porcentajeTasaEstadistica, int* tipoLicencia)
@@ -72,23 +78,64 @@ int informe_pedirDatosArticulo(char* nombre, char* codigo, char* descripcion, ch
 
  * \return int 0 si ok, -1 error
  */
-int informe_pedirDatosPosicionArancelaria(char* nomenclador, float* porcentajeSeguro, float* porcentajeImportacion,
+int informe_pedirDatosPosicionArancelaria(LinkedList* listaPosAran, char* nomenclador, float* porcentajeSeguro, float* porcentajeImportacion,
 		                                  float* porcentajeTasaEstadistica, int* tipoLicencia)
 {
 	int retorno = -1;
-	if(nomenclador != NULL && porcentajeSeguro != NULL && porcentajeImportacion != NULL && porcentajeTasaEstadistica != NULL && tipoLicencia != NULL)
+	if(listaPosAran != NULL && nomenclador != NULL && porcentajeSeguro != NULL && porcentajeImportacion != NULL && porcentajeTasaEstadistica != NULL && tipoLicencia != NULL)
 	{
 		if(!utn_getTexto(nomenclador, NOMENCLADOR_LEN, "\n > Ingrese nomenclador: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
-		   !utn_getNumeroFloat(porcentajeSeguro, " > Ingrese porcentaje de seguro: %", "\x1b[31m * ERROR \x1b[0m", 0.1, 100, 2) &&
-		   !utn_getNumeroFloat(porcentajeImportacion, " > Ingrese porcentaje de importacion: %", "\x1b[31m * ERROR \x1b[0m", 0.1, 100, 2) &&
-		   !utn_getNumeroFloat(porcentajeTasaEstadistica, " > Ingrese porcentaje de tasa estadística: %", "\x1b[31m * ERROR \x1b[0m", 0.1, 100, 2) &&
-		   !utn_getNumero(tipoLicencia, " > Ingrese tipo de licencia [0]AUTOMATICA - [1]NO AUTOMATICA: ", "\x1b[31m * ERROR \x1b[0m", 0, 1, 2))
+		   !buscarSiExisteNomenclatura(listaPosAran, nomenclador))
 		{
-			retorno = 0;
+			if(!utn_getNumeroFloat(porcentajeSeguro, " > Ingrese porcentaje de seguro: %", "\x1b[31m * ERROR \x1b[0m", 0.1, 100, 2) &&
+			   !utn_getNumeroFloat(porcentajeImportacion, " > Ingrese porcentaje de importacion: %", "\x1b[31m * ERROR \x1b[0m", 0.1, 100, 2) &&
+			   !utn_getNumeroFloat(porcentajeTasaEstadistica, " > Ingrese porcentaje de tasa estadística: %", "\x1b[31m * ERROR \x1b[0m", 0.1, 100, 2) &&
+			   !utn_getNumero(tipoLicencia, " > Ingrese tipo de licencia [0]AUTOMATICA - [1]NO AUTOMATICA: ", "\x1b[31m * ERROR \x1b[0m", 0, 1, 2))
+			{
+				retorno = 0;
+			}
+		}
+		else
+			printf("\n > Nomenclatura ya existente en una Posicion Arancelaria, no se puede dar de alta");
+	}
+	return retorno;
+}
+
+//Busca si existe nomenclatura ingresada
+int buscarSiExisteNomenclatura(LinkedList* listaPosAran, char* nomenclador)
+{
+	int retorno = 0;
+	if(listaPosAran != NULL && nomenclador != NULL)
+	{
+		void* pElement;
+		//-----------------------------------------
+		pElement = ll_buscarElement(listaPosAran, funcionCriterio_buscarPorNomenclador, nomenclador);
+		if(pElement != NULL)
+		{
+			// significa que existe
+			retorno = 1;
 		}
 	}
 	return retorno;
 }
+//Busca si existe codigo ingresada
+int buscarSiExisteCodigo(LinkedList* listaArticulos, char* codigo)
+{
+	int retorno = 0;
+	if(listaArticulos != NULL && codigo != NULL)
+	{
+		void* pElement;
+		//-----------------------------------------
+		pElement = ll_buscarElement(listaArticulos, funcionCriterio_buscarPorCodigoArticulo, codigo);
+		if(pElement != NULL)
+		{
+			// significa que existe
+			retorno = 1;
+		}
+	}
+	return retorno;
+}
+
 
 /** \brief Lista Todas las Posiciones Arancelarias Con Sus Articulos [inclusive las que no poseen articulos]
  * \param listaArticulos LinkedList*

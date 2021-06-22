@@ -285,7 +285,7 @@ int controller_guardarArticulos(char* path, Dictionary* articulos)
 			if(!serializer_articulosFromText(pFile, articulos))
 			{
 				retorno = 0;
-				printf("\n - GUARDE ARTICULOS EN %s",path);
+				printf("\n - GUARDE DATOS ARTICULOS EN %s",path);
 			}
 			fclose(pFile);
 		}
@@ -309,7 +309,7 @@ int controller_guardarPosicionesArancelarias(char* path, Dictionary* posicionesA
 			if(!serializer_posicionesArancelariasFromText(pFile, posicionesArancelarias))
 			{
 				retorno = 0;
-				printf("\n - GUARDE POSICIONES ARANCELIAS EN %s",path);
+				printf("\n - GUARDE DATOS POSICIONES ARANCELIAS EN %s",path);
 			}
 			fclose(pFile);
 		}
@@ -358,7 +358,7 @@ int controller_guardarTransporteMaritimo(char* path, TransporteMaritimo* pTransp
 			if(!serializer_transporteMaritimoFromText(pFile, pTransporteMaritimo))
 			{
 				retorno = 0;
-				printf("\n - GUARDE TRANSPORTE MARITIMO EN %s",path);
+				printf("\n - GUARDE DATOS TRANSPORTE MARITIMO EN %s",path);
 			}
 			fclose(pFile);
 		}
@@ -382,7 +382,7 @@ int controller_guardarTransporteAereo(char* path, TransporteAereo* pTransporteAe
 			if(!serializer_transporteAereoFromText(pFile, pTransporteAereo))
 			{
 				retorno = 0;
-				printf("\n - GUARDE TRANSPORTE AEREO EN %s",path);
+				printf("\n - GUARDE DATOS TRANSPORTE AEREO EN %s",path);
 			}
 			fclose(pFile);
 		}
@@ -1006,9 +1006,12 @@ int controller_altaArticulo(Dictionary* articulos, Dictionary* posicionesArancel
 						posicionArancelaria_imprimirUnaPosicionArancelaria(pPosArancelariaElegida);
 						bufferArticulo.idPosicionArancelaria = atoi(idPosAranArtSTR);
 						pArticulo = cargaDelArticulo(articulos, bufferArticulo.idPosicionArancelaria);
-						printf("\n > Articulo dado de alta con éxito\n");
-						articulo_imprimirUnArticulo(pArticulo);
-						flagDiAlta = 1;
+						if(pArticulo != NULL)
+						{
+							printf("\n > Articulo dado de alta con éxito\n");
+							articulo_imprimirUnArticulo(pArticulo);
+							flagDiAlta = 1;
+						}
 					}
 				}
 			break;
@@ -1017,9 +1020,12 @@ int controller_altaArticulo(Dictionary* articulos, Dictionary* posicionesArancel
 				if(bufferArticulo.idPosicionArancelaria > 0)
 				{
 					pArticulo = cargaDelArticulo(articulos, bufferArticulo.idPosicionArancelaria);
-					printf("\n > Articulo dado de alta con éxito\n");
-					articulo_imprimirUnArticulo(pArticulo);
-					flagDiAlta = 1;
+					if(pArticulo != NULL)
+					{
+						printf("\n > Articulo dado de alta con éxito\n");
+						articulo_imprimirUnArticulo(pArticulo);
+						flagDiAlta = 1;
+					}
 				}
 			break;
 		}
@@ -1037,8 +1043,10 @@ static Articulo* cargaDelArticulo(Dictionary* articulos, int idPosArancelariaEnA
 	Articulo bufferArticulo;
 	char idArticuloStrAux[10];
 	//------------------------------------------------------------------------------------------
-	if(articulos != NULL &&
-	   !informe_pedirDatosArticulo(bufferArticulo.nombre, bufferArticulo.codigo, bufferArticulo.descripcion, bufferArticulo.paisDeFabricacion,
+	LinkedList* listaArticulo;
+	listaArticulo = dict_getValues(articulos);
+	if(articulos != NULL && listaArticulo != NULL &&
+	   !informe_pedirDatosArticulo(listaArticulo, bufferArticulo.nombre, bufferArticulo.codigo, bufferArticulo.descripcion, bufferArticulo.paisDeFabricacion,
 								  &bufferArticulo.fob, &bufferArticulo.peso, &bufferArticulo.ancho, &bufferArticulo.altura, &bufferArticulo.profundidad))
 	{
 		// Genero ID Articulo
@@ -1054,6 +1062,7 @@ static Articulo* cargaDelArticulo(Dictionary* articulos, int idPosArancelariaEnA
 			if(!dict_insert(articulos, idArticuloStrAux, pArticulo))
 			{
 				flagCargueArticulo = 1;
+				ll_deleteLinkedList(listaArticulo);
 				pArticuloRetorno = pArticulo;
 			}
 		}
@@ -1073,9 +1082,11 @@ int controller_altaPosicionArancelaria(Dictionary* posicionesArancelarias)
 	PosicionArancelaria buffer;
 	PosicionArancelaria* pPosicionArancelaria;
 	char idPosicionArancelariaSTR[10];
+	LinkedList* listaPosAran;
 
-	if(posicionesArancelarias != NULL && posicionesArancelarias != NULL &&
-	  !informe_pedirDatosPosicionArancelaria(buffer.nomenclador, &buffer.porcentajeSeguro, &buffer.porcentajeImportacion, &buffer.porcentajeTasaEstadistica, &buffer.tipoLicencia))
+	listaPosAran = dict_getValues(posicionesArancelarias);
+	if(listaPosAran != NULL && posicionesArancelarias != NULL && posicionesArancelarias != NULL &&
+	  !informe_pedirDatosPosicionArancelaria(listaPosAran, buffer.nomenclador, &buffer.porcentajeSeguro, &buffer.porcentajeImportacion, &buffer.porcentajeTasaEstadistica, &buffer.tipoLicencia))
 	{
 		buffer.idPosicionArancelaria = controller_generarIdPosicionArancelaria();
 		pPosicionArancelaria = posicionArancelaria_newParam(buffer.idPosicionArancelaria, buffer.nomenclador, buffer.porcentajeSeguro,
@@ -1088,6 +1099,7 @@ int controller_altaPosicionArancelaria(Dictionary* posicionesArancelarias)
 				flagCarguePosicionArancelaria = 1;
 				IdRetorno = buffer.idPosicionArancelaria;
 				controller_guardarPosicionesArancelarias("posicionesArancelarias.csv", posicionesArancelarias);
+				ll_deleteLinkedList(listaPosAran);
 			}
 		}
 	}
@@ -1423,7 +1435,7 @@ static Articulo* subMenuEditArticulo(void* pElement, Dictionary* posicionesAranc
 					break;
 					case 2: // Modificar Codigo
 						printf("\n - MODIFICACION DEL CODIGO -");
-						if(!utn_getAlfanumerico(buffer.codigo, CODIGO_LEN, " > Ingrese el codigo del articulo: ", "\n\x1b[31m * ERROR \x1b[0m", 2) &&
+						if(!utn_getTexto(buffer.codigo, CODIGO_LEN, " > Ingrese el codigo del articulo: ", "\n\x1b[31m * ERROR \x1b[0m", 2) &&
 						   !laplume_confirmarAccion("\n > Desea confimar la modificacion?"))
 						{
 							if(!articulo_setCodigo(pArticulo, buffer.codigo))
