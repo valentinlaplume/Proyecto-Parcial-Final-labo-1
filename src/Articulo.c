@@ -389,7 +389,7 @@ int articulo_setFob(Articulo* this, float fob)
 /** \brief Obtiene Valor Fob del Articulo
  * \param this Articulo*
  * \param flagError int*
- * \return int retorna -1 ERROR, retorna Valor Fob si ok
+ * \return float retorna -1 ERROR, retorna Valor Fob si ok
  */
 float articulo_getFob(Articulo* this,int* flagError)
 {
@@ -434,7 +434,7 @@ int articulo_setPeso(Articulo* this, float peso)
 /** \brief Obtiene Peso del Articulo
  * \param this Articulo*
  * \param flagError int*
- * \return int retorna -1 ERROR, retorna Peso si ok
+ * \return float retorna -1 ERROR, retorna Peso si ok
  */
 float articulo_getPeso(Articulo* this,int* flagError)
 {
@@ -479,7 +479,7 @@ int articulo_setAltura(Articulo* this, float altura)
 /** \brief Obtiene Altura del Articulo
  * \param this Articulo*
  * \param flagError int*
- * \return int retorna -1 ERROR, retorna Altura si ok
+ * \return float retorna -1 ERROR, retorna Altura si ok
  */
 float articulo_getAltura(Articulo* this,int* flagError)
 {
@@ -524,7 +524,7 @@ int articulo_setAncho(Articulo* this, float ancho)
 /** \brief Obtiene Ancho del Articulo
  * \param this Articulo*
  * \param flagError int*
- * \return int retorna -1 ERROR, retorna Ancho si ok
+ * \return float retorna -1 ERROR, retorna Ancho si ok
  */
 float articulo_getAncho(Articulo* this,int* flagError)
 {
@@ -569,7 +569,7 @@ int articulo_setProfundidad(Articulo* this, float profundidad)
 /** \brief Obtiene Profundidad del Articulo
  * \param this Articulo*
  * \param flagError int*
- * \return int retorna -1 ERROR, retorna Profundidad si ok
+ * \return float retorna -1 ERROR, retorna Profundidad si ok
  */
 float articulo_getProfundidad(Articulo* this,int* flagError)
 {

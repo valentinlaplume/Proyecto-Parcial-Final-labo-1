@@ -10,11 +10,21 @@
 
 #include "PosicionArancelaria.h"
 
+// CONSTRUCTORES
+
+/* \brief Reserva espacio en memoria para una Posicion Arancelaria
+ * \param void
+ * \return PosicionArancelaria* [direccion de memoria] si obtuvo memoria, [NULL] si no hay mas memoria
+ */
 PosicionArancelaria* posicionArancelaria_new(void)
 {
 	return (PosicionArancelaria*)malloc(sizeof(PosicionArancelaria));
 }
-
+/* \brief Valida los campos y convierte al tipo de dato que corresponda en cada campo, y los carga en una variable PosicionArancelaria
+ * \param (int idPosicionArancelaria, char* nomenclador, float porcentajeSeguro,
+		  float porcentajeImportacion, float porcentajeTasaEstadistica, int tipoLicencia)
+ * \return PosicionArancelaria* Retorna puntero a la PosicionArancelaria cargado
+ */
 PosicionArancelaria* posicionArancelaria_newParam(int idPosicionArancelaria, char* nomenclador, float porcentajeSeguro,
 		                                          float porcentajeImportacion, float porcentajeTasaEstadistica, int tipoLicencia)
 {
@@ -36,6 +46,10 @@ PosicionArancelaria* posicionArancelaria_newParam(int idPosicionArancelaria, cha
 }
 
 //******************************************************************************** DESTRUCTOR
+/* \brief Libera el espacio reservado en memoria para una Posicion Arancelaria
+ * \param this PosicionArancelaria*
+ * \return void
+ */
 int posicionArancelaria_delete(PosicionArancelaria* this)
 {
 	int retorno = -1;
@@ -47,6 +61,11 @@ int posicionArancelaria_delete(PosicionArancelaria* this)
 	return retorno;
 }
 //******************************************************************************** GET - SET - IS VALID
+/** \brief Valida un ID y lo carga en la variable PosicionArancelaria
+ * \param this PosicionArancelaria*
+ * \param idPosicionArancelaria int
+ * \return int  -1 error, 0 si ok
+ */
 int posicionArancelaria_setIdPosicionArancelaria(PosicionArancelaria* this, int idPosicionArancelaria)
 {
 	int retorno = -1;
@@ -57,7 +76,11 @@ int posicionArancelaria_setIdPosicionArancelaria(PosicionArancelaria* this, int 
 	}
 	return retorno;
 }
-
+/** \brief Obtiene Id Articulo del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Id Articulo si ok
+ */
 int posicionArancelaria_getIdPosicionArancelaria(PosicionArancelaria* this,int* flagError)
 {
 	*flagError = -1;
@@ -69,7 +92,10 @@ int posicionArancelaria_getIdPosicionArancelaria(PosicionArancelaria* this,int* 
 	}
 	return auxId;
 }
-
+/** \brief Valida un id
+ * \param int id)
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidIdPosicionArancelaria(int idPosicionArancelaria)
 {
 	int retorno = 0;
@@ -80,6 +106,11 @@ int isValidIdPosicionArancelaria(int idPosicionArancelaria)
 	return retorno;
 }
 //-----------------------------------------------------------------------------
+/** \brief Valida un nomenclador y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param nomenclador char*
+ * \return int  -1 error, 0 si ok
+ */
 int posicionArancelaria_setNomenclador(PosicionArancelaria* this, char* nomenclador)
 {
 	int retorno = -1;
@@ -90,7 +121,11 @@ int posicionArancelaria_setNomenclador(PosicionArancelaria* this, char* nomencla
 	}
 	return retorno;
 }
-
+/** \brief Obtiene nomenclador del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna Nombre si ok
+ */
 char* posicionArancelaria_getNomenclador(PosicionArancelaria* this,int* flagError)
 {
 	*flagError = -1;
@@ -102,29 +137,26 @@ char* posicionArancelaria_getNomenclador(PosicionArancelaria* this,int* flagErro
 	}
 	return auxNomenclador;
 }
-
+/** \brief Valida un nomenclador
+ * \param nombre char*
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidNomenclador(char nomenclador[])
 {
 	int retorno = 0;
 	//int i = 0;
-	if(nomenclador != NULL)
+	if(nomenclador != NULL && esTexto(nomenclador))
 	{
-		/*while(nomenclador[i] != '\0')
-		{
-			if((nomenclador[i] != ' ') && (nomenclador[i] == '.') &&
-			   (nomenclador[i] >= 'a' && nomenclador[i] <= 'z') &&
-			   (nomenclador[i] >= 'A' && nomenclador[i] <= 'Z') &&
-			   (nomenclador[i] >= '0' && nomenclador [i] <= '9'))
-			{
-				retorno = 1;
-			}
-			i++;
-		}*/
 		retorno = 1;
 	}
 	return retorno;
 }
 //-----------------------------------------------------------------------------
+/** \brief Valida un porcentajeSeguro y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param porcentajeSeguro float
+ * \return int  -1 error, 0 si ok
+ */
 int posicionArancelaria_setPorcentajeSeguro(PosicionArancelaria* this, float porcentajeSeguro)
 {
     int retorno = -1;
@@ -135,7 +167,11 @@ int posicionArancelaria_setPorcentajeSeguro(PosicionArancelaria* this, float por
     }
     return retorno;
 }
-
+/** \brief Obtiene porcentajeSeguro del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return float retorna -1 ERROR, retorna porcentajeSeguro si ok
+ */
 float posicionArancelaria_getPorcentajeSeguro(PosicionArancelaria* this,int* flagError)
 {
     *flagError = -1;
@@ -147,7 +183,10 @@ float posicionArancelaria_getPorcentajeSeguro(PosicionArancelaria* this,int* fla
     }
     return aux;
 }
-
+/** \brief Valida un porcentajeSeguro
+ * \param porcentajeSeguro float
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidPorcentajeSeguro(float porcentajeSeguro)
 {
 	int retorno = 0;
@@ -158,6 +197,11 @@ int isValidPorcentajeSeguro(float porcentajeSeguro)
 	return retorno;
 }
 //-----------------------------------------------------------------------------
+/** \brief Valida un porcentajeImportacion y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param porcentajeImportacion float
+ * \return int  -1 error, 0 si ok
+ */
 int posicionArancelaria_setPorcentajeImportacion(PosicionArancelaria* this, float porcentajeImportacion)
 {
     int retorno = -1;
@@ -168,7 +212,11 @@ int posicionArancelaria_setPorcentajeImportacion(PosicionArancelaria* this, floa
     }
     return retorno;
 }
-
+/** \brief Obtiene porcentajeImportacion del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return float retorna -1 ERROR, retorna porcentajeImportacion si ok
+ */
 float posicionArancelaria_getPorcentajeImportacion(PosicionArancelaria* this,int* flagError)
 {
     *flagError = -1;
@@ -180,7 +228,10 @@ float posicionArancelaria_getPorcentajeImportacion(PosicionArancelaria* this,int
     }
     return aux;
 }
-
+/** \brief Valida un porcentajeImportacion
+ * \param porcentajeImportacion float
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidPorcentajeImportacion(float porcentajeImportacion)
 {
 	int retorno = 0;
@@ -191,6 +242,11 @@ int isValidPorcentajeImportacion(float porcentajeImportacion)
 	return retorno;
 }
 //-----------------------------------------------------------------------------
+/** \brief Valida un porcentajeTasaEstadistica y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param porcentajeTasaEstadistica float
+ * \return int  -1 error, 0 si ok
+ */
 int posicionArancelaria_setPorcentajeTasaEstadistica(PosicionArancelaria* this, float porcentajeTasaEstadistica)
 {
     int retorno = -1;
@@ -201,7 +257,11 @@ int posicionArancelaria_setPorcentajeTasaEstadistica(PosicionArancelaria* this, 
     }
     return retorno;
 }
-
+/** \brief Obtiene porcentajeTasaEstadistica del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return float retorna -1 ERROR, retorna porcentajeTasaEstadistica si ok
+ */
 float posicionArancelaria_getPorcentajeTasaEstadistica(PosicionArancelaria* this,int* flagError)
 {
     *flagError = -1;
@@ -213,7 +273,10 @@ float posicionArancelaria_getPorcentajeTasaEstadistica(PosicionArancelaria* this
     }
     return aux;
 }
-
+/** \brief Valida un porcentajeTasaEstadistica
+ * \param porcentajeTasaEstadistica float
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidPorcentajeTasaEstadistica(float porcentajeTasaEstadistica)
 {
 	int retorno = 0;
@@ -224,6 +287,11 @@ int isValidPorcentajeTasaEstadistica(float porcentajeTasaEstadistica)
 	return retorno;
 }
 //-----------------------------------------------------------------------------
+/** \brief Valida un tipoLicencia y lo carga en la variable Articulo
+ * \param this Articulo*
+ * \param tipoLicencia int
+ * \return int  -1 error, 0 si ok
+ */
 int posicionArancelaria_setTipoLicencia(PosicionArancelaria* this, int tipoLicencia)
 {
 	int retorno = -1;
@@ -234,7 +302,11 @@ int posicionArancelaria_setTipoLicencia(PosicionArancelaria* this, int tipoLicen
 	}
 	return retorno;
 }
-
+/** \brief Obtiene tipoLicencia del Articulo
+ * \param this Articulo*
+ * \param flagError int*
+ * \return int retorna -1 ERROR, retorna porcentajeTasaEstadistica si ok
+ */
 int posicionArancelaria_getTipoLicencia(PosicionArancelaria* this,int* flagError)
 {
 	*flagError = -1;
@@ -246,7 +318,10 @@ int posicionArancelaria_getTipoLicencia(PosicionArancelaria* this,int* flagError
 	}
 	return auxtipoLicencia;
 }
-
+/** \brief Valida un tipoLicencia
+ * \param tipoLicencia int
+ * \return int retorna 1 si es valido, 0 no es valido
+ */
 int isValidTipoLicencia(int tipoLicencia)
 {
 	int retorno = 0;
@@ -389,6 +464,11 @@ int funcionCriterio_buscarPorNomenclador(void* pElement, void* nomencladorIngres
 	return retorno;
 }
 //---------------------------------------------------------------
+/* \brief Compara el Tipo Licencia con que sea NO_AUTOMATICA
+ * \param pElement void*
+ * \return int: 0 si no es NO_AUTOMATICA
+ 	 	 	    1 si es NO_AUTOMATICA
+ */
 int funcionCriterio_porTipoLicenciaNoAutomatica(void* pElement)
  {
 	 int flagError, tipoLicencia;
@@ -406,7 +486,11 @@ int funcionCriterio_porTipoLicenciaNoAutomatica(void* pElement)
 	 }
 	 return retorno;
  }
-
+/* \brief Compara el Tipo Licencia con que sea AUTOMATICA
+ * \param pElement void*
+ * \return int: 0 si no es AUTOMATICA
+ 	 	 	    1 si es AUTOMATICA
+ */
 int funcionCriterio_porTipoLicenciaAutomatica(void* pElement)
  {
 	 int flagError, tipoLicencia;

@@ -202,7 +202,6 @@ int informe_listarArticulosConCostoFinalTransporteAereo(LinkedList* listaArticul
 		lenArticulos = ll_len(listaArticulos);
 		lenPosicionArancelaria = ll_len(listaPosicionArancelaria);
 		int idPosAranArticulo, idPosicionArancelaria, flagErrorA, flagErrorB;
-		float resultadoTransporteAereo;
 	// ------------------------------------------------------------------------------------------------------
 		for(i=0; i<lenArticulos; i++)
 		{
@@ -249,7 +248,6 @@ int informe_listarArticulosConCostoFinalTransporteMaritimo(LinkedList* listaArti
 	{
 		int i, k;
 		int lenArticulos, lenPosicionArancelaria;
-		float resultadoTransporteMaritimo;
 		lenArticulos = ll_len(listaArticulos);
 		lenPosicionArancelaria = ll_len(listaPosicionArancelaria);
 		int idPosAranArticulo, idPosicionArancelaria, flagErrorA, flagErrorB;
@@ -269,11 +267,9 @@ int informe_listarArticulosConCostoFinalTransporteMaritimo(LinkedList* listaArti
 					{
 						idPosicionArancelaria = posicionArancelaria_getIdPosicionArancelaria(pPosicionArancelaria, &flagErrorB);
 						if(!flagErrorA && !flagErrorB &&
-						   idPosAranArticulo == idPosicionArancelaria)
+						   idPosAranArticulo == idPosicionArancelaria &&
+						   !printCostoFinalTransporteMaritimo(pArticulo, pPosicionArancelaria, pTransporteMaritimo))
 						{
-
-							resultadoTransporteMaritimo = transporteMaritimo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteMaritimo);
-							printf("\n > \x1b[46m \x1b[30m Costo final por Transporte Maritimo: \x1b[0m \x1b[0m  USD %.2f \n", resultadoTransporteMaritimo);
 							retorno = 0;
 						}
 					}
@@ -402,12 +398,19 @@ static int printCostoFinalTransporteAereo(Articulo* pArticulo, PosicionArancelar
 		                                  TransporteAereo* pTransporteAereo)
 {
 	int retorno = -1;
-	float resultadoTransporteAereo;
+    float costoTransporteAereo;;
+	int flagError;
 	if(pArticulo != NULL && pPosicionArancelaria != NULL  && pTransporteAereo != NULL)
 	{
-		resultadoTransporteAereo = transporteAereo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteAereo);
-		printf("\n > \x1b[43m \x1b[30m Costo final por Transporte Aereo: \x1b[0m \x1b[0m  USD %.2f", resultadoTransporteAereo);
-		retorno = 0;
+		if(transporteAereo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteAereo) > -1)
+		{
+			costoTransporteAereo = articulo_getCostoTransporteAereo(pArticulo, &flagError);
+			if(!flagError)
+			{
+				printf("\n > \x1b[43m \x1b[30m Costo final por Transporte Aereo: \x1b[0m \x1b[0m  USD %.2f", costoTransporteAereo);
+				retorno = 0;
+			}
+		}
 	}
 	return retorno;
 }
@@ -421,12 +424,19 @@ static int printCostoFinalTransporteMaritimo(Articulo* pArticulo, PosicionArance
 		                                     TransporteMaritimo* pTransporteMaritimo)
 {
 	int retorno = -1;
-	float resultadoTransporteMaritimo;
+    float costoTransporteMaritimo;
+	int flagError;
 	if(pArticulo != NULL && pPosicionArancelaria != NULL  && pTransporteMaritimo != NULL)
 	{
-		resultadoTransporteMaritimo = transporteMaritimo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteMaritimo);
-		printf("\n > \x1b[46m \x1b[30m Costo final por Transporte Maritimo: \x1b[0m \x1b[0m  USD %.2f \n", resultadoTransporteMaritimo);
-		retorno = 0;
+		if(transporteMaritimo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteMaritimo)>-1)
+		{
+			costoTransporteMaritimo = articulo_getCostoTransporteMaritimo(pArticulo, &flagError);
+			if(!flagError)
+			{
+				printf("\n > \x1b[46m \x1b[30m Costo final por Transporte Maritimo: \x1b[0m \x1b[0m  USD %.2f \n", costoTransporteMaritimo);
+				retorno = 0;
+			}
+		}
 	}
 	return retorno;
 }
