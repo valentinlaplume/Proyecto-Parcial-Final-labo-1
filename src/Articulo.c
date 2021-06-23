@@ -773,3 +773,142 @@ int funcionCriterio_compararPorNombreArticulo(void* thisUno, void* thisDos)
     return retorno;
 }
 //---------------------------------------------------------------
+/** \brief Lista todos los Articulos informe parcial 2
+ * \param listaArticulos LinkedList*
+ * \return int 0 si ok, -1 error
+ */
+int articulo_imprimirArticulosInformeParcial(LinkedList* listaArticulos)
+{
+	int retorno = -1;
+	int i, lenListaArticulos;
+	void* pArticulo;
+
+	if(listaArticulos != NULL)
+	{
+		lenListaArticulos = ll_len(listaArticulos);
+		for(i=0; i<lenListaArticulos; i++)
+		{
+			pArticulo = ll_get(listaArticulos, i);
+			if(pArticulo != NULL && !articulo_imprimirUnArticuloInformeParcial(pArticulo))
+				retorno = 0;
+		}
+	}
+	return retorno;
+}
+
+/** \brief Lista un Articulo del informe parcial 2
+ * \param pElement void*
+ * \return int 0 si ok, -1 error
+ */
+int articulo_imprimirUnArticuloInformeParcial(void* pElement)
+{
+	int retorno = -1;
+	if(pElement != NULL)
+	{
+		Articulo* pArticulo = (Articulo*)pElement;
+		char* descripcion;
+		float fob, costoTransporteAereo, costoTransporteMaritimo;
+		int flagErrorA, flagErrorB, flagErrorC, flagErrorD;
+
+		// Obtengo cada campo
+		descripcion = articulo_getDescripcion(pArticulo, &flagErrorA);
+		fob = articulo_getFob(pArticulo, &flagErrorB);
+
+		costoTransporteAereo = articulo_getCostoTransporteAereo(pArticulo, &flagErrorC);
+		costoTransporteMaritimo = articulo_getCostoTransporteMaritimo(pArticulo, &flagErrorD);
+
+
+		if(!flagErrorA && !flagErrorB && !flagErrorC && !flagErrorD )
+		{
+			articulo_encabezadoParcial();
+			printf("\n %-30s %-30.2f %-30.2f %-30.3f ", descripcion, fob, costoTransporteAereo, costoTransporteMaritimo);
+			retorno = 0;
+		}
+
+	}
+	return retorno;
+}
+/** \brief print encabezado al listar Informe parcial 2
+ * \param void
+ * \return void
+ */
+void articulo_encabezadoParcial(void)
+{
+	char descripcion[] = {"DESCRIPCIÓN"};
+	char fob[] = {"V.FOB [USD]"};
+	char costoTransporteAereo[] = {"COSTO FINAL ARG: AEREO"};
+	char costoTransporteMaritimo[] = {"COSTO FINAL ARG: MARITIMO"};
+
+	printf("\n \x1b[40m\x1b[36m%-30s %-30s %-30s %-30s \x1b[0m\x1b[0m ", descripcion, fob,costoTransporteAereo,costoTransporteMaritimo);
+}
+/** \brief Compara dos costos maritimos final .
+ * \param (void* this1,
+ *        void* this2))
+ * \return int [-2] si error, 0 si son iguales los this,
+ *  							1 si this1 es mayor a this2,
+ *  							-1 si this1 es menor a this2
+ */
+int funcionCriterio_compararCostoMaritimo(void* this1, void* this2)
+{
+    int retorno=-2;
+    int bufferUno, bufferDos;
+    int flagErroUno, flagErroDos ;
+    if(this1!=NULL && this2!=NULL)
+    {
+    	bufferUno =  articulo_getCostoTransporteMaritimo(this1, &flagErroUno);
+    	bufferDos = articulo_getCostoTransporteMaritimo(this2, &flagErroDos);
+    	if(!flagErroUno && !flagErroDos)
+    	{
+			if(bufferUno == bufferDos)
+				retorno = 0;
+			else
+				if(bufferUno > bufferDos)
+					retorno = 1;
+				else
+					if(bufferUno < bufferDos)
+						 retorno = -1;
+    	}
+    }
+    return retorno;
+}
+/** \brief Compara dos costos aereos final .
+ * \param (void* this1,
+ *        void* this2))
+ * \return int [-2] si error, 0 si son iguales los this,
+ *  							1 si this1 es mayor a this2,
+ *  							-1 si this1 es menor a this2
+ */
+int funcionCriterio_compararCostoAereo(void* this1, void* this2)
+{
+    int retorno=-2;
+    int bufferUno, bufferDos;
+    int flagErroUno, flagErroDos ;
+    if(this1!=NULL && this2!=NULL)
+    {
+    	bufferUno =  articulo_getCostoTransporteAereo(this1, &flagErroUno);
+    	bufferDos = articulo_getCostoTransporteAereo(this2, &flagErroDos);
+    	if(!flagErroUno && !flagErroDos)
+    	{
+			if(bufferUno == bufferDos)
+			{
+				retorno = 0;
+			}
+			else
+			{
+				if(bufferUno > bufferDos)
+				{
+					retorno = 1;
+				}
+				else
+				{
+					if(bufferUno < bufferDos)
+					{
+						 retorno = -1;
+					}
+				}
+			}
+		}
+    }
+    return retorno;
+}
+

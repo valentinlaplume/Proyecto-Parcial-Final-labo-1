@@ -33,8 +33,78 @@ static int printCostoFinalTransporteAereo(Articulo* pArticulo, PosicionArancelar
 // Print costos finales por Transporte Maritimo
 static int printCostoFinalTransporteMaritimo(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
 		                                     TransporteMaritimo* pTransporteMaritimo);
-//-------------------------------------------------------------------------------------------------------------------------
 
+//-------------------------------------------------------------- INFORME PARCIAL
+/** \brief Calcula los costos Finales en Argentina por transportes
+ * \param (Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+		  TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo)
+	punteros a las variables a ser escritas.
+ * \return int 0 si ok, -1 error
+ */
+int informe_calcularCostosFinalesParcial(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria,
+                                         TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo)
+{
+	int retorno = -1;
+	Articulo* pArticulo;
+	PosicionArancelaria* pPosicionArancelaria;
+	if(listaArticulos != NULL && listaPosicionArancelaria != NULL && pTransporteAereo != NULL && pTransporteMaritimo != NULL)
+	{
+		int i, k;
+		int lenArticulos, lenPosicionArancelaria;
+		lenArticulos = ll_len(listaArticulos);
+		lenPosicionArancelaria = ll_len(listaPosicionArancelaria);
+		int idPosAranArticulo, idPosicionArancelaria, flagErrorA, flagErrorB;
+
+	// ------------------------------------------------------------------------------------------------------
+		for(i=0; i<lenArticulos; i++)
+		{
+			pArticulo = (Articulo*) ll_get(listaArticulos, i);
+			if(pArticulo != NULL)
+			{
+				idPosAranArticulo = articulo_getIdPosicionArancelaria(pArticulo, &flagErrorA);
+				// ------------------------------------------------------------------------
+				for(k=0; k<lenPosicionArancelaria; k++)
+				{
+					pPosicionArancelaria = (PosicionArancelaria*) ll_get(listaPosicionArancelaria, k);
+					if(pPosicionArancelaria != NULL)
+					{
+						idPosicionArancelaria = posicionArancelaria_getIdPosicionArancelaria(pPosicionArancelaria, &flagErrorB);
+						if(!flagErrorA && !flagErrorB &&
+						   idPosAranArticulo == idPosicionArancelaria &&
+						   !calcularUnCostoFinalEnArgentina(pArticulo, pPosicionArancelaria, pTransporteAereo, pTransporteMaritimo))
+						{
+							retorno = 0;
+						}
+					}
+				}
+				// ------------------------------------------------------------------------
+			}
+		}
+	}
+	return retorno;
+}
+
+/** \brief Calcula un costo Final en Argentina
+ * \param (Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+		  TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo)
+	punteros a las variables a ser escritas.
+ * \return int 0 si ok, -1 error
+ */
+int calcularUnCostoFinalEnArgentina(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+		                             TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo)
+{
+	int retorno = -1;
+	if(pArticulo != NULL && pPosicionArancelaria != NULL  && pTransporteAereo != NULL)
+	{
+		if(transporteAereo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteAereo) > -1 &&
+		   transporteMaritimo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteMaritimo)> -1)
+		{
+			retorno = 0;
+		}
+	}
+	return retorno;
+}
+//*******************************************************************************************
 /** \brief Pide los datos del Articulo para a ser dada de Alta
  * \param (char* nombre, char* codigo, char* descripcion, char* paisDeFabricacion,
 		  float* fob, float* peso, float* ancho, float* altura, float* profundidad)
@@ -386,6 +456,19 @@ int informe_listarArticulosConCostoFinalPorTransportes(LinkedList* listaArticulo
 	return retorno;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 /** \brief Lista Posicion Arancelaria buscada por Nomenclador con sus Articulos y sus costos por Transporte
  * \param listaArticulos LinkedList*
  * \param listaPosicionArancelaria LinkedList*
@@ -441,6 +524,8 @@ static int printCostosFinalesTransportes(Articulo* pArticulo, PosicionArancelari
 	}
 	return retorno;
 }
+
+
 /** \brief Llama a la funcion calcular costo final Transporte Aereo y le hace un print
  * \param pArticulo Articulo*
  * \param pPosicionArancelaria PosicionArancelaria*

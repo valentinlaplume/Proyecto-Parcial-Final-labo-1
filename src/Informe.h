@@ -16,6 +16,18 @@
 #include "TransporteMaritimo.h"
 #include "Calculos.h"
 
+
+int informe_calcularCostosFinalesParcial(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria,
+                                 TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo);
+int calcularUnCostoFinalEnArgentina(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
+		                             TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo);
+
+
+
+
+
+
+
 // Pedir los datos del Articulo
 int informe_pedirDatosArticulo(LinkedList* listaArticulos,char* nombre, char* codigo, char* descripcion, char* paisDeFabricacion,
 		                       float* fob, float* peso, float* ancho, float* altura, float* profundidad);

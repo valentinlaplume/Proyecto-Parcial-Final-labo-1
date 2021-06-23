@@ -49,8 +49,39 @@ static Articulo* cargaDelArticulo(Dictionary* articulos, int idPosArancelariaEnA
 // nueva entidad
 #include "eGeneral.h"
 
+//------------------------------------ INFORME PARCIAL ----------------------------------
+/** \brief Carga los datos Generales desde el archivo datosGenerales.csv (modo texto).
+ * \param (Dictionary* articulos,
+ *  							Dictionary* posicionesArancelarias,
+ *  							TransporteAereo* pTransporteAereo,
+ *  							TransporteMaritimo* pTransporteMaritimo)
+ * \return int [-1] si error, 0 si OK
+ */
+int controller_informeParcial(Dictionary* articulos, Dictionary* posicionesArancelarias, TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo)
+{
+	int retorno = -1;
 
-int calcularCostosFinales(Dictionary* datosGenerales, Dictionary* articulos)
+	if(articulos != NULL && posicionesArancelarias != NULL && pTransporteAereo != NULL )
+	{
+		LinkedList* listaArticulos;
+		LinkedList* listaPosicionArancelaria;
+		listaArticulos = dict_getValues(articulos);
+		listaPosicionArancelaria = dict_getValues(posicionesArancelarias);
+		//-----------------------------------------
+		if(listaArticulos != NULL && listaPosicionArancelaria != NULL &&
+		  !informe_calcularCostosFinalesParcial(listaArticulos, listaPosicionArancelaria, pTransporteAereo, pTransporteMaritimo) &&
+		  !ll_sort(listaArticulos, funcionCriterio_compararCostoMaritimo, 1))
+		{
+			articulo_imprimirArticulosInformeParcial(listaArticulos);
+			ll_deleteLinkedList(listaArticulos);
+			ll_deleteLinkedList(listaPosicionArancelaria);
+			retorno = 0;
+		}
+	}
+	return retorno;
+}
+//--------------------------------------------------------------------------------
+/*int calcularCostosFinales(Dictionary* datosGenerales, Dictionary* articulos)
 {
 	int retorno = -1;
 	LinkedList* listaGeneral;
@@ -79,28 +110,7 @@ int calcularCostosFinales(Dictionary* datosGenerales, Dictionary* articulos)
 		}
 	}
 	return retorno;
-}
-/*
-int funCalcCostoFinal(void* pGeneralElement)
-{
-	int retorno = 0;
-	eGeneral* pGeneral;
-	int flagErrorA, flagErrorB;
-	if(pGeneralElement != NULL)
-	{
-		pGeneral = (eGeneral*) pGeneralElement;
-		costoTransporteAereo = transporteAereo_calcularCostoFinal(pArticulo, pPosicionArancelaria, pTransporteAereo)
-		eGeneral_setCostoTransporteAereo(pGeneral, costoTransporteAereo)
-	}
-	return retorno;
 }*/
-
-
-
-
-
-
-
 //*********************************************************************************************
 void controller_setearValorInicialDeIdArticulo(int id)
 {
@@ -732,20 +742,23 @@ int controller_subMenuInforme(Dictionary* articulos, Dictionary* posicionesAranc
 {
 	int retorno = -1;
 	int opcion;
-	int opcion_salir = 4;
+	int opcion_salir = 5;
 	if(articulos != NULL && posicionesArancelarias != NULL && pTransporteAereo != NULL && pTransporteMaritimo != NULL)
 	{
 		do
 		{
 			if(!utn_getNumero(&opcion,
 								"\n"
-								"\n * \x1b[95m\x1b[40m=========================   MENU INFORME   =========================\x1b[0m\x1b[0m *"
-								"\n | ==================================================================== |"
-								"\n |  1  - Calcular y ver costo final por Transporte Maritimo             |"
-								"\n |  2  - Calcular y ver con costo final por Transporte Aereo            |"
-								"\n |  3  - Calcular y ver costos finales por Transportes                  |"
-								"\n |  4  - Volver al menu principal                                       |"
-								"\n * -------------------------------------------------------------------- *"
+								"\n * \x1b[95m\x1b[40m=========================   MENU INFORME   ==========================\x1b[0m\x1b[0m *"
+								"\n | ===================================================================== | "
+								"\n |  1  - Calcular y ver costo final por Transporte Maritimo              |"
+								"\n |  2  - Calcular y ver con costo final por Transporte Aereo             |"
+								"\n |  3  - Calcular y ver costos finales por Transportes                   |"
+								"\n |  4  - Informe Parcial 2:                                              |"
+								"\n |  * Mostrar costos finales ordenados ascendentemente por Costo Maritimo|"
+								"\n |                                                                       |"
+								"\n |  5  - Volver al menu principal                                        |"
+								"\n * ---------------------------------------------------------------------- *"
 								"\n > Eliga opcion: ", "\n\x1b[31m * OPCION INVALIDA * \x1b[0m",1, opcion_salir, 2))
 			{
 				switch(opcion)
@@ -759,14 +772,18 @@ int controller_subMenuInforme(Dictionary* articulos, Dictionary* posicionesAranc
 					case 3: // Listar Articulos con costo final por Transporte
 						controller_costoFinalPorTransportes(articulos, posicionesArancelarias,pTransporteAereo,pTransporteMaritimo);
 					break;
+					case 4: // Informe Parcial 2
+						controller_informeParcial(articulos, posicionesArancelarias, pTransporteAereo, pTransporteMaritimo);
+					break;
 				}
 			}
-			// acordarse de guardar en archivo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		}while(opcion != opcion_salir);
 		retorno = 0;
 	}
 	return retorno;
 }
+
+
 
 //********************************************************************************** SUB MENU TRANSPORTES
 /** \brief Submenu: Modificacion - listar [Transporte Aereo]

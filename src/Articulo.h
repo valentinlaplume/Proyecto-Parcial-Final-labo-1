@@ -35,7 +35,16 @@ typedef struct
 	//-----------------------------
 	float costoTransporteAereo;
 	float costoTransporteMaritimo;
+
 }Articulo;
+
+//------------------------------------ INFORME PARCIAL
+void articulo_encabezadoParcial(void);
+int articulo_imprimirArticulosInformeParcial(LinkedList* listaArticulos);
+int articulo_imprimirUnArticuloInformeParcial(void* pElement);
+
+int funcionCriterio_compararCostoMaritimo(void* this1, void* this2);
+int funcionCriterio_compararCostoAereo(void* this1, void* this2);
 
 // LISTAR
 int articulo_imprimirUnArticulo(void* pElement);

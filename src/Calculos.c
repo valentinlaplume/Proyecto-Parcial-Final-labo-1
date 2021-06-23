@@ -237,7 +237,7 @@ float transporteMaritimo_calcularCostoFinal(Articulo* pArticulo, PosicionArancel
  * \return int [-1] error, resultado final si ok
  */
 float transporteMaritimo_calcularPorcentajeTasaEstadistica(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
-		                                TransporteMaritimo* pTransporteMaritimo)
+		                                                   TransporteMaritimo* pTransporteMaritimo)
 {
 	float retornoResultado = -1;
 	float porcentajeTasaEstadistica, resulBaseImponible;
@@ -246,7 +246,6 @@ float transporteMaritimo_calcularPorcentajeTasaEstadistica(Articulo* pArticulo, 
 	{
 		porcentajeTasaEstadistica = posicionArancelaria_getPorcentajeTasaEstadistica(pPosicionArancelaria, &flagErrorA);
 		resulBaseImponible = transporteMaritimo_calcularBaseImponible(pArticulo, pPosicionArancelaria, pTransporteMaritimo);
-
 		if(!flagErrorA && resulBaseImponible > 0)
 			retornoResultado = ((porcentajeTasaEstadistica * resulBaseImponible) / 100);
 	}
@@ -270,6 +269,8 @@ float transporteMaritimo_calcularPorcentajeImportacion(Articulo* pArticulo, Posi
 
 		if(!flagErrorA)
 			retornoResultado = ((porcentajeImportacion * resulBaseImponible) / 100);
+
+
 	}
 	return retornoResultado;
 }
@@ -296,6 +297,7 @@ float transporteMaritimo_calcularBaseImponible(Articulo* pArticulo, PosicionAran
 		fob = articulo_getFob(pArticulo, &flagErrorA); // Obtengo valor fob
 		if(!flagErrorA)
 			retornoResultado = (fob + resulPorcentajeSeguro + resultadoFlete);
+
 	}
 	return retornoResultado;
 }
@@ -358,7 +360,7 @@ float transporteMaritimo_calcularPrecioPorMetroCubico(TransporteMaritimo* pTrans
 		precioContenedor = transporteMaritimo_getPrecioContenedor(pTransporteMaritimo, &flagErrorB);
 
 		if(!flagErrorA && !flagErrorB)
-			retornoResultado = (metrosCubicos / precioContenedor);
+			retornoResultado = (precioContenedor / metrosCubicos);
 	}
 	return retornoResultado;
 }

@@ -51,7 +51,7 @@ int main(void)
 					"\n |                                                                      |"
 					"\n |  7  - Ver información - Modificar información \x1b[30m\x1b[46m [Transporte Maritimo] \x1b[0m\x1b[0m|"
 					"\n |                                                                      |"
-					"\n |  8  - Submenu: \x1b[95m\x1b[40m Informes \x1b[0m\x1b[0m calcular costos final por Transportes      |"
+					"\n |  8  - Submenu: \x1b[95m\x1b[40m Informes \x1b[0m\x1b[0m calcular costos final  ARG por Transportes |"
 					"\n |                                                                      |"
 					"\n |  9  - Buscar Posicion Arancelaria por Nomenclador:                   |"
 					"\n |                        * Listar Articulos y su costo por Transportes |"
