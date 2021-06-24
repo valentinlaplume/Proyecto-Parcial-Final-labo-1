@@ -94,8 +94,7 @@ int main(void)
 					break;
 					case 9: // Buscar Posicion Arancelaria por Nomenclador y Listar Articulos
 						controller_pruebasWhile(articulos, posicionesArancelarias,
-								                &transporteAereo, &transporteMaritimo,
-												funcionCriterio_sonIdsIgualesPosArancelaria);
+								                &transporteAereo, &transporteMaritimo);
 						//controller_listarArticulosPorBusquedaPorNomenclador(articulos, posicionesArancelarias, &transporteAereo, &transporteMaritimo);
 					break;
 					/*case 10:

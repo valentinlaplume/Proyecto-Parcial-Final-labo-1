@@ -43,6 +43,7 @@ void articulo_encabezadoParcial(void);
 int articulo_imprimirArticulosInformeParcial(LinkedList* listaArticulos);
 int articulo_imprimirUnArticuloInformeParcial(void* pElement);
 
+// Comparar costos final argentino por transportes
 int funcionCriterio_compararCostoMaritimo(void* this1, void* this2);
 int funcionCriterio_compararCostoAereo(void* this1, void* this2);
 
@@ -57,10 +58,10 @@ void articulo_encabezado(void);
 int funcionCriterio_compararPorNombreArticulo(void* thisUno, void* thisDos);
 
 // FUNCION CRITERIO BUSCAR POR CODIGO
-int funcionCriterio_buscarPorCodigoArticulo(void* pElement, void* codigoIngresadoBuscado);
+int funcionCriterio_compararPorCodigoArticulo(void* pElement, void* codigoIngresadoBuscado);
 
 // FUNCION CRITERIO BUSCAR POR DESCRIPCION
-int funcionCriterio_buscarPorDescripcionArticulo(void* pElement, void* descripcionIngresadaBuscado);
+int funcionCriterio_compararPorDescripcionArticulo(void* pElement, void* descripcionIngresadaBuscado);
 
 //------------------------------------------------------------------------------------------------------------------
 // CONSTRUCTORES

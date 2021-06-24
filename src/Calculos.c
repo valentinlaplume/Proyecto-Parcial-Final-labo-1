@@ -360,7 +360,7 @@ float transporteMaritimo_calcularPrecioPorMetroCubico(TransporteMaritimo* pTrans
 		precioContenedor = transporteMaritimo_getPrecioContenedor(pTransporteMaritimo, &flagErrorB);
 
 		if(!flagErrorA && !flagErrorB)
-			retornoResultado = (precioContenedor / metrosCubicos);
+			retornoResultado = (precioContenedor/ metrosCubicos);
 	}
 	return retornoResultado;
 }

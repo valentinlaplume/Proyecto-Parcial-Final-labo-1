@@ -705,13 +705,13 @@ int articulo_imprimirArticulos(LinkedList* listaArticulos)
 	}
 	return retorno;
 }
-/* \brief Compara el codigo ingresado con el de todos los elementos
+/* \brief Compara el codigo ingresado con el del elemento
  * \param pElement void*
  * \param codigoIngresadoBuscado void*
  * \return int: 0 si no encontró
  	 	 	    1 si encontró
  */
-int funcionCriterio_buscarPorCodigoArticulo(void* pElement, void* codigoIngresadoBuscado)
+int funcionCriterio_compararPorCodigoArticulo(void* pElement, void* codigoIngresadoBuscado)
 {
 	int retorno = 0;
 	char* codigoAux;
@@ -727,13 +727,13 @@ int funcionCriterio_buscarPorCodigoArticulo(void* pElement, void* codigoIngresad
 	return retorno;
 }
 
-/* \brief Compara el codigo ingresado con el de todos los elementos
+/* \brief Compara el codigo ingresado con el del elemento
  * \param pElement void*
  * \param codigoIngresadoBuscado void*
  * \return int: 0 si no encontró
  	 	 	    1 si encontró
  */
-int funcionCriterio_buscarPorDescripcionArticulo(void* pElement, void* descripcionIngresadaBuscado)
+int funcionCriterio_compararPorDescripcionArticulo(void* pElement, void* descripcionIngresadaBuscado)
 {
 	int retorno = 0;
 	char* descripcionAux;
@@ -840,7 +840,7 @@ int articulo_imprimirUnArticuloInformeParcial(void* pElement)
 		if(!flagErrorA && !flagErrorB && !flagErrorC && !flagErrorD )
 		{
 			articulo_encabezadoParcial();
-			printf("\n %-30s %-30.2f %-30.2f %-30.3f ", descripcion, fob, costoTransporteAereo, costoTransporteMaritimo);
+			printf("\n %-30s %-30.2f %-30.2f %-30.2f ", descripcion, fob, costoTransporteAereo, costoTransporteMaritimo);
 			retorno = 0;
 		}
 

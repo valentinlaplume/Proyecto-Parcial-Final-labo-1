@@ -446,7 +446,7 @@ int posicionArancelaria_obtenerCadenaPorTipoLicencia(int tipoLicencia, char opci
  * \return int: 0 si no encontró
  	 	 	    1 si encontró
  */
-int funcionCriterio_buscarPorNomenclador(void* pElement, void* nomencladorIngresadoBuscado)
+int funcionCriterio_compararPorNomenclador(void* pElement, void* nomencladorIngresadoBuscado)
 {
 	int retorno = 0;
 	char* nomencladorAux;
