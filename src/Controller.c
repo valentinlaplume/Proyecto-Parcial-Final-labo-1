@@ -610,7 +610,8 @@ int controller_listarArticulosPorBusquedaPorNomenclador(Dictionary* articulos, D
 		listaArticulos = dict_getValues(articulos);
 		//--------------------------------------------------------------------------------
 		if(listaPosicionArancelaria != NULL && listaArticulos != NULL &&
-		   !informe_listarPorBusquedaPorNomencladorPosAran(listaPosicionArancelaria, listaArticulos, pTransporteAereo, pTransporteMaritimo))
+		   !informe_listarPorBusquedaPorNomencladorPosAran(listaPosicionArancelaria, listaArticulos, pTransporteAereo, pTransporteMaritimo,
+				   	   	   	   	   	   	   	   	   	   	   funcionCriterio_sonIdsIgualesPosArancelaria))
 		{
 			ll_deleteLinkedList(listaArticulos);
 			ll_deleteLinkedList(listaPosicionArancelaria);

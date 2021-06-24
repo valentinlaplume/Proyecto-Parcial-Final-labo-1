@@ -59,8 +59,8 @@ int informe_listarArticulosConCostoFinalPorTransportes(LinkedList* listaArticulo
 
 // Listar Articulos por Busqueda nomenclador
 int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionArancelaria, LinkedList* listaArticulos,
-		                                           TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo);
-int sonIgualesIdPosicionArancelaria(void* pArticuloElement, void* pPosicionAranElement);
+		                                           TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo,
+												   int (*pFuncion)(void*, void*));
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 // FUNCION CRITERIO, SON IDS IGUALES

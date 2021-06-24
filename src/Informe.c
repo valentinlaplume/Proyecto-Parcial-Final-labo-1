@@ -519,7 +519,8 @@ int informe_listarArticulosConCostoFinalPorTransportes(LinkedList* listaArticulo
  * \return int 0 si ok, -1 error
  */
 int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionArancelaria, LinkedList* listaArticulos,
-		                                           TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo)
+		                                           TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo,
+												   int (*pFuncion)(void*, void*))
 {
 	int retorno = -1;
 	void* pPosicionAranElement;
@@ -536,7 +537,7 @@ int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionAran
 			pArticuloElement = ll_getNext(listaArticulos, 1);
 			while(pArticuloElement != NULL)
 			{
-				if(sonIgualesIdPosicionArancelaria(pArticuloElement, pPosicionAranElement))
+				if(pFuncion(pArticuloElement, pPosicionAranElement))
 				{
 					articulo_imprimirUnArticulo(pArticuloElement);
 					printCostosFinalesTransportes((Articulo*)pArticuloElement,(PosicionArancelaria*)pPosicionAranElement,pTransporteAereo,pTransporteMaritimo);
@@ -673,47 +674,22 @@ void* buscarPorCodigoArticulo(LinkedList* listaArticulos)
 	return pRetornoElement;
 }
 //-----------------------------------------------------------------------------------------------------
+
 /** \brief Veerifica si los Ids de los parametros ingresados son iguales
  * \param void* pArticuloElement
  * \param pPosicionAranElement
  * \return int 1 si son IGUALES, 0 error o si NO son iguales
  */
-int sonIgualesIdPosicionArancelaria(void* pArticuloElement, void* pPosicionAranElement)
-{
-	int retorno = 0;
-	Articulo* pArticulo;
-	PosicionArancelaria* pPosicionAran;
-	int idPosAranArticulo, idPosAran,
-	    flagErrorA, flagErrorB;
-
-	if(pArticuloElement != NULL && pPosicionAranElement != NULL)
-	{
-		pArticulo = (Articulo*) pArticuloElement;
-		pPosicionAran = (PosicionArancelaria*) pPosicionAranElement;
-		//------------------------------------------------------------------------------------
-		idPosAranArticulo = articulo_getIdPosicionArancelaria(pArticulo, &flagErrorA);
-		idPosAran = posicionArancelaria_getIdPosicionArancelaria(pPosicionAran, &flagErrorB);
-		//------------------------------------------------------------------------------------
-		if(!flagErrorA && !flagErrorB &&
-		  (idPosAranArticulo == idPosAran) )
-		{
-			retorno = 1;
-		}
-	}
-	return retorno;
-}
-
-
 int funcionCriterio_sonIdsIgualesPosArancelaria(void* pElementArticulo, void* pElementPosAran)
 {
 	int retorno = 0;
 	if(pElementArticulo != NULL && pElementPosAran != NULL)
 	{
 		int idPosAranArticulo, idPosicionArancelaria, flagErrorA, flagErrorB;
-		//------------------------------------------------------------
+		//------------------------------------------------------------------------------------
 		idPosAranArticulo = articulo_getIdPosicionArancelaria((Articulo*) pElementArticulo, &flagErrorA);
 		idPosicionArancelaria = posicionArancelaria_getIdPosicionArancelaria((PosicionArancelaria*)pElementPosAran, &flagErrorB);
-		//------------------------------------------------------------
+		//------------------------------------------------------------------------------------
 		if(!flagErrorA && !flagErrorB &&
 		   idPosAranArticulo == idPosicionArancelaria)
 		{
