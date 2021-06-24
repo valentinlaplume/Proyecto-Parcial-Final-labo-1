@@ -17,16 +17,19 @@
 #include "Calculos.h"
 
 
+
+// generico
+int informe_prueba(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria,
+                   TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo,
+				   int (*pFuncion)(void*, void*));
+
+
 int informe_calcularCostosFinalesParcial(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria,
-                                 TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo);
+                                 TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo,
+								 int (*pFuncion)(void*, void*));
+
 int calcularUnCostoFinalEnArgentina(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
 		                             TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo);
-
-
-
-
-
-
 
 // Pedir los datos del Articulo
 int informe_pedirDatosArticulo(LinkedList* listaArticulos,char* nombre, char* codigo, char* descripcion, char* paisDeFabricacion,
@@ -59,8 +62,9 @@ void* busquedaPorCodigoArticulo(LinkedList* listaArticulos);
 
 //Busca si existe nomenclatura ingresada
 int buscarSiExisteNomenclatura(LinkedList* listaPosAran, char* nomenclador);
-//Busca si existe codigo ingresada
+//Busca si existe codigo ingresado
 int buscarSiExisteCodigo(LinkedList* listaArticulos, char* codigo);
-
+////Busca si existe descripcion ingresado
+int buscarSiExisteDescripcion(LinkedList* listaArticulos, char* descripcion);
 
 #endif /* INFORME_H_ */

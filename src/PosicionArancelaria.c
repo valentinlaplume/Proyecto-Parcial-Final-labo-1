@@ -401,19 +401,17 @@ void posicionArancelaria_encabezado(void)
 int posicionArancelaria_imprimirPosicionesArancelarias(LinkedList* ListaPosicionesArancelarias)
 {
 	int retorno = -1;
-	int i, lenListaPosArancelarias;
 	void* pPosicionArancelaria;
 
 	if(ListaPosicionesArancelarias != NULL)
 	{
-		lenListaPosArancelarias = ll_len(ListaPosicionesArancelarias);
-		for(i=0; i<lenListaPosArancelarias; i++)
+		pPosicionArancelaria = (PosicionArancelaria*)ll_getNext(ListaPosicionesArancelarias, 1);
+		while(pPosicionArancelaria != NULL)
 		{
-			pPosicionArancelaria = ll_get(ListaPosicionesArancelarias, i);
-			if(pPosicionArancelaria != NULL &&
-			  !posicionArancelaria_imprimirUnaPosicionArancelaria(pPosicionArancelaria) )
-				retorno = 0;
+			if(!posicionArancelaria_imprimirUnaPosicionArancelaria(pPosicionArancelaria))
+				pPosicionArancelaria = (PosicionArancelaria*)ll_getNext(ListaPosicionesArancelarias, 0);
 		}
+		retorno = 0;
 	}
 	return retorno;
 }

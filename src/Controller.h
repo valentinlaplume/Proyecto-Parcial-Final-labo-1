@@ -14,11 +14,18 @@
 #define ID_STR 10
 
 
+
+// generico
+int controller_pruebasWhile(Dictionary* articulos, Dictionary* posicionesArancelarias,
+		                    TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo,
+							int (*pFuncion)(void*, void*));
+
+int funcionCriterio_sonIdsIgualesPosArancelaria(void* pElementArticulo, void* pElementPosAran);
+
+
+
+
 int controller_informeParcial(Dictionary* articulos, Dictionary* posicionesArancelarias, TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo);
-
-
-
-
 
 // BUSCA POSICION ARANCELARIA POR NOMENCLADOR Y LISTAR SUS ARTICULOS CON SUS COSTOS DE TRANSPORTE
 int controller_listarArticulosPorBusquedaPorNomenclador(Dictionary* articulos, Dictionary* posicionesArancelarias,

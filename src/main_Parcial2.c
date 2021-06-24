@@ -93,7 +93,10 @@ int main(void)
 						controller_subMenuInforme(articulos, posicionesArancelarias, &transporteAereo, &transporteMaritimo);
 					break;
 					case 9: // Buscar Posicion Arancelaria por Nomenclador y Listar Articulos
-						controller_listarArticulosPorBusquedaPorNomenclador(articulos, posicionesArancelarias, &transporteAereo, &transporteMaritimo);
+						controller_pruebasWhile(articulos, posicionesArancelarias,
+								                &transporteAereo, &transporteMaritimo,
+												funcionCriterio_sonIdsIgualesPosArancelaria);
+						//controller_listarArticulosPorBusquedaPorNomenclador(articulos, posicionesArancelarias, &transporteAereo, &transporteMaritimo);
 					break;
 					/*case 10:
 					break;

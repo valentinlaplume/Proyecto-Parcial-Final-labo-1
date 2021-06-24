@@ -34,6 +34,82 @@ static int printCostoFinalTransporteAereo(Articulo* pArticulo, PosicionArancelar
 static int printCostoFinalTransporteMaritimo(Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
 		                                     TransporteMaritimo* pTransporteMaritimo);
 
+
+
+
+int informe_prueba(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria,
+                   TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo,
+				   int (*pFuncion)(void*, void*))
+{
+	int retorno = -1;
+	if(listaArticulos != NULL && listaPosicionArancelaria != NULL && pTransporteAereo != NULL && pTransporteMaritimo != NULL)
+	{
+		Articulo* pArticulo;
+		PosicionArancelaria* pPosicionArancelaria;
+		//----------------------------------------------------
+		pPosicionArancelaria =ll_getNext(listaPosicionArancelaria, 1);
+		while(pPosicionArancelaria != NULL)
+		{
+			pArticulo =  ll_getNext(listaArticulos, 1);
+			while(pArticulo != NULL)
+			{
+				if(pFuncion(pArticulo, pPosicionArancelaria))
+				{
+					posicionArancelaria_imprimirUnaPosicionArancelaria(pPosicionArancelaria);
+					articulo_imprimirUnArticulo(pArticulo);
+					printCostosFinalesTransportes(pArticulo, pPosicionArancelaria, pTransporteAereo, pTransporteMaritimo);
+				}
+				pArticulo =  ll_getNext(listaArticulos, 0);
+			}
+			pPosicionArancelaria = ll_getNext(listaPosicionArancelaria, 0);
+			posicionArancelaria_imprimirUnaPosicionArancelaria(pPosicionArancelaria);
+		}
+
+		/*for(k=0; k<lenArticulos; k++)
+		{
+			pArticulo = (Articulo*)ll_get(listaArticulos, k);
+			// ------------------------------------
+			if(pFuncion(pArticulo, pPosicionArancelaria))
+			{
+				articulo_imprimirUnArticulo(pArticulo);
+			}
+			// ------------------------------------
+		}*/
+	}
+	return retorno;
+}
+
+/*
+int informe_generico(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria,
+                   TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo,
+				   int (*pFuncion)(void*, void*))
+{
+	int retorno = -1;
+	Articulo* pArticulo;
+	PosicionArancelaria* pPosicionArancelaria;
+	if(listaArticulos != NULL && listaPosicionArancelaria != NULL && pTransporteAereo != NULL && pTransporteMaritimo != NULL)
+	{
+		//-----------------------------------------------------------------------------
+		pArticulo = (Articulo*) ll_getNext(listaArticulos, 1);
+		while(pArticulo != NULL)
+		{
+			pPosicionArancelaria = (PosicionArancelaria*)ll_getNext(listaPosicionArancelaria, 1);
+			while(pPosicionArancelaria != NULL)
+			{
+				if(pFuncion(pArticulo, pPosicionArancelaria))
+				{
+
+				}
+				pPosicionArancelaria = (PosicionArancelaria*)ll_getNext(listaPosicionArancelaria, 0);
+			}
+			pArticulo = (Articulo*) ll_getNext(listaArticulos, 0);
+		}
+		//------------------------------------------------------------------------------------------------------
+	}
+	return retorno;
+}*/
+
+
 //-------------------------------------------------------------- INFORME PARCIAL
 /** \brief Calcula los costos Finales en Argentina por transportes
  * \param (Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
@@ -42,47 +118,40 @@ static int printCostoFinalTransporteMaritimo(Articulo* pArticulo, PosicionArance
  * \return int 0 si ok, -1 error
  */
 int informe_calcularCostosFinalesParcial(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria,
-                                         TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo)
+                                         TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo,
+										 int (*pFuncion)(void*, void*))
 {
 	int retorno = -1;
 	Articulo* pArticulo;
 	PosicionArancelaria* pPosicionArancelaria;
 	if(listaArticulos != NULL && listaPosicionArancelaria != NULL && pTransporteAereo != NULL && pTransporteMaritimo != NULL)
 	{
-		int i, k;
-		int lenArticulos, lenPosicionArancelaria;
-		lenArticulos = ll_len(listaArticulos);
+		int i, lenPosicionArancelaria;
 		lenPosicionArancelaria = ll_len(listaPosicionArancelaria);
-		int idPosAranArticulo, idPosicionArancelaria, flagErrorA, flagErrorB;
 
-	// ------------------------------------------------------------------------------------------------------
-		for(i=0; i<lenArticulos; i++)
+		pArticulo = (Articulo*) ll_getNext(listaArticulos, 1);
+		while(pArticulo != NULL)
 		{
-			pArticulo = (Articulo*) ll_get(listaArticulos, i);
-			if(pArticulo != NULL)
+			for(i=0; i<lenPosicionArancelaria; i++)
 			{
-				idPosAranArticulo = articulo_getIdPosicionArancelaria(pArticulo, &flagErrorA);
-				// ------------------------------------------------------------------------
-				for(k=0; k<lenPosicionArancelaria; k++)
+				pPosicionArancelaria = (PosicionArancelaria*) ll_get(listaPosicionArancelaria, i);
+				if(pPosicionArancelaria != NULL &&
+				   pFuncion(pArticulo, pPosicionArancelaria) &&
+				  !calcularUnCostoFinalEnArgentina(pArticulo, pPosicionArancelaria, pTransporteAereo, pTransporteMaritimo))
 				{
-					pPosicionArancelaria = (PosicionArancelaria*) ll_get(listaPosicionArancelaria, k);
-					if(pPosicionArancelaria != NULL)
-					{
-						idPosicionArancelaria = posicionArancelaria_getIdPosicionArancelaria(pPosicionArancelaria, &flagErrorB);
-						if(!flagErrorA && !flagErrorB &&
-						   idPosAranArticulo == idPosicionArancelaria &&
-						   !calcularUnCostoFinalEnArgentina(pArticulo, pPosicionArancelaria, pTransporteAereo, pTransporteMaritimo))
-						{
-							retorno = 0;
-						}
-					}
+					retorno = 0;
 				}
-				// ------------------------------------------------------------------------
 			}
+			pArticulo = (Articulo*) ll_getNext(listaArticulos, 0);
 		}
 	}
 	return retorno;
 }
+
+/*
+ * for(pPosicionArancelaria = (PosicionArancelaria*)ll_getNext(listaPosicionArancelaria, 1);
+			    pPosicionArancelaria != NULL;
+			    pPosicionArancelaria = (PosicionArancelaria*)ll_getNext(listaPosicionArancelaria, 0))*/
 
 /** \brief Calcula un costo Final en Argentina
  * \param (Articulo* pArticulo, PosicionArancelaria* pPosicionArancelaria,
@@ -116,26 +185,32 @@ int informe_pedirDatosArticulo(LinkedList* listaArticulos,char* nombre, char* co
 		                       float* fob, float* peso, float* ancho, float* altura, float* profundidad)
 {
 	int retorno = -1;
+	int opcionIntentar = 0;
 	if(nombre != NULL && codigo != NULL && descripcion != NULL &&
 	   paisDeFabricacion != NULL && fob  != NULL && peso != NULL && ancho != NULL && altura != NULL && profundidad != NULL )
 	{
 		if(!utn_getTexto(codigo, CODIGO_LEN, "\n > Ingrese el codigo del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
 		   !buscarSiExisteCodigo(listaArticulos, codigo))
 		{
-			if(!utn_getNombre(nombre, NOMBRE_LEN, " > Ingrese nombre del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
-			   !utn_getTexto(descripcion, DESCRIPCION_LEN, " > Ingrese descripcion del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
-			   !utn_getNombre(paisDeFabricacion, PAIS_LEN, " > Ingrese pais de fabricación del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
-			   !utn_getNumeroFloat(fob, " > Ingrese valor fob del articulo: USS ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
-			   !utn_getNumeroFloat(peso, " > Ingrese peso en [kg] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
-			   !utn_getNumeroFloat(ancho, "\n > DIMENSIONES:\n > Ingrese ancho[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
-			   !utn_getNumeroFloat(altura, " > Ingrese altura[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
-			   !utn_getNumeroFloat(profundidad, " > Ingrese profundidad[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2))
+			if(!utn_getTexto(descripcion, DESCRIPCION_LEN, " > Ingrese descripcion del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
+			   !buscarSiExisteDescripcion(listaArticulos, descripcion))
 			{
-				retorno = 0;
+				if(!utn_getNombre(nombre, NOMBRE_LEN, " > Ingrese nombre del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
+				   !utn_getNombre(paisDeFabricacion, PAIS_LEN, " > Ingrese pais de fabricación del articulo: ", "\x1b[31m * ERROR \x1b[0m", 2) &&
+				   !utn_getNumeroFloat(fob, " > Ingrese valor fob del articulo: USS ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
+				   !utn_getNumeroFloat(peso, " > Ingrese peso en [kg] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
+				   !utn_getNumeroFloat(ancho, "\n > DIMENSIONES:\n > Ingrese ancho[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
+				   !utn_getNumeroFloat(altura, " > Ingrese altura[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2) &&
+				   !utn_getNumeroFloat(profundidad, " > Ingrese profundidad[cm] del articulo: ", "\x1b[31m * ERROR \x1b[0m", 0, 99999, 2))
+				{
+					retorno = 0;
+				}
 			}
+			else
+				printf("\n > La Descripcion ingresada ya correspone a un Articulo, por lo tanto, no se puede dar de alta.");
 		}
 		else
-			printf("\n > Codigo ya existente en un Articulo, no se puede dar de alta");
+			printf("\n > El Codigo ingresado ya correspone a un Articulo, por lo tanto, no se puede dar de alta.");
 	}
 	return retorno;
 }
@@ -165,7 +240,7 @@ int informe_pedirDatosPosicionArancelaria(LinkedList* listaPosAran, char* nomenc
 			}
 		}
 		else
-			printf("\n > Nomenclatura ya existente en una Posicion Arancelaria, no se puede dar de alta");
+			printf("\n > La Nomenclatura ingresada ya correspone a una Posicion Arancelaria, por lo tanto, no se puede dar de alta.");
 	}
 	return retorno;
 }
@@ -204,6 +279,27 @@ int buscarSiExisteCodigo(LinkedList* listaArticulos, char* codigo)
 		void* pElement;
 		//----------------------------------------- // busca el elemento depende la funcion criterio pasada
 		pElement = ll_buscarElement_VL(listaArticulos, funcionCriterio_buscarPorCodigoArticulo, codigo);
+		if(pElement != NULL)
+		{
+			// significa que existe
+			retorno = 1;
+		}
+	}
+	return retorno;
+}
+/** \brief Busca si existe la descripcion ingresada por el usuario en Articulos
+ * \param listaArticulos LinkedList*
+ * \param codigo char* puntero al codigo ingresado
+ * \return int: retorna 1 si existe, 0 si no existe
+ */
+int buscarSiExisteDescripcion(LinkedList* listaArticulos, char* descripcion)
+{
+	int retorno = 0;
+	if(listaArticulos != NULL && descripcion != NULL)
+	{
+		void* pElement;
+		//----------------------------------------- // busca el elemento depende la funcion criterio pasada
+		pElement = ll_buscarElement_VL(listaArticulos, funcionCriterio_buscarPorDescripcionArticulo, descripcion);
 		if(pElement != NULL)
 		{
 			// significa que existe

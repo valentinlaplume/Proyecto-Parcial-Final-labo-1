@@ -59,6 +59,9 @@ int funcionCriterio_compararPorNombreArticulo(void* thisUno, void* thisDos);
 // FUNCION CRITERIO BUSCAR POR CODIGO
 int funcionCriterio_buscarPorCodigoArticulo(void* pElement, void* codigoIngresadoBuscado);
 
+// FUNCION CRITERIO BUSCAR POR DESCRIPCION
+int funcionCriterio_buscarPorDescripcionArticulo(void* pElement, void* descripcionIngresadaBuscado);
+
 //------------------------------------------------------------------------------------------------------------------
 // CONSTRUCTORES
 Articulo* articulo_new(void);

@@ -691,18 +691,17 @@ void articulo_encabezado(void)
 int articulo_imprimirArticulos(LinkedList* listaArticulos)
 {
 	int retorno = -1;
-	int i, lenListaArticulos;
 	void* pArticulo;
 
 	if(listaArticulos != NULL)
 	{
-		lenListaArticulos = ll_len(listaArticulos);
-		for(i=0; i<lenListaArticulos; i++)
+		pArticulo = (Articulo*) ll_getNext(listaArticulos, 1);
+		while(pArticulo != NULL)
 		{
-			pArticulo = ll_get(listaArticulos, i);
-			if(pArticulo != NULL && !articulo_imprimirUnArticulo(pArticulo))
-				retorno = 0;
+			if(!articulo_imprimirUnArticulo(pArticulo))
+				pArticulo = (Articulo*) ll_getNext(listaArticulos, 0);
 		}
+		retorno = 0;
 	}
 	return retorno;
 }
@@ -723,6 +722,27 @@ int funcionCriterio_buscarPorCodigoArticulo(void* pElement, void* codigoIngresad
 		codigoAux = articulo_getCodigo(pArticulo, &flagError);
 
 		if(!flagError && (strcmp(codigoAux, codigoIngresadoBuscado) == 0) )
+			retorno = 1;
+	}
+	return retorno;
+}
+
+/* \brief Compara el codigo ingresado con el de todos los elementos
+ * \param pElement void*
+ * \param codigoIngresadoBuscado void*
+ * \return int: 0 si no encontró
+ 	 	 	    1 si encontró
+ */
+int funcionCriterio_buscarPorDescripcionArticulo(void* pElement, void* descripcionIngresadaBuscado)
+{
+	int retorno = 0;
+	char* descripcionAux;
+	int flagError;
+	if(pElement != NULL && descripcionIngresadaBuscado != NULL)
+	{
+		descripcionAux = articulo_getDescripcion((Articulo*)pElement, &flagError);
+
+		if(!flagError && (strcmp(descripcionAux, descripcionIngresadaBuscado) == 0) )
 			retorno = 1;
 	}
 	return retorno;
@@ -780,18 +800,17 @@ int funcionCriterio_compararPorNombreArticulo(void* thisUno, void* thisDos)
 int articulo_imprimirArticulosInformeParcial(LinkedList* listaArticulos)
 {
 	int retorno = -1;
-	int i, lenListaArticulos;
 	void* pArticulo;
 
 	if(listaArticulos != NULL)
 	{
-		lenListaArticulos = ll_len(listaArticulos);
-		for(i=0; i<lenListaArticulos; i++)
+		pArticulo = (Articulo*) ll_getNext(listaArticulos, 1);
+		while(pArticulo != NULL)
 		{
-			pArticulo = ll_get(listaArticulos, i);
-			if(pArticulo != NULL && !articulo_imprimirUnArticuloInformeParcial(pArticulo))
-				retorno = 0;
+			if(!articulo_imprimirUnArticuloInformeParcial(pArticulo))
+				pArticulo = (Articulo*) ll_getNext(listaArticulos, 0);
 		}
+		retorno = 0;
 	}
 	return retorno;
 }
