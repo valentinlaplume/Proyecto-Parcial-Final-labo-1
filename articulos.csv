@@ -7,4 +7,4 @@ idArticulo,idPosicionArancelaria,nombre,codigo,descripcion,paisDeFabricacion,fob
 6,2,Cabb,CA_0001,CABINET 100,China,95.000,12.000,100.000,100.000,10.000
 7,2,Cabin,CA_0002,CABINET 50,China,40.000,12.000,50.000,50.000,8.000
 8,2,Cabinet,CA_0003,CABINET 40,China,25.000,12.000,40.000,40.000,5.000
-9,4,Ejemplo,UTN_EJ,Ejemplo clase,utn,38.100,0.107,8.500,4.900,2.200
+9,4,Ejemplo,UTN_EJ,Ejemplo clase,Utn,38.100,0.107,8.500,4.900,2.200

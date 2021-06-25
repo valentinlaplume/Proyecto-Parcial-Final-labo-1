@@ -550,7 +550,8 @@ int informe_listarPorBusquedaPorNomencladorPosAran(LinkedList* listaPosicionAran
 	return retorno;
 }
 //------------------------------------------------------------------------------------------ PRINT COSTO FINAL TRANSPORTES
-/** \brief Llama a la funcion calcular costo final por Transporte Aereo y Maritimo, y le hace un print
+/** \brief Llama a las funciones print costo final ARG por Transporte Aereo y Maritimo
+  	  	  	  	  	  las cuales esas mismas calculas y imprimen su resultado por consola
  * \param pArticulo Articulo*
  * \param pPosicionArancelaria PosicionArancelaria*
  * \param pTransporteAereo TransporteAereo*
@@ -571,7 +572,7 @@ static int printCostosFinalesTransportes(Articulo* pArticulo, PosicionArancelari
 }
 
 
-/** \brief Llama a la funcion calcular costo final Transporte Aereo y le hace un print
+/** \brief Llama a la funcion calcular costo final Transporte Aereo y imprimet por consola el resultado
  * \param pArticulo Articulo*
  * \param pPosicionArancelaria PosicionArancelaria*
  * \param pTransporteAereo TransporteAereo*
@@ -598,7 +599,7 @@ static int printCostoFinalTransporteAereo(Articulo* pArticulo, PosicionArancelar
 	}
 	return retorno;
 }
-/** \brief Llama a la funcion calcular costo final Transporte Maritimo y le hace un print
+/** \brief Llama a la funcion calcular costo final Transporte Maritimo y imprime por consola el resultado
  * \param pArticulo Articulo*
  * \param pPosicionArancelaria PosicionArancelaria*
  * \param pTransporteMaritimo TransporteMaritimo*

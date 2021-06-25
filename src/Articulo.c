@@ -858,7 +858,7 @@ void articulo_encabezadoParcial(void)
 	char costoTransporteAereo[] = {"COSTO FINAL ARG: AEREO"};
 	char costoTransporteMaritimo[] = {"COSTO FINAL ARG: MARITIMO"};
 
-	printf("\n \x1b[40m\x1b[36m%-30s %-30s %-30s %-30s \x1b[0m\x1b[0m ", descripcion, fob,costoTransporteAereo,costoTransporteMaritimo);
+	printf("\n \x1b[40m\x1b[37m%-30s %-30s %-30s %-30s \x1b[0m\x1b[0m ", descripcion, fob,costoTransporteAereo,costoTransporteMaritimo);
 }
 /** \brief Compara dos costos maritimos final .
  * \param (void* this1,

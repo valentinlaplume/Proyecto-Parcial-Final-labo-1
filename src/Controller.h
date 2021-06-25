@@ -11,6 +11,7 @@
 #include "TransporteMaritimo.h"
 #include "TransporteAereo.h"
 
+
 #define ID_STR 10
 
 
@@ -57,7 +58,7 @@ int controller_cargarTransporteAereo(char* path, TransporteAereo* pTransporteAer
 
 // VOLCAR DATOS AL ARCHIVO
 int controller_guardarDatosGenerales(char* path, Dictionary* articulos, Dictionary* posicionesArancelarias,
-		TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo); // Guarda datos generales
+		                             TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo); // Guarda datos generales
 int controller_guardarArticulos(char* path, Dictionary* articulos);
 int controller_guardarPosicionesArancelarias(char* path, Dictionary* posicionesArancelarias);
 int controller_guardarTransporteMaritimo(char* path, TransporteMaritimo* pTransporteMaritimo);
@@ -88,6 +89,7 @@ int controller_listarPosicionesArancelariasAutomatica(Dictionary* posicionesAran
 // ALTAS
 int controller_altaArticulo(Dictionary* articulos, Dictionary* posicionesArancelarias);
 int controller_altaPosicionArancelaria(Dictionary* posicionesArancelarias);
+void* controller_opcionBuscarPosicionArancelaria(Dictionary* posicionesArancelarias);
 
 //BAJAS
 int controller_bajaArticulo(Dictionary* articulos);

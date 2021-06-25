@@ -34,7 +34,6 @@ int informe_prueba(LinkedList* listaArticulos, LinkedList* listaPosicionArancela
 
 
 
-
 //-----------------------------------------------------------------------------------------------------------------------
 int informe_calcularCostosFinalesParcial(LinkedList* listaArticulos, LinkedList* listaPosicionArancelaria,
                                  TransporteAereo* pTransporteAereo, TransporteMaritimo* pTransporteMaritimo,

@@ -972,6 +972,55 @@ int controller_costoFinalTransporteMaritimo(Dictionary* articulos, Dictionary* p
 	return retorno;
 }
 //********************************************************************************************* ALTAS
+ void* controller_opcionBuscarPosicionArancelaria(Dictionary* posicionesArancelarias)
+{
+	void* retornoPuntero = NULL;
+	void* pPosicionArancelaria;
+	int opcion;
+	char idPosAranStr[ID_STR];
+	LinkedList* listaPosicionArancelaria;
+	listaPosicionArancelaria = dict_getValues(posicionesArancelarias);
+	//------------------------------------------------------------------------------
+	if(posicionesArancelarias != NULL  && listaPosicionArancelaria != NULL &&
+	  !utn_getNumero(&opcion, "\n\n * \x1b[30m\x1b[47m BUSCAR POSICION ARANCELARIA\x1b[0m\x1b[0m"
+				              "\n | ============================================================= |"
+			                  "\n |  1 - Buscar por ID (rececomendado, evita errores de tipeo)    |"
+	  				          "\n |  2 - Buscar por Nomenclatura                                  |"
+	  				          "\n |  3 - Volver al menu principal                                 |"
+			  	  	  	  	  "\n > Opcion: ",
+							  "\n\x1b[31m * ERROR \x1b[0m", 1, 3, 2))
+	{
+		switch(opcion)
+		{
+			case 1:
+				if(!utn_getAlfanumerico(idPosAranStr, ID_STR,
+				"\n > Ingrese ID de la [Posicion Arancelaria]: ", "\n\x1b[31m * ERROR \x1b[0m", 2))
+
+				{
+					pPosicionArancelaria = dict_get(posicionesArancelarias, idPosAranStr);
+					if(pPosicionArancelaria == NULL)
+						printf("\n > ID de la Posicion Arancelaria no existe");
+					else
+					{
+						retornoPuntero = pPosicionArancelaria;
+					}
+				}
+			break;
+			case 2:
+				pPosicionArancelaria = buscarPorNomencladorPosicionArancelaria(listaPosicionArancelaria);
+				if(pPosicionArancelaria == NULL)
+					printf("\n > ID de la Posicion Arancelaria no existe");
+				else
+					retornoPuntero = pPosicionArancelaria;
+			break;
+		}
+		//---------------------- FIN SWITCH -----------------------------------------------
+		ll_deleteLinkedList(listaPosicionArancelaria);
+	}
+	return retornoPuntero;
+}
+
+
 /** \brief Alta del [Articulo]
  * \param articulos Dictionary*
  * \param posicionesArancelarias Dictionary*
